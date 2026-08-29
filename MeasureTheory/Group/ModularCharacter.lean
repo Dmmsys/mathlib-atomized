@@ -1,0 +1,301 @@
+/-
+Copyright (c) 2025 Noam Atar. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Noam Atar
+-/
+module
+
+public import Mathlib.MeasureTheory.Measure.Haar.Unique
+
+/-!
+# Modular character of a locally compact group
+
+On a locally compact group, there is a natural homomorphism `G → ℝ≥0*`, which for `g : G` gives the
+value `μ (· * g⁻¹) / μ`, where `μ` is an (inner regular) Haar measure. This file defines this
+homomorphism, called the modular character, and shows that it is independent of the chosen Haar
+measure.
+
+TODO: Show that the character is continuous.
+
+## Main Declarations
+
+* `modularCharacterFun`: Define the modular character function. If `μ` is a left Haar measure on `G`
+  and `g : G`, the measure `A ↦ μ (A g⁻¹)` is also a left Haar measure, so by uniqueness is of the
+  form `Δ(g) μ`, for `Δ(g) ∈ ℝ≥0`. This `Δ` is the modular character. The result that this does not
+  depend on the measure chosen is `modularCharacterFun_eq_haarScalarFactor`.
+* `modularCharacter`: The homomorphism G →* ℝ≥0 whose toFun is `modularCharacterFun`.
+-/
+
+@[expose] public section
+
+open MeasureTheory
+open scoped NNReal
+
+namespace MeasureTheory
+
+namespace Measure
+
+variable {G : Type*} [TopologicalSpace G] [Group G] [IsTopologicalGroup G] [LocallyCompactSpace G]
+
+/-- The modular character as a map is `g ↦ μ (· * g⁻¹) / μ`, where `μ` is a left Haar measure.
+
+  See also `modularCharacter` that defines the map as a homomorphism. -/
+@[to_additive /-- The additive modular character as a map is `g ↦ μ (· - g) / μ`, where `μ` is an
+  left additive Haar measure. -/]
+/--
+Definition of `modularCharacterFun` / `modularCharacterFun` 的定义
+
+English:
+definition modularCharacterFun
+  signature: (g : G)
+  body: letI : MeasurableSpace G := borel G
+  haveI : BorelSpace G := ⟨rfl⟩
+  haarScalarFactor (map (· * g) MeasureTheory.Measure.haar) MeasureTheory.Measure.haar
+
+中文:
+定义 modularCharacterFun
+  签名: (g : G)
+  定义体: letI : MeasurableSpace G := borel G
+  haveI : BorelSpace G := ⟨rfl⟩
+  haarScalarFactor (map (· * g) MeasureTheory.Measure.haar) MeasureTheory.Measure.haar
+
+Depends on / 依赖: BorelSpace, MeasurableSpace, Measure, MeasureTheory, MeasureTheory.Measure.haar, haarScalarFactor
+-/
+noncomputable def modularCharacterFun (g : G) : Real>=0 :=
+  letI : MeasurableSpace G := borel G
+  haveI : BorelSpace G := ⟨rfl⟩
+  haarScalarFactor (map (· * g) MeasureTheory.Measure.haar) MeasureTheory.Measure.haar
+
+/-- Independence of modularCharacterFun from the chosen Haar measure. -/
+@[to_additive /-- Independence of addModularCharacterFun from the chosen Haar measure -/]
+/--
+lemma `modularCharacterFun_eq_haarScalarFactor` / 引理 `modularCharacterFun_eq_haarScalarFactor`
+
+English:
+lemma modularCharacterFun_eq_haarScalarFactor
+  statement: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  proof: by
+  let ν := MeasureTheory.Measure.haar (G := G)
+  obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
+    exists f : C(G, Real), HasCompactSupport f ∧ 0 <= f ∧ f 1 != 0 := exists_continuous_nonneg_pos 1
+  have int_f_ne_zero (μ₀ : Measure G) [IsHaarMeasure μ₀] : ∫ x, f x ∂μ₀ != 0 :=
+    ne_of_gt (f_con
+
+中文:
+引理 modularCharacterFun_eq_haarScalarFactor
+  结论: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  证明: by
+  let ν := MeasureTheory.Measure.haar (G := G)
+  obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
+    exists f : C(G, Real), HasCompactSupport f ∧ 0 <= f ∧ f 1 != 0 := exists_continuous_nonneg_pos 1
+  have int_f_ne_zero (μ₀ : Measure G) [IsHaarMeasure μ₀] : ∫ x, f x ∂μ₀ != 0 :=
+    ne_of_gt (f_con
+
+Depends on / 依赖: HasCompactSupport, IsHaarMeasure, Measure, MeasureTheory, MeasureTheory.Measure.haar, NNReal, NNReal.coe_injective, coe_injective, exists_continuous_nonneg_pos, f_comp, f_cont, f_cont.integral_pos_of_hasCompactSupport_nonneg_nonzero, f_nonneg, f_one, haarScalarFactor, int_f_ne_zero, integral_isMulLeftInvari, integral_pos_of_hasCompactSupport_nonneg_nonzero, ne_of_gt
+-/
+lemma modularCharacterFun_eq_haarScalarFactor [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+    [IsHaarMeasure μ] (g : G) : modularCharacterFun g = haarScalarFactor (map (· * g) μ) μ := by
+  let ν := MeasureTheory.Measure.haar (G := G)
+  obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
+    exists f : C(G, Real), HasCompactSupport f ∧ 0 <= f ∧ f 1 != 0 := exists_continuous_nonneg_pos 1
+  have int_f_ne_zero (μ₀ : Measure G) [IsHaarMeasure μ₀] : ∫ x, f x ∂μ₀ != 0 :=
+    ne_of_gt (f_cont.integral_pos_of_hasCompactSupport_nonneg_nonzero f_comp f_nonneg f_one)
+  apply NNReal.coe_injective
+  have t : (∫ x, f (x * g) ∂ν) = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) := by
+    refine integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ ?_ ?_
+    · exact Continuous.comp' f_cont (continuous_mul_const g)
+    · have j : (fun x => f (x * g)) = (f ∘ (Homeomorph.mulRight g)) := rfl
+      rw [j]
+      exact HasCompactSupport.comp_homeomorph f_comp _
+  have r : (haarScalarFactor ν μ : Real) / (haarScalarFactor ν μ) = 1 := by
+    refine div_self ?_
+    rw [NNReal.coe_ne_zero]
+    apply (ne_of_lt (haarScalarFactor_pos_of_isHaarMeasure _ _)).symm
+  calc
+  ↑(modularCharacterFun g) = ↑(haarScalarFactor (map (· * g) ν) ν) := by borelize G; rfl
+  _ = (∫ x, f x ∂(map (· * g) ν)) / ∫ x, f x ∂ν :=
+    haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero ν)
+  _ = (∫ x, f (x * g) ∂ν) / ∫ x, f x ∂ν := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂ν := by rw [t]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂(haarScalarFactor ν μ • μ) := by
+    rw [integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ f_cont f_comp]
+  _ = (haarScalarFactor ν μ • ∫ x, f (x * g) ∂μ) / (haarScalarFactor ν μ • ∫ x, f x ∂μ) := by
+    rw [integral_smul_nnreal_measure]; rw [integral_smul_nnreal_measure]
+  _ = (haarScalarFactor ν μ / haarScalarFactor ν μ) * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) :=
+    mul_div_mul_comm _ _ _ _
+  _ = 1 * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) := by rw [r]
+  _ = (∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ := by rw [one_mul]
+  _ = (∫ x, f x ∂(map (· * g) μ)) / ∫ x, f x ∂μ := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = haarScalarFactor (map (· * g) μ) μ :=
+    (haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero μ)).symm
+
+@[to_additive]
+/--
+lemma `map_right_mul_eq_modularCharacterFun_smul` / 引理 `map_right_mul_eq_modularCharacterFun_smul`
+
+English:
+lemma map_right_mul_eq_modularCharacterFun_smul
+  statement: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  proof: by
+  rw [modularCharacterFun_eq_haarScalarFactor μ _]
+  exact isMulLeftInvariant_eq_smul_of_innerRegular _ μ
+
+@[to_additive]
+
+中文:
+引理 map_right_mul_eq_modularCharacterFun_smul
+  结论: [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+  证明: by
+  rw [modularCharacterFun_eq_haarScalarFactor μ _]
+  exact isMulLeftInvariant_eq_smul_of_innerRegular _ μ
+
+@[to_additive]
+
+Depends on / 依赖: isMulLeftInvariant_eq_smul_of_innerRegular, modularCharacterFun_eq_haarScalarFactor
+-/
+lemma map_right_mul_eq_modularCharacterFun_smul [MeasurableSpace G] [BorelSpace G] (μ : Measure G)
+    [IsHaarMeasure μ] [InnerRegular μ] (g : G) : map (· * g) μ = modularCharacterFun g • μ := by
+  rw [modularCharacterFun_eq_haarScalarFactor μ _]
+  exact isMulLeftInvariant_eq_smul_of_innerRegular _ μ
+
+@[to_additive]
+/--
+lemma `modularCharacterFun_pos` / 引理 `modularCharacterFun_pos`
+
+English:
+lemma modularCharacterFun_pos
+  given: (g : G)
+  statement: 0 < modularCharacterFun g
+  proof: by
+  borelize G
+  rw [modularCharacterFun_eq_haarScalarFactor MeasureTheory.Measure.haar g]
+  exact haarScalarFactor_pos_of_isHaarMeasure _ _
+
+@[to_additive]
+
+中文:
+引理 modularCharacterFun_pos
+  条件: (g : G)
+  结论: 0 < modularCharacterFun g
+  证明: by
+  borelize G
+  rw [modularCharacterFun_eq_haarScalarFactor MeasureTheory.Measure.haar g]
+  exact haarScalarFactor_pos_of_isHaarMeasure _ _
+
+@[to_additive]
+
+Depends on / 依赖: Measure, MeasureTheory, MeasureTheory.Measure.haar, borelize, haarScalarFactor_pos_of_isHaarMeasure, modularCharacterFun_eq_haarScalarFactor
+-/
+lemma modularCharacterFun_pos (g : G) : 0 < modularCharacterFun g := by
+  borelize G
+  rw [modularCharacterFun_eq_haarScalarFactor MeasureTheory.Measure.haar g]
+  exact haarScalarFactor_pos_of_isHaarMeasure _ _
+
+@[to_additive]
+/--
+lemma `modularCharacterFun_map_one` / 引理 `modularCharacterFun_map_one`
+
+English:
+lemma modularCharacterFun_map_one
+  statement: modularCharacterFun (1 : G) = 1
+  proof: by
+  simp [modularCharacterFun, haarScalarFactor_self]
+
+@[to_additive]
+
+中文:
+引理 modularCharacterFun_map_one
+  结论: modularCharacterFun (1 : G) = 1
+  证明: by
+  simp [modularCharacterFun, haarScalarFactor_self]
+
+@[to_additive]
+
+Depends on / 依赖: haarScalarFactor_self, modularCharacterFun
+-/
+lemma modularCharacterFun_map_one : modularCharacterFun (1 : G) = 1 := by
+  simp [modularCharacterFun, haarScalarFactor_self]
+
+@[to_additive]
+/--
+lemma `modularCharacterFun_map_mul` / 引理 `modularCharacterFun_map_mul`
+
+English:
+lemma modularCharacterFun_map_mul
+  given: (g h : G)
+  statement: modularCharacterFun (g * h) =
+  proof: by
+  borelize G
+  have mul_g_meas : Measurable (· * g) := Measurable.mul_const (fun ⦃_⦄ a => a) g
+  have mul_h_meas : Measurable (· * h) := Measurable.mul_const (fun ⦃_⦄ a => a) h
+  let ν := MeasureTheory.Measure.haar (G := G)
+  symm
+  calc
+    modularCharacterFun g * modularCharacterFun h =
+      m
+
+中文:
+引理 modularCharacterFun_map_mul
+  条件: (g h : G)
+  结论: modularCharacterFun (g * h) =
+  证明: by
+  borelize G
+  have mul_g_meas : Measurable (· * g) := Measurable.mul_const (fun ⦃_⦄ a => a) g
+  have mul_h_meas : Measurable (· * h) := Measurable.mul_const (fun ⦃_⦄ a => a) h
+  let ν := MeasureTheory.Measure.haar (G := G)
+  symm
+  calc
+    modularCharacterFun g * modularCharacterFun h =
+      m
+
+Depends on / 依赖: Measurable, Measurable.mul_const, Measure, MeasureTheory, MeasureTheory.Measure.haar, borelize, haarScalarFactor, modularCharacterFun, modularCharacterFun_eq_haarScalarFactor, mul_comm, mul_const, mul_g_meas, mul_h_meas
+-/
+lemma modularCharacterFun_map_mul (g h : G) : modularCharacterFun (g * h) =
+    modularCharacterFun g * modularCharacterFun h := by
+  borelize G
+  have mul_g_meas : Measurable (· * g) := Measurable.mul_const (fun ⦃_⦄ a => a) g
+  have mul_h_meas : Measurable (· * h) := Measurable.mul_const (fun ⦃_⦄ a => a) h
+  let ν := MeasureTheory.Measure.haar (G := G)
+  symm
+  calc
+    modularCharacterFun g * modularCharacterFun h =
+      modularCharacterFun h * modularCharacterFun g := mul_comm _ _
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      modularCharacterFun g := by
+      rw [modularCharacterFun_eq_haarScalarFactor (map (· * g) ν) _]
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      haarScalarFactor (map (· * g) ν) ν := rfl
+    _ = haarScalarFactor (map (· * (g * h)) ν) ν := by simp only [map_map mul_h_meas mul_g_meas,
+      comp_mul_right, ← haarScalarFactor_eq_mul]
+
+/--
+Definition of `modularCharacter` / `modularCharacter` 的定义
+
+English:
+definition modularCharacter
+  signature: : G ->* Real>=0 where
+  body: modularCharacterFun
+  map_one' := modularCharacterFun_map_one
+  map_mul' := modularCharacterFun_map_mul
+
+中文:
+定义 modularCharacter
+  签名: : G ->* 实数>=0 where
+  定义体: modularCharacterFun
+  map_one' := modularCharacterFun_map_one
+  map_mul' := modularCharacterFun_map_mul
+
+Depends on / 依赖: modularCharacterFun
+-/
+noncomputable def modularCharacter : G ->* Real>=0 where
+  toFun := modularCharacterFun
+  map_one' := modularCharacterFun_map_one
+  map_mul' := modularCharacterFun_map_mul
+
+end Measure
+
+end MeasureTheory

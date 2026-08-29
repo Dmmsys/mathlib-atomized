@@ -1,0 +1,226 @@
+/-
+Copyright (c) 2023 Mohanad Ahmed. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Mohanad Ahmed
+-/
+module
+
+public import Mathlib.Algebra.Algebra.Spectrum.Basic
+public import Mathlib.Algebra.Polynomial.Basic
+public import Mathlib.FieldTheory.IsAlgClosed.Basic
+
+/-!
+# Eigenvalues are characteristic polynomial roots.
+
+In fields we show that:
+
+* `Matrix.mem_spectrum_iff_isRoot_charpoly`: the roots of the characteristic polynomial are exactly
+  the spectrum of the matrix.
+* `Matrix.det_eq_prod_roots_charpoly_of_splits`: the determinant (in the field of the matrix)
+  is the product of the roots of the characteristic polynomial if the polynomial splits in the field
+  of the matrix.
+* `Matrix.trace_eq_sum_roots_charpoly_of_splits`: the trace is the sum of the roots of the
+  characteristic polynomial if the polynomial splits in the field of the matrix.
+
+In an algebraically closed field we show that:
+
+* `Matrix.det_eq_prod_roots_charpoly`: the determinant is the product of the roots of the
+  characteristic polynomial.
+* `Matrix.trace_eq_sum_roots_charpoly`: the trace is the sum of the roots of the
+  characteristic polynomial.
+
+Note that over other fields such as `ℝ`, these results can be used by using
+`A.map (algebraMap ℝ ℂ)` as the matrix, and then applying `RingHom.map_det`.
+
+The two lemmas `Matrix.det_eq_prod_roots_charpoly` and `Matrix.trace_eq_sum_roots_charpoly` are more
+commonly stated as trace is the sum of eigenvalues and determinant is the product of eigenvalues.
+Mathlib has already defined eigenvalues in `LinearAlgebra.Eigenspace` as the roots of the minimal
+polynomial of a linear endomorphism. These do not have correct multiplicity and cannot be used in
+the theorems above. Hence we express these theorems in terms of the roots of the characteristic
+polynomial directly.
+
+## TODO
+
+The proofs of `det_eq_prod_roots_charpoly_of_splits` and
+`trace_eq_sum_roots_charpoly_of_splits` closely resemble
+`norm_gen_eq_prod_roots` and `trace_gen_eq_sum_roots` respectively, but the
+dependencies are not general enough to unify them. We should refactor
+`Polynomial.coeff_zero_eq_prod_roots_of_monic_of_split` and
+`Polynomial.nextCoeff_eq_neg_sum_roots_of_monic_of_splits` to assume splitting over an
+arbitrary map.
+-/
+
+public section
+
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+variable {R K : Type*} [CommRing R] [Field K]
+variable {A : Matrix n n K} {B : Matrix n n R}
+
+open Matrix Polynomial
+
+open scoped Matrix
+
+namespace Matrix
+
+/--
+theorem `mem_spectrum_iff_not_isUnit_eval_charpoly` / 定理 `mem_spectrum_iff_not_isUnit_eval_charpoly`
+
+English:
+theorem mem_spectrum_iff_not_isUnit_eval_charpoly
+  given: {r : R}
+  proof: by
+  simp [eval_charpoly, spectrum.mem_iff, isUnit_iff_isUnit_det, algebraMap_eq_diagonal,
+    Pi.algebraMap_def]
+
+中文:
+定理 mem_spectrum_iff_not_isUnit_eval_charpoly
+  条件: {r : R}
+  证明: by
+  simp [eval_charpoly, spectrum.mem_iff, isUnit_iff_isUnit_det, algebraMap_eq_diagonal,
+    Pi.algebraMap_def]
+
+Depends on / 依赖: Pi.algebraMap_def, algebraMap_def, algebraMap_eq_diagonal, eval_charpoly, isUnit_iff_isUnit_det, mem_iff, spectrum, spectrum.mem_iff
+-/
+theorem mem_spectrum_iff_not_isUnit_eval_charpoly {r : R} :
+    r in spectrum R B ↔ ¬IsUnit (B.charpoly.eval r) := by
+  simp [eval_charpoly, spectrum.mem_iff, isUnit_iff_isUnit_det, algebraMap_eq_diagonal,
+    Pi.algebraMap_def]
+
+/--
+theorem `mem_spectrum_of_isRoot_charpoly` / 定理 `mem_spectrum_of_isRoot_charpoly`
+
+English:
+theorem mem_spectrum_of_isRoot_charpoly
+  given: [Nontrivial R] {r : R} (hr : IsRoot B.charpoly r)
+  proof: by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly, hr.eq_zero]
+
+中文:
+定理 mem_spectrum_of_isRoot_charpoly
+  条件: [Nontrivial R] {r : R} (hr : IsRoot B.charpoly r)
+  证明: by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly, hr.eq_zero]
+
+Depends on / 依赖: eq_zero, hr.eq_zero, mem_spectrum_iff_not_isUnit_eval_charpoly
+-/
+theorem mem_spectrum_of_isRoot_charpoly [Nontrivial R] {r : R} (hr : IsRoot B.charpoly r) :
+    r in spectrum R B := by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly, hr.eq_zero]
+
+/--
+theorem `mem_spectrum_iff_isRoot_charpoly` / 定理 `mem_spectrum_iff_isRoot_charpoly`
+
+English:
+theorem mem_spectrum_iff_isRoot_charpoly
+  given: {r : K}
+  statement: r in spectrum K A ↔ IsRoot A.charpoly r
+  proof: by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly]
+
+中文:
+定理 mem_spectrum_iff_isRoot_charpoly
+  条件: {r : K}
+  结论: r in spectrum K A ↔ IsRoot A.charpoly r
+  证明: by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly]
+
+Depends on / 依赖: mem_spectrum_iff_not_isUnit_eval_charpoly
+-/
+theorem mem_spectrum_iff_isRoot_charpoly {r : K} : r in spectrum K A ↔ IsRoot A.charpoly r := by
+  simp [mem_spectrum_iff_not_isUnit_eval_charpoly]
+
+/--
+theorem `det_eq_prod_roots_charpoly_of_splits` / 定理 `det_eq_prod_roots_charpoly_of_splits`
+
+English:
+theorem det_eq_prod_roots_charpoly_of_splits
+  given: [IsDomain R] (hAps : B.charpoly.Splits)
+  proof: by
+  rw [det_eq_sign_charpoly_coeff]; rw [← charpoly_natDegree_eq_dim B]; rw [hAps.coeff_zero_eq_prod_roots_of_monic B.charpoly_monic]; rw [← mul_assoc]; rw [← pow_two]; rw [pow_right_comm]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]
+
+中文:
+定理 det_eq_prod_roots_charpoly_of_splits
+  条件: [IsDomain R] (hAps : B.charpoly.Splits)
+  证明: by
+  rw [det_eq_sign_charpoly_coeff]; rw [← charpoly_natDegree_eq_dim B]; rw [hAps.coeff_zero_eq_prod_roots_of_monic B.charpoly_monic]; rw [← mul_assoc]; rw [← pow_two]; rw [pow_right_comm]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]
+
+Depends on / 依赖: B.charpoly_monic, charpoly_monic, charpoly_natDegree_eq_dim, coeff_zero_eq_prod_roots_of_monic, det_eq_sign_charpoly_coeff, hAps.coeff_zero_eq_prod_roots_of_monic, mul_assoc, neg_one_sq, one_mul, one_pow, pow_right_comm, pow_two
+-/
+theorem det_eq_prod_roots_charpoly_of_splits [IsDomain R] (hAps : B.charpoly.Splits) :
+    B.det = (Matrix.charpoly B).roots.prod := by
+  rw [det_eq_sign_charpoly_coeff]; rw [← charpoly_natDegree_eq_dim B]; rw [hAps.coeff_zero_eq_prod_roots_of_monic B.charpoly_monic]; rw [← mul_assoc]; rw [← pow_two]; rw [pow_right_comm]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]
+
+/--
+theorem `trace_eq_sum_roots_charpoly_of_splits` / 定理 `trace_eq_sum_roots_charpoly_of_splits`
+
+English:
+theorem trace_eq_sum_roots_charpoly_of_splits
+  given: [IsDomain R] (hAps : B.charpoly.Splits)
+  proof: by
+  rcases isEmpty_or_nonempty n with h | _
+  · simp
+  · rw [trace_eq_neg_charpoly_nextCoeff, neg_eq_iff_eq_neg,
+      ← hAps.nextCoeff_eq_neg_sum_roots_of_monic B.charpoly_monic]
+
+中文:
+定理 trace_eq_sum_roots_charpoly_of_splits
+  条件: [IsDomain R] (hAps : B.charpoly.Splits)
+  证明: by
+  rcases isEmpty_or_nonempty n with h | _
+  · simp
+  · rw [trace_eq_neg_charpoly_nextCoeff, neg_eq_iff_eq_neg,
+      ← hAps.nextCoeff_eq_neg_sum_roots_of_monic B.charpoly_monic]
+
+Depends on / 依赖: B.charpoly_monic, charpoly_monic, hAps.nextCoeff_eq_neg_sum_roots_of_monic, isEmpty_or_nonempty, neg_eq_iff_eq_neg, nextCoeff_eq_neg_sum_roots_of_monic, trace_eq_neg_charpoly_nextCoeff
+-/
+theorem trace_eq_sum_roots_charpoly_of_splits [IsDomain R] (hAps : B.charpoly.Splits) :
+    B.trace = (Matrix.charpoly B).roots.sum := by
+  rcases isEmpty_or_nonempty n with h | _
+  · simp
+  · rw [trace_eq_neg_charpoly_nextCoeff, neg_eq_iff_eq_neg,
+      ← hAps.nextCoeff_eq_neg_sum_roots_of_monic B.charpoly_monic]
+
+variable (A)
+
+/--
+theorem `det_eq_prod_roots_charpoly` / 定理 `det_eq_prod_roots_charpoly`
+
+English:
+theorem det_eq_prod_roots_charpoly
+  given: [IsAlgClosed K]
+  statement: A.det = (Matrix.charpoly A).roots.prod
+  proof: det_eq_prod_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+中文:
+定理 det_eq_prod_roots_charpoly
+  条件: [IsAlgClosed K]
+  结论: A.det = (Matrix.charpoly A).roots.prod
+  证明: det_eq_prod_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+Depends on / 依赖: A.charpoly, IsAlgClosed, IsAlgClosed.splits, charpoly, det_eq_prod_roots_charpoly_of_splits, splits
+-/
+theorem det_eq_prod_roots_charpoly [IsAlgClosed K] : A.det = (Matrix.charpoly A).roots.prod :=
+  det_eq_prod_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+/--
+theorem `trace_eq_sum_roots_charpoly` / 定理 `trace_eq_sum_roots_charpoly`
+
+English:
+theorem trace_eq_sum_roots_charpoly
+  given: [IsAlgClosed K]
+  statement: A.trace = (Matrix.charpoly A).roots.sum
+  proof: trace_eq_sum_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+中文:
+定理 trace_eq_sum_roots_charpoly
+  条件: [IsAlgClosed K]
+  结论: A.trace = (Matrix.charpoly A).roots.sum
+  证明: trace_eq_sum_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+Depends on / 依赖: A.charpoly, IsAlgClosed, IsAlgClosed.splits, charpoly, splits, trace_eq_sum_roots_charpoly_of_splits
+-/
+theorem trace_eq_sum_roots_charpoly [IsAlgClosed K] : A.trace = (Matrix.charpoly A).roots.sum :=
+  trace_eq_sum_roots_charpoly_of_splits (IsAlgClosed.splits A.charpoly)
+
+end Matrix

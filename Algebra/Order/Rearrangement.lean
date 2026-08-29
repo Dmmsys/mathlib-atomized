@@ -1,0 +1,1190 @@
+/-
+Copyright (c) 2022 Mantas Bakšys. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Mantas Bakšys
+-/
+module
+
+public import Mathlib.Algebra.Order.Module.Defs
+public import Mathlib.Algebra.Order.Module.Synonym
+public import Mathlib.Algebra.Order.Monoid.OrderDual
+public import Mathlib.Data.Finset.Max
+public import Mathlib.Data.Prod.Lex
+public import Mathlib.GroupTheory.Perm.Support
+public import Mathlib.Order.Monotone.Monovary
+
+/-!
+# Rearrangement inequality
+
+This file proves the rearrangement inequality and deduces the conditions for equality and strict
+inequality.
+
+The rearrangement inequality tells you that for two functions `f g : ι → α`, the sum
+`∑ i, f i * g (σ i)` is maximized over all `σ : Perm ι` when `g ∘ σ` monovaries with `f` and
+minimized when `g ∘ σ` antivaries with `f`.
+
+The inequality also tells you that `∑ i, f i * g (σ i) = ∑ i, f i * g i` if and only if `g ∘ σ`
+monovaries with `f` when `g` monovaries with `f`. The above equality also holds if and only if
+`g ∘ σ` antivaries with `f` when `g` antivaries with `f`.
+
+From the above two statements, we deduce that the inequality is strict if and only if `g ∘ σ` does
+not monovary with `f` when `g` monovaries with `f`. Analogously, the inequality is strict if and
+only if `g ∘ σ` does not antivary with `f` when `g` antivaries with `f`.
+
+## Implementation notes
+
+In fact, we don't need much compatibility between the addition and multiplication of `α`, so we can
+actually decouple them by replacing multiplication with scalar multiplication and making `f` and `g`
+land in different types.
+As a bonus, this makes the dual statement trivial. The multiplication versions are provided for
+convenience.
+
+The case for `Monotone`/`Antitone` pairs of functions over a `LinearOrder` is not deduced in this
+file because it is easily deducible from the `Monovary` API.
+
+## TODO
+
+Add equality cases for when the permute function is injective. This comes from the following fact:
+If `Monovary f g`, `Injective g` and `σ` is a permutation, then `Monovary f (g ∘ σ) ↔ σ = 1`.
+-/
+
+public section
+
+
+open Equiv Equiv.Perm Finset Function OrderDual
+
+variable {ι α β : Type*} [Semiring α] [LinearOrder α] [IsStrictOrderedRing α] [ExistsAddOfLE α]
+  [AddCommMonoid β] [LinearOrder β] [IsOrderedCancelAddMonoid β] [Module α β]
+
+/-! ### Scalar multiplication versions -/
+
+section SMul
+
+/-! #### Weak rearrangement inequality -/
+
+section weak_inequality
+variable [PosSMulMono α β] {s : Finset ι} {σ : Perm ι} {f : ι -> α} {g : ι -> β}
+
+/--
+theorem `MonovaryOn.sum_smul_comp_perm_le_sum_smul` / 定理 `MonovaryOn.sum_smul_comp_perm_le_sum_smul`
+
+English:
+theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  classical
+  induction s using induction_on_max_value fun i => toLex (g i, f i) generalizing σ with
+  | empty => simp only [le_rfl, Finset.sum_empty]
+  | insert a s has hamax hind => ?_
+  set τ : Perm ι := σ.trans (swap a (σ a)) with hτ
+  have hτs : {x | τ x != x} subseteq s := by
+    intro x hx
+
+中文:
+定理 MonovaryOn.sum_smul_comp_perm_le_sum_smul
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  classical
+  induction s using induction_on_max_value fun i => toLex (g i, f i) generalizing σ with
+  | empty => simp only [le_rfl, Finset.sum_empty]
+  | insert a s has hamax hind => ?_
+  set τ : Perm ι := σ.trans (swap a (σ a)) with hτ
+  have hτs : {x | τ x != x} subseteq s := by
+    intro x hx
+
+Depends on / 依赖: Equiv.swap_comp_apply, Finset, Finset.sum_empty, Set.mem_ofPred_eq, classical, eq_or_ne, generalizing, h.symm.trans, induction_on_max_value, insert, le_rfl, mem_ofPred_eq, mem_of_mem_insert_of_ne, split_ifs, subseteq, sum_empty, swap_comp_apply
+-/
+theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f i • g (σ i) <= ∑ i in s, f i • g i := by
+  classical
+  induction s using induction_on_max_value fun i => toLex (g i, f i) generalizing σ with
+  | empty => simp only [le_rfl, Finset.sum_empty]
+  | insert a s has hamax hind => ?_
+  set τ : Perm ι := σ.trans (swap a (σ a)) with hτ
+  have hτs : {x | τ x != x} subseteq s := by
+    intro x hx
+    simp only [τ, Ne, Set.mem_ofPred_eq, Equiv.swap_comp_apply] at hx
+    split_ifs at hx with h₁ h₂
+    · obtain rfl | hax := eq_or_ne x a
+      · contradiction
+      · exact mem_of_mem_insert_of_ne (hσ fun h => hax <| h.symm.trans h₁) hax
+    · exact (hx <| σ.injective h₂.symm).elim
+    · exact mem_of_mem_insert_of_ne (hσ hx) (ne_of_apply_ne _ h₂)
+  specialize hind (hfg.subset <| subset_insert _ _) hτs
+  simp_rw [sum_insert has]
+  grw [← hind]
+  obtain hσa | hσa := eq_or_ne a (σ a)
+  · rw [hτ, ← hσa, swap_self, trans_refl]
+  have h1s : σ.symm a in s := by
+    rw [Ne]; rw [← inv_eq_iff_eq] at hσa
+    refine mem_of_mem_insert_of_ne (hσ fun h => hσa ?_) hσa
+    rwa [apply_symm_apply, eq_comm] at h
+  simp only [← s.sum_erase_add _ h1s, add_comm]
+  rw [← add_assoc]; rw [← add_assoc]
+  simp only [hτ, swap_apply_left, Function.comp_apply, Equiv.coe_trans, apply_symm_apply]
+  refine add_le_add (smul_add_smul_le_smul_add_smul' ?_ ?_) (sum_congr rfl fun x hx => ?_).le
+  · specialize hamax (σ.symm a) h1s
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hfg (mem_insert_of_mem h1s) (mem_insert_self _ _) hamax
+    · exact hamax.2
+  · specialize hamax (σ a) (mem_of_mem_insert_of_ne (hσ <| σ.injective.ne hσa.symm) hσa.symm)
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hamax.le
+    · exact hamax.1.le
+  · rw [mem_erase, Ne, eq_symm_apply] at hx
+    rw [swap_apply_of_ne_of_ne hx.1 (σ.injective.ne _)]
+    rintro rfl
+    exact has hx.2
+
+/--
+theorem `AntivaryOn.sum_smul_le_sum_smul_comp_perm` / 定理 `AntivaryOn.sum_smul_le_sum_smul_comp_perm`
+
+English:
+theorem AntivaryOn.sum_smul_le_sum_smul_comp_perm
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.dual_right.sum_smul_comp_perm_le_sum_smul hσ
+
+中文:
+定理 AntivaryOn.sum_smul_le_sum_smul_comp_perm
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.dual_right.sum_smul_comp_perm_le_sum_smul hσ
+
+Depends on / 依赖: dual_right, hfg.dual_right.sum_smul_comp_perm_le_sum_smul, sum_smul_comp_perm_le_sum_smul
+-/
+theorem AntivaryOn.sum_smul_le_sum_smul_comp_perm (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f i • g i <= ∑ i in s, f i • g (σ i) :=
+  hfg.dual_right.sum_smul_comp_perm_le_sum_smul hσ
+
+/--
+theorem `MonovaryOn.sum_comp_perm_smul_le_sum_smul` / 定理 `MonovaryOn.sum_comp_perm_smul_le_sum_smul`
+
+English:
+theorem MonovaryOn.sum_comp_perm_smul_le_sum_smul
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  convert!
+    hfg.sum_smul_comp_perm_le_sum_smul
+      (show {x | σ⁻¹ x != x} subseteq s by simp [set_support_symm_eq, hσ]) using 1
+  exact σ.sum_comp' s (fun i j => f i • g j) hσ
+
+中文:
+定理 MonovaryOn.sum_comp_perm_smul_le_sum_smul
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  convert!
+    hfg.sum_smul_comp_perm_le_sum_smul
+      (show {x | σ⁻¹ x != x} subseteq s by simp [set_support_symm_eq, hσ]) using 1
+  exact σ.sum_comp' s (fun i j => f i • g j) hσ
+
+Depends on / 依赖: convert, hfg.sum_smul_comp_perm_le_sum_smul, set_support_symm_eq, subseteq, sum_comp, sum_smul_comp_perm_le_sum_smul
+-/
+theorem MonovaryOn.sum_comp_perm_smul_le_sum_smul (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f (σ i) • g i <= ∑ i in s, f i • g i := by
+  convert!
+    hfg.sum_smul_comp_perm_le_sum_smul
+      (show {x | σ⁻¹ x != x} subseteq s by simp [set_support_symm_eq, hσ]) using 1
+  exact σ.sum_comp' s (fun i j => f i • g j) hσ
+
+/--
+theorem `AntivaryOn.sum_smul_le_sum_comp_perm_smul` / 定理 `AntivaryOn.sum_smul_le_sum_comp_perm_smul`
+
+English:
+theorem AntivaryOn.sum_smul_le_sum_comp_perm_smul
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.dual_right.sum_comp_perm_smul_le_sum_smul hσ
+
+中文:
+定理 AntivaryOn.sum_smul_le_sum_comp_perm_smul
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.dual_right.sum_comp_perm_smul_le_sum_smul hσ
+
+Depends on / 依赖: dual_right, hfg.dual_right.sum_comp_perm_smul_le_sum_smul, sum_comp_perm_smul_le_sum_smul
+-/
+theorem AntivaryOn.sum_smul_le_sum_comp_perm_smul (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f i • g i <= ∑ i in s, f (σ i) • g i :=
+  hfg.dual_right.sum_comp_perm_smul_le_sum_smul hσ
+
+variable [Fintype ι]
+
+/--
+theorem `Monovary.sum_smul_comp_perm_le_sum_smul` / 定理 `Monovary.sum_smul_comp_perm_le_sum_smul`
+
+English:
+theorem Monovary.sum_smul_comp_perm_le_sum_smul
+  given: (hfg : Monovary f g)
+  proof: (hfg.monovaryOn _).sum_smul_comp_perm_le_sum_smul fun _ _ => mem_univ _
+
+中文:
+定理 Monovary.sum_smul_comp_perm_le_sum_smul
+  条件: (hfg : Monovary f g)
+  证明: (hfg.monovaryOn _).sum_smul_comp_perm_le_sum_smul fun _ _ => mem_univ _
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_smul_comp_perm_le_sum_smul
+-/
+theorem Monovary.sum_smul_comp_perm_le_sum_smul (hfg : Monovary f g) :
+    ∑ i, f i • g (σ i) <= ∑ i, f i • g i :=
+  (hfg.monovaryOn _).sum_smul_comp_perm_le_sum_smul fun _ _ => mem_univ _
+
+/--
+theorem `Antivary.sum_smul_le_sum_smul_comp_perm` / 定理 `Antivary.sum_smul_le_sum_smul_comp_perm`
+
+English:
+theorem Antivary.sum_smul_le_sum_smul_comp_perm
+  given: (hfg : Antivary f g)
+  proof: (hfg.antivaryOn _).sum_smul_le_sum_smul_comp_perm fun _ _ => mem_univ _
+
+中文:
+定理 Antivary.sum_smul_le_sum_smul_comp_perm
+  条件: (hfg : Antivary f g)
+  证明: (hfg.antivaryOn _).sum_smul_le_sum_smul_comp_perm fun _ _ => mem_univ _
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_smul_le_sum_smul_comp_perm
+-/
+theorem Antivary.sum_smul_le_sum_smul_comp_perm (hfg : Antivary f g) :
+    ∑ i, f i • g i <= ∑ i, f i • g (σ i) :=
+  (hfg.antivaryOn _).sum_smul_le_sum_smul_comp_perm fun _ _ => mem_univ _
+
+/--
+theorem `Monovary.sum_comp_perm_smul_le_sum_smul` / 定理 `Monovary.sum_comp_perm_smul_le_sum_smul`
+
+English:
+theorem Monovary.sum_comp_perm_smul_le_sum_smul
+  given: (hfg : Monovary f g)
+  proof: (hfg.monovaryOn _).sum_comp_perm_smul_le_sum_smul fun _ _ => mem_univ _
+
+中文:
+定理 Monovary.sum_comp_perm_smul_le_sum_smul
+  条件: (hfg : Monovary f g)
+  证明: (hfg.monovaryOn _).sum_comp_perm_smul_le_sum_smul fun _ _ => mem_univ _
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_comp_perm_smul_le_sum_smul
+-/
+theorem Monovary.sum_comp_perm_smul_le_sum_smul (hfg : Monovary f g) :
+    ∑ i, f (σ i) • g i <= ∑ i, f i • g i :=
+  (hfg.monovaryOn _).sum_comp_perm_smul_le_sum_smul fun _ _ => mem_univ _
+
+/--
+theorem `Antivary.sum_smul_le_sum_comp_perm_smul` / 定理 `Antivary.sum_smul_le_sum_comp_perm_smul`
+
+English:
+theorem Antivary.sum_smul_le_sum_comp_perm_smul
+  given: (hfg : Antivary f g)
+  proof: (hfg.antivaryOn _).sum_smul_le_sum_comp_perm_smul fun _ _ => mem_univ _
+
+中文:
+定理 Antivary.sum_smul_le_sum_comp_perm_smul
+  条件: (hfg : Antivary f g)
+  证明: (hfg.antivaryOn _).sum_smul_le_sum_comp_perm_smul fun _ _ => mem_univ _
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_smul_le_sum_comp_perm_smul
+-/
+theorem Antivary.sum_smul_le_sum_comp_perm_smul (hfg : Antivary f g) :
+    ∑ i, f i • g i <= ∑ i, f (σ i) • g i :=
+  (hfg.antivaryOn _).sum_smul_le_sum_comp_perm_smul fun _ _ => mem_univ _
+
+end weak_inequality
+
+/-! #### Equality case of the rearrangement inequality -/
+
+section equality_case
+variable [PosSMulStrictMono α β] {s : Finset ι} {σ : Perm ι} {f : ι -> α} {g : ι -> β}
+
+/--
+theorem `MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff` / 定理 `MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff`
+
+English:
+theorem MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  classical
+refine ⟨not_imp_not.1 fun h => ?_, fun h => (hfg.sum_smul_comp_perm_le_sum_smul hσ).antisymm by
+    simpa using h.sum_smul_comp_perm_le_sum_smul ((set_support_symm_eq _).subset.trans hσ)⟩
+  rw [MonovaryOn] at h
+  push Not at h
+  obtain ⟨x, hx, y, hy, hgxy, hfxy⟩ := h
+  set τ : Perm ι 
+
+中文:
+定理 MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  classical
+refine ⟨not_imp_not.1 fun h => ?_, fun h => (hfg.sum_smul_comp_perm_le_sum_smul hσ).antisymm by
+    simpa using h.sum_smul_comp_perm_le_sum_smul ((set_support_symm_eq _).subset.trans hσ)⟩
+  rw [MonovaryOn] at h
+  push Not at h
+  obtain ⟨x, hx, y, hy, hgxy, hfxy⟩ := h
+  set τ : Perm ι 
+
+Depends on / 依赖: Equiv.swap, MonovaryOn, Set.union_subset, antisymm, classical, h.sum_smul_comp_perm_le_sum_smul, hfg.sum_smul_comp_perm_le_sum_smul, not_imp_not, set_support_mul_subset, set_support_symm_eq, subset, subset.trans, subseteq, sum_smul_comp_perm_le_sum_smul, swap_apply_ne_self_iff, union_subset
+-/
+theorem MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g (σ i) = ∑ i in s, f i • g i ↔ MonovaryOn f (g ∘ σ) s := by
+  classical
+refine ⟨not_imp_not.1 fun h => ?_, fun h => (hfg.sum_smul_comp_perm_le_sum_smul hσ).antisymm by
+    simpa using h.sum_smul_comp_perm_le_sum_smul ((set_support_symm_eq _).subset.trans hσ)⟩
+  rw [MonovaryOn] at h
+  push Not at h
+  obtain ⟨x, hx, y, hy, hgxy, hfxy⟩ := h
+  set τ : Perm ι := (Equiv.swap x y).trans σ
+  have hτs : {x | τ x != x} subseteq s := by
+    refine (set_support_mul_subset σ <| swap x y).trans (Set.union_subset hσ fun z hz => ?_)
+    obtain ⟨_, rfl | rfl⟩ := swap_apply_ne_self_iff.1 hz <;> assumption
+  refine ((hfg.sum_smul_comp_perm_le_sum_smul hτs).trans_lt' ?_).ne
+  obtain rfl | hxy := eq_or_ne x y
+  · cases lt_irrefl _ hfxy
+  simp only [τ, ← s.sum_erase_add _ hx,
+    ← (s.erase x).sum_erase_add _ (mem_erase.2 ⟨hxy.symm, hy⟩),
+    add_assoc, Equiv.coe_trans, Function.comp_apply, swap_apply_right, swap_apply_left]
+  refine add_lt_add_of_le_of_lt (Finset.sum_congr rfl fun z hz => ?_).le
+    (smul_add_smul_lt_smul_add_smul hfxy hgxy)
+  simp_rw [mem_erase] at hz
+  rw [swap_apply_of_ne_of_ne hz.2.1 hz.1]
+
+/--
+theorem `AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff` / 定理 `AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff`
+
+English:
+theorem AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: (hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+中文:
+定理 AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: (hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+Depends on / 依赖: dual_right, hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff, monovaryOn_toDual_right, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem AntivaryOn.sum_smul_comp_perm_eq_sum_smul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g (σ i) = ∑ i in s, f i • g i ↔ AntivaryOn f (g ∘ σ) s :=
+  (hfg.dual_right.sum_smul_comp_perm_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+/--
+theorem `MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff` / 定理 `MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff`
+
+English:
+theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  have hσinv : { x | σ⁻¹ x != x } subseteq s := (set_support_symm_eq _).subset.trans hσ
+  refine (Iff.trans ?_ <| hfg.sum_smul_comp_perm_eq_sum_smul_iff hσinv).trans
+    ⟨fun h => ?_, fun h => ?_⟩
+  · apply eq_iff_eq_cancel_right.2
+    rw [σ.sum_comp' s (fun i j => f i • g j) hσ]
+    congr
+  · co
+
+中文:
+定理 MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  have hσinv : { x | σ⁻¹ x != x } subseteq s := (set_support_symm_eq _).subset.trans hσ
+  refine (Iff.trans ?_ <| hfg.sum_smul_comp_perm_eq_sum_smul_iff hσinv).trans
+    ⟨fun h => ?_, fun h => ?_⟩
+  · apply eq_iff_eq_cancel_right.2
+    rw [σ.sum_comp' s (fun i j => f i • g j) hσ]
+    congr
+  · co
+
+Depends on / 依赖: Iff.trans, Set.image_perm, comp_assoc, comp_id, comp_right, convert, eq_iff_eq_cancel_right, eq_pre, eq_preimage_iff_image_eq, h.comp_right, hfg.sum_smul_comp_perm_eq_sum_smul_iff, image_perm, inv_def, self_comp_symm, set_support_symm_eq, subset, subset.trans, subseteq, sum_comp, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) • g i = ∑ i in s, f i • g i ↔ MonovaryOn (f ∘ σ) g s := by
+  have hσinv : { x | σ⁻¹ x != x } subseteq s := (set_support_symm_eq _).subset.trans hσ
+  refine (Iff.trans ?_ <| hfg.sum_smul_comp_perm_eq_sum_smul_iff hσinv).trans
+    ⟨fun h => ?_, fun h => ?_⟩
+  · apply eq_iff_eq_cancel_right.2
+    rw [σ.sum_comp' s (fun i j => f i • g j) hσ]
+    congr
+  · convert! h.comp_right σ
+    · rw [comp_assoc, inv_def, symm_comp_self, comp_id]
+    · rw [σ.eq_preimage_iff_image_eq, Set.image_perm hσ]
+  · convert! h.comp_right σ.symm
+    · rw [comp_assoc, self_comp_symm, comp_id]
+    · rw [σ.symm.eq_preimage_iff_image_eq]
+      exact Set.image_perm hσinv
+
+/--
+theorem `AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff` / 定理 `AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff`
+
+English:
+theorem AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: (hfg.dual_right.sum_comp_perm_smul_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+中文:
+定理 AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: (hfg.dual_right.sum_comp_perm_smul_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+Depends on / 依赖: dual_right, hfg.dual_right.sum_comp_perm_smul_eq_sum_smul_iff, monovaryOn_toDual_right, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem AntivaryOn.sum_comp_perm_smul_eq_sum_smul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) • g i = ∑ i in s, f i • g i ↔ AntivaryOn (f ∘ σ) g s :=
+  (hfg.dual_right.sum_comp_perm_smul_eq_sum_smul_iff hσ).trans monovaryOn_toDual_right
+
+variable [Fintype ι]
+
+/--
+theorem `Monovary.sum_smul_comp_perm_eq_sum_smul_iff` / 定理 `Monovary.sum_smul_comp_perm_eq_sum_smul_iff`
+
+English:
+theorem Monovary.sum_smul_comp_perm_eq_sum_smul_iff
+  given: (hfg : Monovary f g)
+  proof: by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Monovary.sum_smul_comp_perm_eq_sum_smul_iff
+  条件: (hfg : Monovary f g)
+  证明: by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem Monovary.sum_smul_comp_perm_eq_sum_smul_iff (hfg : Monovary f g) :
+    ∑ i, f i • g (σ i) = ∑ i, f i • g i ↔ Monovary f (g ∘ σ) := by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Monovary.sum_comp_perm_smul_eq_sum_smul_iff` / 定理 `Monovary.sum_comp_perm_smul_eq_sum_smul_iff`
+
+English:
+theorem Monovary.sum_comp_perm_smul_eq_sum_smul_iff
+  given: (hfg : Monovary f g)
+  proof: by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Monovary.sum_comp_perm_smul_eq_sum_smul_iff
+  条件: (hfg : Monovary f g)
+  证明: by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem Monovary.sum_comp_perm_smul_eq_sum_smul_iff (hfg : Monovary f g) :
+    ∑ i, f (σ i) • g i = ∑ i, f i • g i ↔ Monovary (f ∘ σ) g := by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Antivary.sum_smul_comp_perm_eq_sum_smul_iff` / 定理 `Antivary.sum_smul_comp_perm_eq_sum_smul_iff`
+
+English:
+theorem Antivary.sum_smul_comp_perm_eq_sum_smul_iff
+  given: (hfg : Antivary f g)
+  proof: by
+  simp [(hfg.antivaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Antivary.sum_smul_comp_perm_eq_sum_smul_iff
+  条件: (hfg : Antivary f g)
+  证明: by
+  simp [(hfg.antivaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem Antivary.sum_smul_comp_perm_eq_sum_smul_iff (hfg : Antivary f g) :
+    ∑ i, f i • g (σ i) = ∑ i, f i • g i ↔ Antivary f (g ∘ σ) := by
+  simp [(hfg.antivaryOn _).sum_smul_comp_perm_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Antivary.sum_comp_perm_smul_eq_sum_smul_iff` / 定理 `Antivary.sum_comp_perm_smul_eq_sum_smul_iff`
+
+English:
+theorem Antivary.sum_comp_perm_smul_eq_sum_smul_iff
+  given: (hfg : Antivary f g)
+  proof: by
+  simp [(hfg.antivaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Antivary.sum_comp_perm_smul_eq_sum_smul_iff
+  条件: (hfg : Antivary f g)
+  证明: by
+  simp [(hfg.antivaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem Antivary.sum_comp_perm_smul_eq_sum_smul_iff (hfg : Antivary f g) :
+    ∑ i, f (σ i) • g i = ∑ i, f i • g i ↔ Antivary (f ∘ σ) g := by
+  simp [(hfg.antivaryOn _).sum_comp_perm_smul_eq_sum_smul_iff fun _ _ => mem_univ _]
+
+end equality_case
+
+/-! #### Strict rearrangement inequality -/
+
+section strict_inequality
+variable [PosSMulStrictMono α β] {s : Finset ι} {σ : Perm ι} {f : ι -> α} {g : ι -> β}
+
+/--
+theorem `MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff` / 定理 `MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff`
+
+English:
+theorem MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_smul_comp_perm_le_sum_smul hσ]
+
+中文:
+定理 MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_smul_comp_perm_le_sum_smul hσ]
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_eq_sum_smul_iff, hfg.sum_smul_comp_perm_le_sum_smul, lt_iff_le_and_ne, sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_comp_perm_le_sum_smul
+-/
+theorem MonovaryOn.sum_smul_comp_perm_lt_sum_smul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g (σ i) < ∑ i in s, f i • g i ↔ ¬MonovaryOn f (g ∘ σ) s := by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_smul_comp_perm_le_sum_smul hσ]
+
+/--
+theorem `AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff` / 定理 `AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff`
+
+English:
+theorem AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne, eq_comm,
+    hfg.sum_smul_le_sum_smul_comp_perm hσ]
+
+中文:
+定理 AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne, eq_comm,
+    hfg.sum_smul_le_sum_smul_comp_perm hσ]
+
+Depends on / 依赖: eq_comm, hfg.sum_smul_comp_perm_eq_sum_smul_iff, hfg.sum_smul_le_sum_smul_comp_perm, lt_iff_le_and_ne, sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_le_sum_smul_comp_perm
+-/
+theorem AntivaryOn.sum_smul_lt_sum_smul_comp_perm_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g i < ∑ i in s, f i • g (σ i) ↔ ¬AntivaryOn f (g ∘ σ) s := by
+  simp [← hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ, lt_iff_le_and_ne, eq_comm,
+    hfg.sum_smul_le_sum_smul_comp_perm hσ]
+
+/--
+theorem `MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff` / 定理 `MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff`
+
+English:
+theorem MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_comp_perm_smul_le_sum_smul hσ]
+
+中文:
+定理 MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_comp_perm_smul_le_sum_smul hσ]
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_eq_sum_smul_iff, hfg.sum_comp_perm_smul_le_sum_smul, lt_iff_le_and_ne, sum_comp_perm_smul_eq_sum_smul_iff, sum_comp_perm_smul_le_sum_smul
+-/
+theorem MonovaryOn.sum_comp_perm_smul_lt_sum_smul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) • g i < ∑ i in s, f i • g i ↔ ¬MonovaryOn (f ∘ σ) g s := by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, lt_iff_le_and_ne,
+    hfg.sum_comp_perm_smul_le_sum_smul hσ]
+
+/--
+theorem `AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff` / 定理 `AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff`
+
+English:
+theorem AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, eq_comm, lt_iff_le_and_ne,
+    hfg.sum_smul_le_sum_comp_perm_smul hσ]
+
+中文:
+定理 AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, eq_comm, lt_iff_le_and_ne,
+    hfg.sum_smul_le_sum_comp_perm_smul hσ]
+
+Depends on / 依赖: eq_comm, hfg.sum_comp_perm_smul_eq_sum_smul_iff, hfg.sum_smul_le_sum_comp_perm_smul, lt_iff_le_and_ne, sum_comp_perm_smul_eq_sum_smul_iff, sum_smul_le_sum_comp_perm_smul
+-/
+theorem AntivaryOn.sum_smul_lt_sum_comp_perm_smul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g i < ∑ i in s, f (σ i) • g i ↔ ¬AntivaryOn (f ∘ σ) g s := by
+  simp [← hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ, eq_comm, lt_iff_le_and_ne,
+    hfg.sum_smul_le_sum_comp_perm_smul hσ]
+
+variable [Fintype ι]
+
+/--
+theorem `Monovary.sum_smul_comp_perm_lt_sum_smul_iff` / 定理 `Monovary.sum_smul_comp_perm_lt_sum_smul_iff`
+
+English:
+theorem Monovary.sum_smul_comp_perm_lt_sum_smul_iff
+  given: (hfg : Monovary f g)
+  proof: by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Monovary.sum_smul_comp_perm_lt_sum_smul_iff
+  条件: (hfg : Monovary f g)
+  证明: by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_smul_comp_perm_lt_sum_smul_iff
+-/
+theorem Monovary.sum_smul_comp_perm_lt_sum_smul_iff (hfg : Monovary f g) :
+    ∑ i, f i • g (σ i) < ∑ i, f i • g i ↔ ¬Monovary f (g ∘ σ) := by
+  simp [(hfg.monovaryOn _).sum_smul_comp_perm_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Monovary.sum_comp_perm_smul_lt_sum_smul_iff` / 定理 `Monovary.sum_comp_perm_smul_lt_sum_smul_iff`
+
+English:
+theorem Monovary.sum_comp_perm_smul_lt_sum_smul_iff
+  given: (hfg : Monovary f g)
+  proof: by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Monovary.sum_comp_perm_smul_lt_sum_smul_iff
+  条件: (hfg : Monovary f g)
+  证明: by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: hfg.monovaryOn, mem_univ, monovaryOn, sum_comp_perm_smul_lt_sum_smul_iff
+-/
+theorem Monovary.sum_comp_perm_smul_lt_sum_smul_iff (hfg : Monovary f g) :
+    ∑ i, f (σ i) • g i < ∑ i, f i • g i ↔ ¬Monovary (f ∘ σ) g := by
+  simp [(hfg.monovaryOn _).sum_comp_perm_smul_lt_sum_smul_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Antivary.sum_smul_lt_sum_smul_comp_perm_iff` / 定理 `Antivary.sum_smul_lt_sum_smul_comp_perm_iff`
+
+English:
+theorem Antivary.sum_smul_lt_sum_smul_comp_perm_iff
+  given: (hfg : Antivary f g)
+  proof: by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_smul_comp_perm_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Antivary.sum_smul_lt_sum_smul_comp_perm_iff
+  条件: (hfg : Antivary f g)
+  证明: by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_smul_comp_perm_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_smul_lt_sum_smul_comp_perm_iff
+-/
+theorem Antivary.sum_smul_lt_sum_smul_comp_perm_iff (hfg : Antivary f g) :
+    ∑ i, f i • g i < ∑ i, f i • g (σ i) ↔ ¬Antivary f (g ∘ σ) := by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_smul_comp_perm_iff fun _ _ => mem_univ _]
+
+/--
+theorem `Antivary.sum_smul_lt_sum_comp_perm_smul_iff` / 定理 `Antivary.sum_smul_lt_sum_comp_perm_smul_iff`
+
+English:
+theorem Antivary.sum_smul_lt_sum_comp_perm_smul_iff
+  given: (hfg : Antivary f g)
+  proof: by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_comp_perm_smul_iff fun _ _ => mem_univ _]
+
+中文:
+定理 Antivary.sum_smul_lt_sum_comp_perm_smul_iff
+  条件: (hfg : Antivary f g)
+  证明: by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_comp_perm_smul_iff fun _ _ => mem_univ _]
+
+Depends on / 依赖: antivaryOn, hfg.antivaryOn, mem_univ, sum_smul_lt_sum_comp_perm_smul_iff
+-/
+theorem Antivary.sum_smul_lt_sum_comp_perm_smul_iff (hfg : Antivary f g) :
+    ∑ i, f i • g i < ∑ i, f (σ i) • g i ↔ ¬Antivary (f ∘ σ) g := by
+  simp [(hfg.antivaryOn _).sum_smul_lt_sum_comp_perm_smul_iff fun _ _ => mem_univ _]
+
+end strict_inequality
+end SMul
+
+/-!
+### Multiplication versions
+
+Special cases of the above when scalar multiplication is actually multiplication.
+-/
+
+section Mul
+variable {s : Finset ι} {σ : Perm ι} {f g : ι -> α}
+
+/--
+theorem `MonovaryOn.sum_mul_comp_perm_le_sum_mul` / 定理 `MonovaryOn.sum_mul_comp_perm_le_sum_mul`
+
+English:
+theorem MonovaryOn.sum_mul_comp_perm_le_sum_mul
+  given: (hfg : MonovaryOn f g s) (hσ : {x | σ x != x} subseteq s)
+  proof: hfg.sum_smul_comp_perm_le_sum_smul hσ
+
+中文:
+定理 MonovaryOn.sum_mul_comp_perm_le_sum_mul
+  条件: (hfg : MonovaryOn f g s) (hσ : {x | σ x != x} subseteq s)
+  证明: hfg.sum_smul_comp_perm_le_sum_smul hσ
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_le_sum_smul, sum_smul_comp_perm_le_sum_smul
+-/
+theorem MonovaryOn.sum_mul_comp_perm_le_sum_mul (hfg : MonovaryOn f g s) (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i * g (σ i) <= ∑ i in s, f i * g i :=
+  hfg.sum_smul_comp_perm_le_sum_smul hσ
+
+/--
+theorem `MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff` / 定理 `MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff`
+
+English:
+theorem MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+中文:
+定理 MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem MonovaryOn.sum_mul_comp_perm_eq_sum_mul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i * g (σ i) = ∑ i in s, f i * g i ↔ MonovaryOn f (g ∘ σ) s :=
+  hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+/--
+theorem `MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff` / 定理 `MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff`
+
+English:
+theorem MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: hfg.sum_smul_comp_perm_lt_sum_smul_iff hσ
+
+中文:
+定理 MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: hfg.sum_smul_comp_perm_lt_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_lt_sum_smul_iff, sum_smul_comp_perm_lt_sum_smul_iff
+-/
+theorem MonovaryOn.sum_mul_comp_perm_lt_sum_mul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i • g (σ i) < ∑ i in s, f i • g i ↔ ¬MonovaryOn f (g ∘ σ) s :=
+  hfg.sum_smul_comp_perm_lt_sum_smul_iff hσ
+
+/--
+theorem `MonovaryOn.sum_comp_perm_mul_le_sum_mul` / 定理 `MonovaryOn.sum_comp_perm_mul_le_sum_mul`
+
+English:
+theorem MonovaryOn.sum_comp_perm_mul_le_sum_mul
+  statement: (hfg : MonovaryOn f g s)
+  proof: hfg.sum_comp_perm_smul_le_sum_smul hσ
+
+中文:
+定理 MonovaryOn.sum_comp_perm_mul_le_sum_mul
+  结论: (hfg : MonovaryOn f g s)
+  证明: hfg.sum_comp_perm_smul_le_sum_smul hσ
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_le_sum_smul, sum_comp_perm_smul_le_sum_smul
+-/
+theorem MonovaryOn.sum_comp_perm_mul_le_sum_mul (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f (σ i) * g i <= ∑ i in s, f i * g i :=
+  hfg.sum_comp_perm_smul_le_sum_smul hσ
+
+/--
+theorem `MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff` / 定理 `MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff`
+
+English:
+theorem MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+中文:
+定理 MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_eq_sum_smul_iff, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem MonovaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) * g i = ∑ i in s, f i * g i ↔ MonovaryOn (f ∘ σ) g s :=
+  hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+/--
+theorem `MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff` / 定理 `MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff`
+
+English:
+theorem MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff
+  statement: (hfg : MonovaryOn f g s)
+  proof: hfg.sum_comp_perm_smul_lt_sum_smul_iff hσ
+
+中文:
+定理 MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff
+  结论: (hfg : MonovaryOn f g s)
+  证明: hfg.sum_comp_perm_smul_lt_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_lt_sum_smul_iff, sum_comp_perm_smul_lt_sum_smul_iff
+-/
+theorem MonovaryOn.sum_comp_perm_mul_lt_sum_mul_iff (hfg : MonovaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) * g i < ∑ i in s, f i * g i ↔ ¬MonovaryOn (f ∘ σ) g s :=
+  hfg.sum_comp_perm_smul_lt_sum_smul_iff hσ
+
+/--
+theorem `AntivaryOn.sum_mul_le_sum_mul_comp_perm` / 定理 `AntivaryOn.sum_mul_le_sum_mul_comp_perm`
+
+English:
+theorem AntivaryOn.sum_mul_le_sum_mul_comp_perm
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_smul_le_sum_smul_comp_perm hσ
+
+中文:
+定理 AntivaryOn.sum_mul_le_sum_mul_comp_perm
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_smul_le_sum_smul_comp_perm hσ
+
+Depends on / 依赖: hfg.sum_smul_le_sum_smul_comp_perm, sum_smul_le_sum_smul_comp_perm
+-/
+theorem AntivaryOn.sum_mul_le_sum_mul_comp_perm (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f i * g i <= ∑ i in s, f i * g (σ i) :=
+  hfg.sum_smul_le_sum_smul_comp_perm hσ
+
+/--
+theorem `AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff` / 定理 `AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff`
+
+English:
+theorem AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+中文:
+定理 AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem AntivaryOn.sum_mul_eq_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i * g (σ i) = ∑ i in s, f i * g i ↔ AntivaryOn f (g ∘ σ) s :=
+  hfg.sum_smul_comp_perm_eq_sum_smul_iff hσ
+
+/--
+theorem `AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff` / 定理 `AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff`
+
+English:
+theorem AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_smul_lt_sum_smul_comp_perm_iff hσ
+
+中文:
+定理 AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_smul_lt_sum_smul_comp_perm_iff hσ
+
+Depends on / 依赖: hfg.sum_smul_lt_sum_smul_comp_perm_iff, sum_smul_lt_sum_smul_comp_perm_iff
+-/
+theorem AntivaryOn.sum_mul_lt_sum_mul_comp_perm_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i * g i < ∑ i in s, f i * g (σ i) ↔ ¬AntivaryOn f (g ∘ σ) s :=
+  hfg.sum_smul_lt_sum_smul_comp_perm_iff hσ
+
+/--
+theorem `AntivaryOn.sum_mul_le_sum_comp_perm_mul` / 定理 `AntivaryOn.sum_mul_le_sum_comp_perm_mul`
+
+English:
+theorem AntivaryOn.sum_mul_le_sum_comp_perm_mul
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_smul_le_sum_comp_perm_smul hσ
+
+中文:
+定理 AntivaryOn.sum_mul_le_sum_comp_perm_mul
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_smul_le_sum_comp_perm_smul hσ
+
+Depends on / 依赖: hfg.sum_smul_le_sum_comp_perm_smul, sum_smul_le_sum_comp_perm_smul
+-/
+theorem AntivaryOn.sum_mul_le_sum_comp_perm_mul (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) : ∑ i in s, f i * g i <= ∑ i in s, f (σ i) * g i :=
+  hfg.sum_smul_le_sum_comp_perm_smul hσ
+
+/--
+theorem `AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff` / 定理 `AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff`
+
+English:
+theorem AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+中文:
+定理 AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_eq_sum_smul_iff, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem AntivaryOn.sum_comp_perm_mul_eq_sum_mul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f (σ i) * g i = ∑ i in s, f i * g i ↔ AntivaryOn (f ∘ σ) g s :=
+  hfg.sum_comp_perm_smul_eq_sum_smul_iff hσ
+
+/--
+theorem `AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff` / 定理 `AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff`
+
+English:
+theorem AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff
+  statement: (hfg : AntivaryOn f g s)
+  proof: hfg.sum_smul_lt_sum_comp_perm_smul_iff hσ
+
+中文:
+定理 AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff
+  结论: (hfg : AntivaryOn f g s)
+  证明: hfg.sum_smul_lt_sum_comp_perm_smul_iff hσ
+
+Depends on / 依赖: hfg.sum_smul_lt_sum_comp_perm_smul_iff, sum_smul_lt_sum_comp_perm_smul_iff
+-/
+theorem AntivaryOn.sum_mul_lt_sum_comp_perm_mul_iff (hfg : AntivaryOn f g s)
+    (hσ : {x | σ x != x} subseteq s) :
+    ∑ i in s, f i * g i < ∑ i in s, f (σ i) * g i ↔ ¬AntivaryOn (f ∘ σ) g s :=
+  hfg.sum_smul_lt_sum_comp_perm_smul_iff hσ
+
+variable [Fintype ι]
+
+/--
+theorem `Monovary.sum_mul_comp_perm_le_sum_mul` / 定理 `Monovary.sum_mul_comp_perm_le_sum_mul`
+
+English:
+theorem Monovary.sum_mul_comp_perm_le_sum_mul
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_smul_comp_perm_le_sum_smul
+
+中文:
+定理 Monovary.sum_mul_comp_perm_le_sum_mul
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_smul_comp_perm_le_sum_smul
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_le_sum_smul, sum_smul_comp_perm_le_sum_smul
+-/
+theorem Monovary.sum_mul_comp_perm_le_sum_mul (hfg : Monovary f g) :
+    ∑ i, f i * g (σ i) <= ∑ i, f i * g i :=
+  hfg.sum_smul_comp_perm_le_sum_smul
+
+/--
+theorem `Monovary.sum_mul_comp_perm_eq_sum_mul_iff` / 定理 `Monovary.sum_mul_comp_perm_eq_sum_mul_iff`
+
+English:
+theorem Monovary.sum_mul_comp_perm_eq_sum_mul_iff
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+中文:
+定理 Monovary.sum_mul_comp_perm_eq_sum_mul_iff
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem Monovary.sum_mul_comp_perm_eq_sum_mul_iff (hfg : Monovary f g) :
+    ∑ i, f i * g (σ i) = ∑ i, f i * g i ↔ Monovary f (g ∘ σ) :=
+  hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+/--
+theorem `Monovary.sum_mul_comp_perm_lt_sum_mul_iff` / 定理 `Monovary.sum_mul_comp_perm_lt_sum_mul_iff`
+
+English:
+theorem Monovary.sum_mul_comp_perm_lt_sum_mul_iff
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_smul_comp_perm_lt_sum_smul_iff
+
+中文:
+定理 Monovary.sum_mul_comp_perm_lt_sum_mul_iff
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_smul_comp_perm_lt_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_lt_sum_smul_iff, sum_smul_comp_perm_lt_sum_smul_iff
+-/
+theorem Monovary.sum_mul_comp_perm_lt_sum_mul_iff (hfg : Monovary f g) :
+    ∑ i, f i * g (σ i) < ∑ i, f i * g i ↔ ¬Monovary f (g ∘ σ) :=
+  hfg.sum_smul_comp_perm_lt_sum_smul_iff
+
+/--
+theorem `Monovary.sum_comp_perm_mul_le_sum_mul` / 定理 `Monovary.sum_comp_perm_mul_le_sum_mul`
+
+English:
+theorem Monovary.sum_comp_perm_mul_le_sum_mul
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_comp_perm_smul_le_sum_smul
+
+中文:
+定理 Monovary.sum_comp_perm_mul_le_sum_mul
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_comp_perm_smul_le_sum_smul
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_le_sum_smul, sum_comp_perm_smul_le_sum_smul
+-/
+theorem Monovary.sum_comp_perm_mul_le_sum_mul (hfg : Monovary f g) :
+    ∑ i, f (σ i) * g i <= ∑ i, f i * g i :=
+  hfg.sum_comp_perm_smul_le_sum_smul
+
+/--
+theorem `Monovary.sum_comp_perm_mul_eq_sum_mul_iff` / 定理 `Monovary.sum_comp_perm_mul_eq_sum_mul_iff`
+
+English:
+theorem Monovary.sum_comp_perm_mul_eq_sum_mul_iff
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+中文:
+定理 Monovary.sum_comp_perm_mul_eq_sum_mul_iff
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_eq_sum_smul_iff, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem Monovary.sum_comp_perm_mul_eq_sum_mul_iff (hfg : Monovary f g) :
+    ∑ i, f (σ i) * g i = ∑ i, f i * g i ↔ Monovary (f ∘ σ) g :=
+  hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+/--
+theorem `Monovary.sum_comp_perm_mul_lt_sum_mul_iff` / 定理 `Monovary.sum_comp_perm_mul_lt_sum_mul_iff`
+
+English:
+theorem Monovary.sum_comp_perm_mul_lt_sum_mul_iff
+  given: (hfg : Monovary f g)
+  proof: hfg.sum_comp_perm_smul_lt_sum_smul_iff
+
+中文:
+定理 Monovary.sum_comp_perm_mul_lt_sum_mul_iff
+  条件: (hfg : Monovary f g)
+  证明: hfg.sum_comp_perm_smul_lt_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_lt_sum_smul_iff, sum_comp_perm_smul_lt_sum_smul_iff
+-/
+theorem Monovary.sum_comp_perm_mul_lt_sum_mul_iff (hfg : Monovary f g) :
+    ∑ i, f (σ i) * g i < ∑ i, f i * g i ↔ ¬Monovary (f ∘ σ) g :=
+  hfg.sum_comp_perm_smul_lt_sum_smul_iff
+
+/--
+theorem `Antivary.sum_mul_le_sum_mul_comp_perm` / 定理 `Antivary.sum_mul_le_sum_mul_comp_perm`
+
+English:
+theorem Antivary.sum_mul_le_sum_mul_comp_perm
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_smul_le_sum_smul_comp_perm
+
+中文:
+定理 Antivary.sum_mul_le_sum_mul_comp_perm
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_smul_le_sum_smul_comp_perm
+
+Depends on / 依赖: hfg.sum_smul_le_sum_smul_comp_perm, sum_smul_le_sum_smul_comp_perm
+-/
+theorem Antivary.sum_mul_le_sum_mul_comp_perm (hfg : Antivary f g) :
+    ∑ i, f i * g i <= ∑ i, f i * g (σ i) :=
+  hfg.sum_smul_le_sum_smul_comp_perm
+
+/--
+theorem `Antivary.sum_mul_eq_sum_mul_comp_perm_iff` / 定理 `Antivary.sum_mul_eq_sum_mul_comp_perm_iff`
+
+English:
+theorem Antivary.sum_mul_eq_sum_mul_comp_perm_iff
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+中文:
+定理 Antivary.sum_mul_eq_sum_mul_comp_perm_iff
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_smul_comp_perm_eq_sum_smul_iff, sum_smul_comp_perm_eq_sum_smul_iff
+-/
+theorem Antivary.sum_mul_eq_sum_mul_comp_perm_iff (hfg : Antivary f g) :
+    ∑ i, f i * g (σ i) = ∑ i, f i * g i ↔ Antivary f (g ∘ σ) :=
+  hfg.sum_smul_comp_perm_eq_sum_smul_iff
+
+/--
+theorem `Antivary.sum_mul_lt_sum_mul_comp_perm_iff` / 定理 `Antivary.sum_mul_lt_sum_mul_comp_perm_iff`
+
+English:
+theorem Antivary.sum_mul_lt_sum_mul_comp_perm_iff
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_smul_lt_sum_smul_comp_perm_iff
+
+中文:
+定理 Antivary.sum_mul_lt_sum_mul_comp_perm_iff
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_smul_lt_sum_smul_comp_perm_iff
+
+Depends on / 依赖: hfg.sum_smul_lt_sum_smul_comp_perm_iff, sum_smul_lt_sum_smul_comp_perm_iff
+-/
+theorem Antivary.sum_mul_lt_sum_mul_comp_perm_iff (hfg : Antivary f g) :
+    ∑ i, f i • g i < ∑ i, f i • g (σ i) ↔ ¬Antivary f (g ∘ σ) :=
+  hfg.sum_smul_lt_sum_smul_comp_perm_iff
+
+/--
+theorem `Antivary.sum_mul_le_sum_comp_perm_mul` / 定理 `Antivary.sum_mul_le_sum_comp_perm_mul`
+
+English:
+theorem Antivary.sum_mul_le_sum_comp_perm_mul
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_smul_le_sum_comp_perm_smul
+
+中文:
+定理 Antivary.sum_mul_le_sum_comp_perm_mul
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_smul_le_sum_comp_perm_smul
+
+Depends on / 依赖: hfg.sum_smul_le_sum_comp_perm_smul, sum_smul_le_sum_comp_perm_smul
+-/
+theorem Antivary.sum_mul_le_sum_comp_perm_mul (hfg : Antivary f g) :
+    ∑ i, f i * g i <= ∑ i, f (σ i) * g i :=
+  hfg.sum_smul_le_sum_comp_perm_smul
+
+/--
+theorem `Antivary.sum_comp_perm_mul_eq_sum_mul_iff` / 定理 `Antivary.sum_comp_perm_mul_eq_sum_mul_iff`
+
+English:
+theorem Antivary.sum_comp_perm_mul_eq_sum_mul_iff
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+中文:
+定理 Antivary.sum_comp_perm_mul_eq_sum_mul_iff
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+Depends on / 依赖: hfg.sum_comp_perm_smul_eq_sum_smul_iff, sum_comp_perm_smul_eq_sum_smul_iff
+-/
+theorem Antivary.sum_comp_perm_mul_eq_sum_mul_iff (hfg : Antivary f g) :
+    ∑ i, f (σ i) * g i = ∑ i, f i * g i ↔ Antivary (f ∘ σ) g :=
+  hfg.sum_comp_perm_smul_eq_sum_smul_iff
+
+/--
+theorem `Antivary.sum_mul_lt_sum_comp_perm_mul_iff` / 定理 `Antivary.sum_mul_lt_sum_comp_perm_mul_iff`
+
+English:
+theorem Antivary.sum_mul_lt_sum_comp_perm_mul_iff
+  given: (hfg : Antivary f g)
+  proof: hfg.sum_smul_lt_sum_comp_perm_smul_iff
+
+中文:
+定理 Antivary.sum_mul_lt_sum_comp_perm_mul_iff
+  条件: (hfg : Antivary f g)
+  证明: hfg.sum_smul_lt_sum_comp_perm_smul_iff
+
+Depends on / 依赖: hfg.sum_smul_lt_sum_comp_perm_smul_iff, sum_smul_lt_sum_comp_perm_smul_iff
+-/
+theorem Antivary.sum_mul_lt_sum_comp_perm_mul_iff (hfg : Antivary f g) :
+    ∑ i, f i * g i < ∑ i, f (σ i) * g i ↔ ¬Antivary (f ∘ σ) g :=
+  hfg.sum_smul_lt_sum_comp_perm_smul_iff
+
+end Mul

@@ -1,0 +1,182 @@
+/-
+Copyright (c) 2021 Chris Hughes, Junyan Xu. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Hughes, Junyan Xu
+-/
+module
+
+public import Mathlib.Algebra.MonoidAlgebra.Cardinal
+public import Mathlib.Algebra.MvPolynomial.Equiv
+public import Mathlib.Data.Finsupp.Fintype
+public import Mathlib.SetTheory.Cardinal.Arithmetic
+
+import Mathlib.Algebra.MonoidAlgebra.Cardinal
+
+/-!
+# Cardinality of Multivariate Polynomial Ring
+
+The main result in this file is `MvPolynomial.cardinalMk_le_max`, which says that
+the cardinality of `MvPolynomial σ R` is bounded above by the maximum of `#R`, `#σ`
+and `ℵ₀`.
+-/
+
+public section
+
+
+universe u v
+
+open Cardinal
+
+namespace MvPolynomial
+
+section TwoUniverses
+
+variable {σ : Type u} {R : Type v} [CommSemiring R]
+
+-- We want this to have higher priority than `AddMonoidAlgebra.cardinalMk_eq_max_lift_of_infinite`.
+@[simp high]
+/--
+theorem `cardinalMk_eq_max_lift` / 定理 `cardinalMk_eq_max_lift`
+
+English:
+theorem cardinalMk_eq_max_lift
+  given: [Nonempty σ] [Nontrivial R]
+  proof: by simp [sup_assoc]
+
+中文:
+定理 cardinalMk_eq_max_lift
+  条件: [Nonempty σ] [Nontrivial R]
+  证明: by simp [sup_assoc]
+
+Depends on / 依赖: sup_assoc
+-/
+theorem cardinalMk_eq_max_lift [Nonempty σ] [Nontrivial R] :
+    #(MvPolynomial σ R) = lift.{u} #R ⊔ lift.{v} #σ ⊔ ℵ₀ := by simp [sup_assoc]
+
+-- We want this to have higher priority than `AddMonoidAlgebra.cardinalMk_eq_lift_of_fintype`.
+@[simp high]
+/--
+theorem `cardinalMk_eq_lift` / 定理 `cardinalMk_eq_lift`
+
+English:
+theorem cardinalMk_eq_lift
+  given: [IsEmpty σ]
+  statement: #(MvPolynomial σ R) = lift.{u} #R
+  proof: by simp
+
+@[nontriviality]
+
+中文:
+定理 cardinalMk_eq_lift
+  条件: [IsEmpty σ]
+  结论: #(MvPolynomial σ R) = lift.{u} #R
+  证明: by simp
+
+@[nontriviality]
+-/
+theorem cardinalMk_eq_lift [IsEmpty σ] : #(MvPolynomial σ R) = lift.{u} #R := by simp
+
+@[nontriviality]
+/--
+theorem `cardinalMk_eq_one` / 定理 `cardinalMk_eq_one`
+
+English:
+theorem cardinalMk_eq_one
+  given: [Subsingleton R]
+  statement: #(MvPolynomial σ R) = 1
+  proof: mk_eq_one _
+
+中文:
+定理 cardinalMk_eq_one
+  条件: [Subsingleton R]
+  结论: #(MvPolynomial σ R) = 1
+  证明: mk_eq_one _
+
+Depends on / 依赖: mk_eq_one
+-/
+theorem cardinalMk_eq_one [Subsingleton R] : #(MvPolynomial σ R) = 1 := mk_eq_one _
+
+
+/--
+theorem `cardinalMk_le_max_lift` / 定理 `cardinalMk_le_max_lift`
+
+English:
+theorem cardinalMk_le_max_lift
+  given: {σ : Type u} {R : Type v} [CommSemiring R]
+  proof: by
+  nontriviality R; cases isEmpty_or_nonempty σ <;> simp
+
+中文:
+定理 cardinalMk_le_max_lift
+  条件: {σ : 类型u} {R : 类型v} [CommSemiring R]
+  证明: by
+  nontriviality R; cases isEmpty_or_nonempty σ <;> simp
+
+Depends on / 依赖: isEmpty_or_nonempty, nontriviality
+-/
+theorem cardinalMk_le_max_lift {σ : Type u} {R : Type v} [CommSemiring R] :
+    #(MvPolynomial σ R) <= lift.{u} #R ⊔ lift.{v} #σ ⊔ ℵ₀ := by
+  nontriviality R; cases isEmpty_or_nonempty σ <;> simp
+
+end TwoUniverses
+
+variable {σ R : Type u} [CommSemiring R]
+
+/--
+theorem `cardinalMk_eq_max` / 定理 `cardinalMk_eq_max`
+
+English:
+theorem cardinalMk_eq_max
+  given: [Nonempty σ] [Nontrivial R]
+  statement: #(MvPolynomial σ R) = #R ⊔ #σ ⊔ ℵ₀
+  proof: by
+  simp [sup_assoc]
+
+中文:
+定理 cardinalMk_eq_max
+  条件: [Nonempty σ] [Nontrivial R]
+  结论: #(MvPolynomial σ R) = #R ⊔ #σ ⊔ ℵ₀
+  证明: by
+  simp [sup_assoc]
+
+Depends on / 依赖: sup_assoc
+-/
+theorem cardinalMk_eq_max [Nonempty σ] [Nontrivial R] : #(MvPolynomial σ R) = #R ⊔ #σ ⊔ ℵ₀ := by
+  simp [sup_assoc]
+
+/--
+theorem `cardinalMk_eq` / 定理 `cardinalMk_eq`
+
+English:
+theorem cardinalMk_eq
+  given: [IsEmpty σ]
+  statement: #(MvPolynomial σ R) = #R
+  proof: by simp
+
+中文:
+定理 cardinalMk_eq
+  条件: [IsEmpty σ]
+  结论: #(MvPolynomial σ R) = #R
+  证明: by simp
+-/
+theorem cardinalMk_eq [IsEmpty σ] : #(MvPolynomial σ R) = #R := by simp
+
+/--
+theorem `cardinalMk_le_max` / 定理 `cardinalMk_le_max`
+
+English:
+theorem cardinalMk_le_max
+  statement: #(MvPolynomial σ R) <= #R ⊔ #σ ⊔ ℵ₀
+  proof: cardinalMk_le_max_lift.trans by rw [lift_id, lift_id]
+
+中文:
+定理 cardinalMk_le_max
+  结论: #(MvPolynomial σ R) <= #R ⊔ #σ ⊔ ℵ₀
+  证明: cardinalMk_le_max_lift.trans by rw [lift_id, lift_id]
+
+Depends on / 依赖: cardinalMk_le_max_lift, cardinalMk_le_max_lift.trans, lift_id
+-/
+theorem cardinalMk_le_max : #(MvPolynomial σ R) <= #R ⊔ #σ ⊔ ℵ₀ :=
+cardinalMk_le_max_lift.trans by rw [lift_id, lift_id]
+
+end MvPolynomial

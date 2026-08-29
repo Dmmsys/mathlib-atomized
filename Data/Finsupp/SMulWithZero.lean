@@ -1,0 +1,303 @@
+/-
+Copyright (c) 2017 Johannes Hölzl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Johannes Hölzl, Kim Morrison
+-/
+module
+
+public import Mathlib.Algebra.Group.Action.Pi
+public import Mathlib.Algebra.Group.Finsupp
+public import Mathlib.Algebra.GroupWithZero.Action.Defs
+
+/-!
+# Scalar multiplication on `Finsupp`
+
+This file defines the pointwise scalar multiplication on `Finsupp`, assuming it preserves zero.
+
+## Main declarations
+
+* `Finsupp.smulZeroClass`: if the action of `R` on `M` preserves `0`, then it acts on `α →₀ M`
+
+## Implementation notes
+
+This file is intermediate between `Finsupp.Defs` and `Finsupp.Module` in that it covers scalar
+multiplication but does not rely on the definition of `Module`. Scalar multiplication is needed to
+supply the `nsmul` (and `zsmul`) fields of (semi)ring structures which are fundamental for e.g.
+`Polynomial`, so we want to keep the imports required for the `Finsupp.smulZeroClass` instance
+reasonably light.
+
+This file is a `noncomputable theory` and uses classical logic throughout.
+-/
+
+public section
+
+assert_not_exists Module
+
+noncomputable section
+
+open Finset Function
+
+variable {α β γ ι M M' N P G H R S : Type*}
+
+namespace Finsupp
+
+/--
+Instance `smulZeroClass` / 实例 `smulZeroClass`
+
+English:
+instance smulZeroClass
+  signature: [Zero M] [SMulZeroClass R M]
+  body: v.mapRange (a • ·) (smul_zero _)
+  smul_zero a := by
+    ext
+    apply smul_zero
+
+中文:
+实例 smulZeroClass
+  签名: [Zero M] [SMulZeroClass R M]
+  定义体: v.mapRange (a • ·) (smul_zero _)
+  smul_zero a := by
+    ext
+    apply smul_zero
+
+Depends on / 依赖: mapRange, smul_zero, v.mapRange
+-/
+instance smulZeroClass [Zero M] [SMulZeroClass R M] : SMulZeroClass R (α ->₀ M) where
+  smul a v := v.mapRange (a • ·) (smul_zero _)
+  smul_zero a := by
+    ext
+    apply smul_zero
+
+/-!
+Throughout this section, some `Monoid` and `Semiring` arguments are specified with `{}` instead of
+`[]`. See note [implicit instance arguments].
+-/
+
+@[simp, norm_cast]
+/--
+theorem `coe_smul` / 定理 `coe_smul`
+
+English:
+theorem coe_smul
+  given: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M)
+  statement: ⇑(b • v) = b • ⇑v
+  proof: rfl
+
+中文:
+定理 coe_smul
+  条件: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M)
+  结论: ⇑(b • v) = b • ⇑v
+  证明: rfl
+-/
+theorem coe_smul [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) : ⇑(b • v) = b • ⇑v :=
+  rfl
+
+/--
+theorem `smul_apply` / 定理 `smul_apply`
+
+English:
+theorem smul_apply
+  given: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) (a : α)
+  proof: rfl
+
+中文:
+定理 smul_apply
+  条件: [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) (a : α)
+  证明: rfl
+-/
+theorem smul_apply [Zero M] [SMulZeroClass R M] (b : R) (v : α ->₀ M) (a : α) :
+    (b • v) a = b • v a :=
+  rfl
+
+/--
+Instance `instSMulWithZero` / 实例 `instSMulWithZero`
+
+English:
+instance instSMulWithZero
+  signature: [Zero R] [Zero M] [SMulWithZero R M]
+  body: by ext i; exact zero_smul _ _
+
+中文:
+实例 instSMulWithZero
+  签名: [Zero R] [Zero M] [SMulWithZero R M]
+  定义体: by ext i; exact zero_smul _ _
+
+Depends on / 依赖: zero_smul
+-/
+instance instSMulWithZero [Zero R] [Zero M] [SMulWithZero R M] : SMulWithZero R (α ->₀ M) where
+  zero_smul f := by ext i; exact zero_smul _ _
+
+variable (α M)
+
+/--
+Instance `distribSMul` / 实例 `distribSMul`
+
+English:
+instance distribSMul
+  signature: [AddZeroClass M] [DistribSMul R M]
+  body: ext fun _ => smul_add _ _ _
+  smul_zero _ := ext fun _ => smul_zero _
+
+中文:
+实例 distribSMul
+  签名: [AddZeroClass M] [DistribSMul R M]
+  定义体: ext fun _ => smul_add _ _ _
+  smul_zero _ := ext fun _ => smul_zero _
+
+Depends on / 依赖: smul_add
+-/
+instance distribSMul [AddZeroClass M] [DistribSMul R M] : DistribSMul R (α ->₀ M) where
+  smul_add _ _ _ := ext fun _ => smul_add _ _ _
+  smul_zero _ := ext fun _ => smul_zero _
+
+/--
+Instance `isScalarTower` / 实例 `isScalarTower`
+
+English:
+instance isScalarTower
+  signature: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMul R S]
+  body: ext fun _ => smul_assoc _ _ _
+
+中文:
+实例 isScalarTower
+  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMul R S]
+  定义体: ext fun _ => smul_assoc _ _ _
+
+Depends on / 依赖: smul_assoc
+-/
+instance isScalarTower [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMul R S]
+    [IsScalarTower R S M] : IsScalarTower R S (α ->₀ M) where
+  smul_assoc _ _ _ := ext fun _ => smul_assoc _ _ _
+
+/--
+Instance `smulCommClass` / 实例 `smulCommClass`
+
+English:
+instance smulCommClass
+  signature: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMulCommClass R S M]
+  body: ext fun _ => smul_comm _ _ _
+
+中文:
+实例 smulCommClass
+  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMulCommClass R S M]
+  定义体: ext fun _ => smul_comm _ _ _
+
+Depends on / 依赖: smul_comm
+-/
+instance smulCommClass [Zero M] [SMulZeroClass R M] [SMulZeroClass S M] [SMulCommClass R S M] :
+    SMulCommClass R S (α ->₀ M) where
+  smul_comm _ _ _ := ext fun _ => smul_comm _ _ _
+
+/--
+Instance `isCentralScalar` / 实例 `isCentralScalar`
+
+English:
+instance isCentralScalar
+  signature: [Zero M] [SMulZeroClass R M] [SMulZeroClass Rᵐᵒᵖ M] [IsCentralScalar R M]
+  body: ext fun _ => op_smul_eq_smul _ _
+
+中文:
+实例 isCentralScalar
+  签名: [Zero M] [SMulZeroClass R M] [SMulZeroClass Rᵐᵒᵖ M] [IsCentralScalar R M]
+  定义体: ext fun _ => op_smul_eq_smul _ _
+
+Depends on / 依赖: op_smul_eq_smul
+-/
+instance isCentralScalar [Zero M] [SMulZeroClass R M] [SMulZeroClass Rᵐᵒᵖ M] [IsCentralScalar R M] :
+    IsCentralScalar R (α ->₀ M) where
+  op_smul_eq_smul _ _ := ext fun _ => op_smul_eq_smul _ _
+
+variable {α M}
+
+/--
+theorem `support_smul` / 定理 `support_smul`
+
+English:
+theorem support_smul
+  given: [Zero M] [SMulZeroClass R M] {b : R} {g : α ->₀ M}
+  proof: fun a => by
+  simp only [smul_apply, mem_support_iff, Ne]
+  exact mt fun h => h.symm ▸ smul_zero _
+
+@[simp]
+
+中文:
+定理 support_smul
+  条件: [Zero M] [SMulZeroClass R M] {b : R} {g : α ->₀ M}
+  证明: fun a => by
+  simp only [smul_apply, mem_support_iff, Ne]
+  exact mt fun h => h.symm ▸ smul_zero _
+
+@[simp]
+
+Depends on / 依赖: h.symm, mem_support_iff, smul_apply, smul_zero
+-/
+theorem support_smul [Zero M] [SMulZeroClass R M] {b : R} {g : α ->₀ M} :
+    (b • g).support subseteq g.support := fun a => by
+  simp only [smul_apply, mem_support_iff, Ne]
+  exact mt fun h => h.symm ▸ smul_zero _
+
+@[simp]
+/--
+theorem `smul_single` / 定理 `smul_single`
+
+English:
+theorem smul_single
+  given: [Zero M] [SMulZeroClass R M] (c : R) (a : α) (b : M)
+  proof: mapRange_single
+
+中文:
+定理 smul_single
+  条件: [Zero M] [SMulZeroClass R M] (c : R) (a : α) (b : M)
+  证明: mapRange_single
+
+Depends on / 依赖: mapRange_single
+-/
+theorem smul_single [Zero M] [SMulZeroClass R M] (c : R) (a : α) (b : M) :
+    c • Finsupp.single a b = Finsupp.single a (c • b) :=
+  mapRange_single
+
+/--
+theorem `mapRange_smul'` / 定理 `mapRange_smul'`
+
+English:
+theorem mapRange_smul'
+  statement: [Zero M] [SMulZeroClass R M] [Zero N]
+  proof: by
+  ext
+  simp [hsmul]
+
+中文:
+定理 mapRange_smul'
+  结论: [Zero M] [SMulZeroClass R M] [Zero N]
+  证明: by
+  ext
+  simp [hsmul]
+-/
+theorem mapRange_smul' [Zero M] [SMulZeroClass R M] [Zero N]
+    [SMulZeroClass S N] {f : M -> N} {hf : f 0 = 0} (c : R) (d : S) (v : α ->₀ M)
+    (hsmul : forall x, f (c • x) = d • f x) : mapRange f hf (c • v) = d • mapRange f hf v := by
+  ext
+  simp [hsmul]
+
+/--
+theorem `mapRange_smul` / 定理 `mapRange_smul`
+
+English:
+theorem mapRange_smul
+  statement: [Zero M] [SMulZeroClass R M] [Zero N]
+  proof: mapRange_smul' c c v hsmul
+
+中文:
+定理 mapRange_smul
+  结论: [Zero M] [SMulZeroClass R M] [Zero N]
+  证明: mapRange_smul' c c v hsmul
+
+Depends on / 依赖: mapRange_smul
+-/
+theorem mapRange_smul [Zero M] [SMulZeroClass R M] [Zero N]
+    [SMulZeroClass R N] {f : M -> N} {hf : f 0 = 0} (c : R) (v : α ->₀ M)
+    (hsmul : forall x, f (c • x) = c • f x) : mapRange f hf (c • v) = c • mapRange f hf v :=
+  mapRange_smul' c c v hsmul
+
+end Finsupp

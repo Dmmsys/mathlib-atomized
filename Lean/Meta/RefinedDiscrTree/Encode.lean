@@ -1,0 +1,696 @@
+/-
+Copyright (c) 2024 Jovan Gerbscheid. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jovan Gerbscheid
+-/
+module
+
+public import Mathlib.Lean.Meta.RefinedDiscrTree.Basic
+public import Lean.Meta.DiscrTree
+public import Lean.Meta.LazyDiscrTree
+
+/-!
+# Encoding an `Expr` as a sequence of `Key`s
+
+We compute the encoding of an expression in a lazy way.
+This means computing only one `Key` at a time
+and storing the state of the remaining computation in a `LazyEntry`.
+
+Each step is computed by
+`evalLazyEntryWithEta : LazyEntry → MetaM (Option (List (Key × LazyEntry)))`.
+It returns `none` when the last `Key` has already been reached.
+
+The first step, which is used when initializing the tree,
+is computed by `initializeLazyEntryWithEta`.
+
+To compute all the keys at once, we have
+* `encodeExprWithEta`, which computes all possible key sequences.
+* `encodeExpr`, which computes the canonical key sequence.
+  This will be used for expressions that are looked up in a `RefinedDiscrTree` using `getMatch`.
+
+-/
+
+public section
+
+namespace Lean.Meta.RefinedDiscrTree
+
+/--
+Definition of `Context` / `Context` 的定义
+
+English:
+structure Context
+  parameters: where
+  axioms and operations (1):
+    - bvars : List FVarId
+
+中文:
+结构 Context
+  参数: where
+  公理与运算 (1 个):
+    - bvars : List FVarId
+-/
+private structure Context where
+  /-- Variables that come from a lambda or forall binder.
+  The list index gives the De Bruijn index. -/
+  bvars : List FVarId
+
+/--
+Definition of `LazyM` / `LazyM` 的定义
+
+English:
+abbreviation LazyM
+  body: ReaderT Context StateT LazyEntry MetaM
+
+中文:
+缩写 LazyM
+  定义体: ReaderT Context StateT LazyEntry MetaM
+-/
+private abbrev LazyM := ReaderT Context StateT LazyEntry MetaM
+
+/--
+Definition of `mkLabelledStar` / `mkLabelledStar` 的定义
+
+English:
+definition mkLabelledStar
+  signature: (mvarId : MVarId)
+  body: modifyGet fun entry =>
+    if let some stars := entry.labelledStars? then
+      match stars.idxOf? mvarId with
+      | some idx => (.labelledStar idx, entry)
+      | none => (.labelledStar stars.size, { entry with labelledStars? := stars.push mvarId })
+    else
+      (.star, entry)
+
+中文:
+定义 mkLabelledStar
+  签名: (mvarId : MVarId)
+  定义体: modifyGet fun entry =>
+    if let some stars := entry.labelledStars? then
+      match stars.idxOf? mvarId with
+      | some idx => (.labelledStar idx, entry)
+      | none => (.labelledStar stars.size, { entry with labelledStars? := stars.push mvarId })
+    else
+      (.star, entry)
+-/
+private def mkLabelledStar (mvarId : MVarId) : LazyM Key :=
+  modifyGet fun entry =>
+    if let some stars := entry.labelledStars? then
+      match stars.idxOf? mvarId with
+      | some idx => (.labelledStar idx, entry)
+      | none => (.labelledStar stars.size, { entry with labelledStars? := stars.push mvarId })
+    else
+      (.star, entry)
+
+/--
+Sometimes, we need to not index lambda binders, in particular when the body is the application of
+a metavariable.
+
+In the case where we do index the lambda binders,
+`withLams` efficiently adds the lambdas and `key` to the result.
+-/
+@[inline]
+/--
+Definition of `withLams` / `withLams` 的定义
+
+English:
+definition withLams
+  signature: (lambdas : List FVarId) (key : Key)
+  body: do
+  match lambdas with
+  | [] => return key
+  | _ :: tail =>
+    -- Add `key` and `lambdas.length - 1` lambdas to the result, returning the final lambda.
+    modify ({ · with computedKeys := tail.foldl (init := [key]) (fun _ => .lam :: ·) })
+    return .lam
+
+@[inline]
+
+中文:
+定义 withLams
+  签名: (lambdas : List FVarId) (key : Key)
+  定义体: do
+  match lambdas with
+  | [] => return key
+  | _ :: tail =>
+    -- Add `key` and `lambdas.length - 1` lambdas to the result, returning the final lambda.
+    modify ({ · with computedKeys := tail.foldl (init := [key]) (fun _ => .lam :: ·) })
+    return .lam
+
+@[inline]
+-/
+private def withLams (lambdas : List FVarId) (key : Key) : StateT LazyEntry MetaM Key := do
+  match lambdas with
+  | [] => return key
+  | _ :: tail =>
+    -- Add `key` and `lambdas.length - 1` lambdas to the result, returning the final lambda.
+    modify ({ · with computedKeys := tail.foldl (init := [key]) (fun _ => .lam :: ·) })
+    return .lam
+
+@[inline]
+/--
+Definition of `encodingStepAux` / `encodingStepAux` 的定义
+
+English:
+definition encodingStepAux
+  signature: (e : Expr) (lambdas : List FVarId) (root : Bool)
+  body: do
+  withLams lambdas (← go)
+
+中文:
+定义 encodingStepAux
+  签名: (e : Expr) (lambdas : List FVarId) (root : 布尔)
+  定义体: do
+  withLams lambdas (← go)
+-/
+private def encodingStepAux (e : Expr) (lambdas : List FVarId) (root : Bool) : LazyM Key := do
+  withLams lambdas (← go)
+where
+  go := do
+  /-
+  If entries need to be added to the stack, we don't do that now, because of the lazy design.
+  Instead, we set `previous` to be `e`, and later,
+  `processPrevious` adds the required entries to the stack.
+  -/
+  let setEAsPrevious : LazyM Unit := do
+    let info ← mkExprInfo e (lambdas ++ (← read).bvars)
+    modify fun s => { s with previous := some info }
+
+  match e.getAppFn with
+  | .const n _ =>
+    unless root do
+      if let some v := LazyDiscrTree.MatchClone.toNatLit? e then
+        return .lit v
+    if e.getAppNumArgs != 0 then
+      setEAsPrevious
+    return .const n e.getAppNumArgs
+  | .proj n i _ =>
+    setEAsPrevious
+    return .proj n i e.getAppNumArgs
+  | .fvar fvarId =>
+    let bvars := lambdas ++ (← read).bvars
+    if e.getAppNumArgs != 0 then
+      setEAsPrevious
+    if let some idx := bvars.idxOf? fvarId then
+      return .bvar idx e.getAppNumArgs
+    else
+      return .fvar fvarId e.getAppNumArgs
+  | .mvar mvarId =>
+    if e.isApp then
+      /-
+      If `e.isApp`, we don't index `lambdas`,
+      since for example `fun x => ?m x x` may be any function.
+      -/
+      return .star
+    else
+      /-
+      If `e` is `.mvar mvarId`, we do index `lambdas`, since it is a constant function.
+      We create a `.labelledStar` key that is identified by `mvarId`,
+      so that multiple appearances of `.mvar mvarId` are indexed the same.
+      -/
+      mkLabelledStar mvarId
+  | .forallE .. =>
+    setEAsPrevious
+    return .forall
+  | .lit v => return .lit v
+  | .sort _ => return .sort
+  | .letE .. => return .opaque
+  | .lam .. => return .opaque
+  | _ => unreachable!
+
+/--
+Definition of `etaPossibilities` / `etaPossibilities` 的定义
+
+English:
+definition etaPossibilities
+  signature: (e : Expr) (lambdas : List FVarId) (root : Bool)
+  body: do
+  return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
+      (← match e, lambdas with
+      | .app f a, fvarId :: lambdas =>
+        if isStarWithArg (.fvar fvarId) a && !f.getAppFn.isMVar then
+          etaPossibilities f lambdas root entry
+        else
+          pure []
+    
+
+中文:
+定义 etaPossibilities
+  签名: (e : Expr) (lambdas : List FVarId) (root : 布尔)
+  定义体: do
+  return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
+      (← match e, lambdas with
+      | .app f a, fvarId :: lambdas =>
+        if isStarWithArg (.fvar fvarId) a && !f.getAppFn.isMVar then
+          etaPossibilities f lambdas root entry
+        else
+          pure []
+    
+-/
+private def etaPossibilities (e : Expr) (lambdas : List FVarId) (root : Bool)
+    (entry : LazyEntry) : ReaderT Context MetaM (List (Key × LazyEntry)) := do
+  return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
+      (← match e, lambdas with
+      | .app f a, fvarId :: lambdas =>
+        if isStarWithArg (.fvar fvarId) a && !f.getAppFn.isMVar then
+          etaPossibilities f lambdas root entry
+        else
+          pure []
+      | _, _ => pure [])
+where
+  /-- Check whether the expression is represented by `Key.star` and has `arg` as an argument. -/
+  isStarWithArg (arg : Expr) : Expr -> Bool
+    | .app f a => if a == arg then f.getAppFn.isMVar else isStarWithArg arg f
+    | _ => false
+
+/-- Repeatedly reduce while stripping lambda binders and introducing their variables -/
+@[specialize]
+/--
+Definition of `lambdaTelescopeReduce` / `lambdaTelescopeReduce` 的定义
+
+English:
+definition lambdaTelescopeReduce
+  signature: {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
+  body: do
+  /- expressions marked with `no_index` should be indexed with a star -/
+  if DiscrTree.hasNoindexAnnotation e then
+    noIndex lambdas
+  else
+    match ← DiscrTree.reduce e with
+    | .lam n d b bi =>
+      withLocalDecl n bi d fun fvar =>
+        lambdaTelescopeReduce (b.instantiate1 fvar) (fva
+
+中文:
+定义 lambdaTelescopeReduce
+  签名: {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
+  定义体: do
+  /- expressions marked with `no_index` should be indexed with a star -/
+  if DiscrTree.hasNoindexAnnotation e then
+    noIndex lambdas
+  else
+    match ← DiscrTree.reduce e with
+    | .lam n d b bi =>
+      withLocalDecl n bi d fun fvar =>
+        lambdaTelescopeReduce (b.instantiate1 fvar) (fva
+-/
+private partial def lambdaTelescopeReduce {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
+    [MonadControlT MetaM m] (e : Expr) (lambdas : List FVarId) (noIndex : List FVarId -> m α)
+    (k : Expr -> List FVarId -> m α) : m α := do
+  /- expressions marked with `no_index` should be indexed with a star -/
+  if DiscrTree.hasNoindexAnnotation e then
+    noIndex lambdas
+  else
+    match ← DiscrTree.reduce e with
+    | .lam n d b bi =>
+      withLocalDecl n bi d fun fvar =>
+        lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
+    | e => k e lambdas
+
+/--
+Definition of `encodingStepWithEta` / `encodingStepWithEta` 的定义
+
+English:
+definition encodingStepWithEta
+  signature: (e : Expr) (root : Bool)
+  body: lambdaTelescopeReduce e []
+    (fun lambdas => return [← (withLams lambdas .star).run entry])
+    (fun e lambdas => etaPossibilities e lambdas root entry)
+
+中文:
+定义 encodingStepWithEta
+  签名: (e : Expr) (root : 布尔)
+  定义体: lambdaTelescopeReduce e []
+    (fun lambdas => return [← (withLams lambdas .star).run entry])
+    (fun e lambdas => etaPossibilities e lambdas root entry)
+-/
+private def encodingStepWithEta (e : Expr) (root : Bool)
+    (entry : LazyEntry) : ReaderT Context MetaM (List (Key × LazyEntry)) :=
+  lambdaTelescopeReduce e []
+    (fun lambdas => return [← (withLams lambdas .star).run entry])
+    (fun e lambdas => etaPossibilities e lambdas root entry)
+
+/--
+Definition of `encodingStep` / `encodingStep` 的定义
+
+English:
+definition encodingStep
+  signature: (e : Expr) (root : Bool)
+  body: do
+  lambdaTelescopeReduce e []
+    (fun lambdas => withLams lambdas .star)
+    (fun e lambdas => encodingStepAux e lambdas root)
+
+中文:
+定义 encodingStep
+  签名: (e : Expr) (root : 布尔)
+  定义体: do
+  lambdaTelescopeReduce e []
+    (fun lambdas => withLams lambdas .star)
+    (fun e lambdas => encodingStepAux e lambdas root)
+-/
+private def encodingStep (e : Expr) (root : Bool) : LazyM Key := do
+  lambdaTelescopeReduce e []
+    (fun lambdas => withLams lambdas .star)
+    (fun e lambdas => encodingStepAux e lambdas root)
+
+/--
+Definition of `initializeLazyEntryWithEtaAux` / `initializeLazyEntryWithEtaAux` 的定义
+
+English:
+definition initializeLazyEntryWithEtaAux
+  signature: (e : Expr) (labelledStars : Bool)
+  body: do
+  (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+
+中文:
+定义 initializeLazyEntryWithEtaAux
+  签名: (e : Expr) (labelledStars : 布尔)
+  定义体: do
+  (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+-/
+@[inline] def initializeLazyEntryWithEtaAux (e : Expr) (labelledStars : Bool) :
+    MetaM (List (Key × LazyEntry)) := do
+  (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+
+
+/--
+Definition of `initializeLazyEntryWithEta` / `initializeLazyEntryWithEta` 的定义
+
+English:
+definition initializeLazyEntryWithEta
+  signature: (e : Expr) (labelledStars : Bool := true)
+  body: do
+  withReducible do initializeLazyEntryWithEtaAux e labelledStars
+
+中文:
+定义 initializeLazyEntryWithEta
+  签名: (e : Expr) (labelledStars : 布尔 := true)
+  定义体: do
+  withReducible do initializeLazyEntryWithEtaAux e labelledStars
+-/
+def initializeLazyEntryWithEta (e : Expr) (labelledStars : Bool := true) :
+    MetaM (List (Key × LazyEntry)) := do
+  withReducible do initializeLazyEntryWithEtaAux e labelledStars
+
+/--
+Definition of `initializeLazyEntry` / `initializeLazyEntry` 的定义
+
+English:
+definition initializeLazyEntry
+  signature: (e : Expr) (labelledStars : Bool)
+  body: do
+  ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
+
+中文:
+定义 initializeLazyEntry
+  签名: (e : Expr) (labelledStars : 布尔)
+  定义体: do
+  ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
+-/
+private def initializeLazyEntry (e : Expr) (labelledStars : Bool) : MetaM (Key × LazyEntry) := do
+  ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
+
+
+/--
+Definition of `evalLazyEntryAux` / `evalLazyEntryAux` 的定义
+
+English:
+definition evalLazyEntryAux
+  signature: (entry : LazyEntry) (eta : Bool)
+  body: do
+  match entry.stack with
+  | [] => return none
+  | stackEntry :: stack =>
+    let entry := { entry with stack }
+    match stackEntry with
+    | .star =>
+      return some [(.star, entry)]
+    | .expr { expr, bvars, lctx, localInsts, cfg } =>
+      withLCtx lctx localInsts do
+      withConfig (fun
+
+中文:
+定义 evalLazyEntryAux
+  签名: (entry : LazyEntry) (eta : 布尔)
+  定义体: do
+  match entry.stack with
+  | [] => return none
+  | stackEntry :: stack =>
+    let entry := { entry with stack }
+    match stackEntry with
+    | .star =>
+      return some [(.star, entry)]
+    | .expr { expr, bvars, lctx, localInsts, cfg } =>
+      withLCtx lctx localInsts do
+      withConfig (fun
+-/
+private partial def evalLazyEntryAux (entry : LazyEntry) (eta : Bool) :
+    MetaM (Option (List (Key × LazyEntry))) := do
+  match entry.stack with
+  | [] => return none
+  | stackEntry :: stack =>
+    let entry := { entry with stack }
+    match stackEntry with
+    | .star =>
+      return some [(.star, entry)]
+    | .expr { expr, bvars, lctx, localInsts, cfg } =>
+      withLCtx lctx localInsts do
+      withConfig (fun _ => cfg) do
+        if eta then
+          return some (← encodingStepWithEta expr false entry |>.run { bvars := bvars })
+        else
+          return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
+
+/--
+Definition of `getStackEntries` / `getStackEntries` 的定义
+
+English:
+definition getStackEntries
+  signature: (fn : Expr) (args : Array Expr) (bvars : List FVarId)
+  body: do
+  let mut fnType ← inferType fn
+  loop fnType 0 0 []
+
+中文:
+定义 getStackEntries
+  签名: (fn : Expr) (args : Array Expr) (bvars : List FVarId)
+  定义体: do
+  let mut fnType ← inferType fn
+  loop fnType 0 0 []
+-/
+private partial def getStackEntries (fn : Expr) (args : Array Expr) (bvars : List FVarId) :
+    MetaM (List StackEntry) := do
+  let mut fnType ← inferType fn
+  loop fnType 0 0 []
+where
+  /-- The main loop of `getStackEntries` -/
+  loop (fnType : Expr) (i j : Nat) (entries : List StackEntry) : MetaM (List StackEntry) := do
+    if h : i < args.size then
+      let arg := args[i]
+      let cont j d b bi := do
+        if ← isIgnoredArg arg d bi then
+          loop b (i+1) j (.star :: entries)
+        else
+          loop b (i+1) j (.expr (← mkExprInfo arg bvars) :: entries)
+      let rec reduce := do
+        match ← whnfD (fnType.instantiateRevRange j i args) with
+        | .forallE _ d b bi => cont i d b bi
+        | fnType => throwFunctionExpected fnType
+      match fnType with
+      | .forallE _ d b bi => cont j d b bi
+      | _ => reduce
+    else
+      return entries
+  /-- Determine whether the argument should be ignored. -/
+  isIgnoredArg (arg domain : Expr) (binderInfo : BinderInfo) : MetaM Bool := do
+    if domain.isOutParam then
+      return true
+    else match binderInfo with
+    | .instImplicit => return true
+    | .implicit
+    | .strictImplicit => return !(← isType arg)
+    | .default => isProof arg
+
+/--
+Definition of `processPrevious` / `processPrevious` 的定义
+
+English:
+definition processPrevious
+  signature: (entry : LazyEntry)
+  body: do
+  let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
+  let entry := { entry with previous := none }
+  withLCtx lctx localInsts do withConfig (fun _ => cfg) do
+  expr.withApp fun fn args => do
+
+    let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
+      let en
+
+中文:
+定义 processPrevious
+  签名: (entry : LazyEntry)
+  定义体: do
+  let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
+  let entry := { entry with previous := none }
+  withLCtx lctx localInsts do withConfig (fun _ => cfg) do
+  expr.withApp fun fn args => do
+
+    let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
+      let en
+-/
+private def processPrevious (entry : LazyEntry) : MetaM LazyEntry := do
+  let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
+  let entry := { entry with previous := none }
+  withLCtx lctx localInsts do withConfig (fun _ => cfg) do
+  expr.withApp fun fn args => do
+
+    let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
+      let entries ← getStackEntries fn args bvars
+      return { entry with stack := entries.reverseAux entry.stack }
+
+    match fn with
+    | .forallE n d b bi =>
+      let d' := .expr (← mkExprInfo d bvars)
+      let b' ← withLocalDecl n bi d fun fvar =>
+        return .expr (← mkExprInfo (b.instantiate1 fvar) (fvar.fvarId! :: bvars))
+      return { entry with stack := d' :: b' :: entry.stack }
+    | .proj n _ a =>
+      let entry ← stackArgs entry
+      if isClass (← getEnv) n then
+        return { entry with stack := .star :: entry.stack }
+      else
+        return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
+    | _ => stackArgs entry
+
+/--
+Definition of `evalLazyEntry` / `evalLazyEntry` 的定义
+
+English:
+definition evalLazyEntry
+  signature: (entry : LazyEntry) (eta : Bool)
+  body: do
+  if let key :: computedKeys := entry.computedKeys then
+    -- If there is already a result available, use it.
+    return some [(key, { entry with computedKeys })]
+  else withMCtx entry.mctx do
+    let entry ← processPrevious entry
+    evalLazyEntryAux entry eta
+
+中文:
+定义 evalLazyEntry
+  签名: (entry : LazyEntry) (eta : 布尔)
+  定义体: do
+  if let key :: computedKeys := entry.computedKeys then
+    -- If there is already a result available, use it.
+    return some [(key, { entry with computedKeys })]
+  else withMCtx entry.mctx do
+    let entry ← processPrevious entry
+    evalLazyEntryAux entry eta
+-/
+def evalLazyEntry (entry : LazyEntry) (eta : Bool) :
+    MetaM (Option (List (Key × LazyEntry))) := do
+  if let key :: computedKeys := entry.computedKeys then
+    -- If there is already a result available, use it.
+    return some [(key, { entry with computedKeys })]
+  else withMCtx entry.mctx do
+    let entry ← processPrevious entry
+    evalLazyEntryAux entry eta
+
+/--
+Definition of `encodeExprWithEta` / `encodeExprWithEta` 的定义
+
+English:
+definition encodeExprWithEta
+  signature: (e : Expr) (labelledStars : Bool)
+  body: withReducible do
+    let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+    let entries := entries.map fun (key, entry) => (#[key], entry)
+    go entries.toArray #[]
+
+中文:
+定义 encodeExprWithEta
+  签名: (e : Expr) (labelledStars : 布尔)
+  定义体: withReducible do
+    let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+    let entries := entries.map fun (key, entry) => (#[key], entry)
+    go entries.toArray #[]
+-/
+partial def encodeExprWithEta (e : Expr) (labelledStars : Bool) : MetaM (Array (Array Key)) :=
+  withReducible do
+    let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+    let entries := entries.map fun (key, entry) => (#[key], entry)
+    go entries.toArray #[]
+where
+  /-- The main loop for `encodeExpr`. -/
+  go (todo : Array (Array Key × LazyEntry)) (result : Array (Array Key)) :
+      MetaM (Array (Array Key)) := do
+    if h : todo.size = 0 then
+      return result
+    else -- use an if-then-else instead of if-then-return, so that `go` is tail recursive
+      let (keys, entry) := todo.back
+      let todo := todo.pop
+      match ← evalLazyEntry entry true with
+      | some xs =>
+        let rec /--
+          This variation on `List.fold` ensures that the array `keys`
+          isn't copied unnecessarily. -/
+        fold xs todo :=
+          match xs with
+          | [] => todo
+          | (key, entry) :: [] => todo.push (keys.push key, entry)
+          | (key, entry) :: xs => fold xs (todo.push (keys.push key, entry))
+        go (fold xs todo) result
+      | none =>
+        go todo (result.push keys)
+
+/--
+Definition of `LazyEntry.toList` / `LazyEntry.toList` 的定义
+
+English:
+definition LazyEntry.toList
+  signature: (entry : LazyEntry) (result : List Key := [])
+  body: do
+  match ← evalLazyEntry entry false with
+  | some [(key, entry')] => entry'.toList (key :: result)
+  | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
+  | none => return result.reverse
+
+中文:
+定义 LazyEntry.toList
+  签名: (entry : LazyEntry) (result : List Key := [])
+  定义体: do
+  match ← evalLazyEntry entry false with
+  | some [(key, entry')] => entry'.toList (key :: result)
+  | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
+  | none => return result.reverse
+-/
+partial def LazyEntry.toList (entry : LazyEntry) (result : List Key := []) : MetaM (List Key) := do
+  match ← evalLazyEntry entry false with
+  | some [(key, entry')] => entry'.toList (key :: result)
+  | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
+  | none => return result.reverse
+
+/--
+Definition of `encodeExpr` / `encodeExpr` 的定义
+
+English:
+definition encodeExpr
+  signature: (e : Expr) (labelledStars : Bool)
+  body: withReducible do
+  let (key, entry) ← initializeLazyEntry e labelledStars
+  return (key, ← entry.toList)
+
+中文:
+定义 encodeExpr
+  签名: (e : Expr) (labelledStars : 布尔)
+  定义体: withReducible do
+  let (key, entry) ← initializeLazyEntry e labelledStars
+  return (key, ← entry.toList)
+
+Depends on / 依赖: withReducible
+-/
+def encodeExpr (e : Expr) (labelledStars : Bool) : MetaM (Key × List Key) := withReducible do
+  let (key, entry) ← initializeLazyEntry e labelledStars
+  return (key, ← entry.toList)
+
+end Lean.Meta.RefinedDiscrTree

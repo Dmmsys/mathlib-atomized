@@ -1,0 +1,1005 @@
+/-
+Copyright (c) 2022 Andrew Yang. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Andrew Yang
+-/
+module
+
+public import Mathlib.RingTheory.FiniteStability
+public import Mathlib.RingTheory.Ideal.Quotient.Nilpotent
+public import Mathlib.RingTheory.Ideal.IdempotentFG
+public import Mathlib.RingTheory.Idempotents
+public import Mathlib.RingTheory.Kaehler.Basic
+public import Mathlib.RingTheory.Localization.Away.AdjoinRoot
+public import Mathlib.RingTheory.TensorProduct.Quotient
+public import Mathlib.Algebra.Algebra.Shrink
+
+/-!
+
+# Unramified morphisms
+
+An `R`-algebra `A` is formally unramified if `Ω[A⁄R]` is trivial.
+This is equivalent to the standard definition "for every `R`-algebra,
+every square-zero ideal `I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists
+at most one lift `A →ₐ[R] B`".
+It is unramified if it is formally unramified and of finite type.
+
+Note that there are multiple definitions in the literature. The definition we give is equivalent to
+the one in the Stacks Project https://stacks.math.columbia.edu/tag/00US. Note that in EGA unramified
+is defined as formally unramified and of finite presentation.
+
+We show that the property extends onto nilpotent ideals, and that it is stable
+under `R`-algebra homomorphisms and compositions.
+
+We show that unramified is stable under algebra isomorphisms, composition and
+localization at an element.
+
+-/
+
+public section
+
+open scoped TensorProduct
+
+universe w u v
+
+namespace Algebra
+
+section
+
+variable (R : Type v) (A : Type u) [CommRing R] [CommRing A] [Algebra R A]
+
+/--
+An `R`-algebra `A` is formally unramified if `Ω[A⁄R]` is trivial.
+
+This is equivalent to "for every `R`-algebra, every square-zero ideal
+`I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists at most one lift `A →ₐ[R] B`".
+See `Algebra.FormallyUnramified.iff_comp_injective`. -/
+@[mk_iff, stacks 00UM]
+/--
+Definition of `FormallyUnramified` / `FormallyUnramified` 的定义
+
+English:
+class FormallyUnramified
+  parameters: : Prop where
+  axioms and operations (1):
+    - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
+
+中文:
+类 FormallyUnramified
+  参数: : 命题 where
+  公理与运算 (1 个):
+    - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
+-/
+class FormallyUnramified : Prop where
+  subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
+
+attribute [instance] FormallyUnramified.subsingleton_kaehlerDifferential
+
+end
+
+namespace FormallyUnramified
+
+section
+
+variable {R : Type v} [CommRing R]
+variable {A : Type u} [CommRing A] [Algebra R A]
+variable {B : Type w} [CommRing B] [Algebra R B] (I : Ideal B)
+
+/--
+theorem `comp_injective` / 定理 `comp_injective`
+
+English:
+theorem comp_injective
+  given: [FormallyUnramified R A] (hI : I ^ 2 = ⊥)
+  proof: by
+  intro f₁ f₂ e
+  let := f₁.toRingHom.toAlgebra
+  have := IsScalarTower.of_algebraMap_eq' f₁.comp_algebraMap.symm
+  have :=
+    ((KaehlerDifferential.linearMapEquivDerivation R A).toEquiv.trans
+          (derivationToSquareZeroEquivLift I hI)).surjective.subsingleton
+  exact Subtype.ext_iff.mp (@
+
+中文:
+定理 comp_injective
+  条件: [FormallyUnramified R A] (hI : I ^ 2 = ⊥)
+  证明: by
+  intro f₁ f₂ e
+  let := f₁.toRingHom.toAlgebra
+  have := IsScalarTower.of_algebraMap_eq' f₁.comp_algebraMap.symm
+  have :=
+    ((KaehlerDifferential.linearMapEquivDerivation R A).toEquiv.trans
+          (derivationToSquareZeroEquivLift I hI)).surjective.subsingleton
+  exact Subtype.ext_iff.mp (@
+
+Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, KaehlerDifferential, KaehlerDifferential.linearMapEquivDerivation, Subsingleton, Subsingleton.elim, Subtype, Subtype.ext_iff.mp, comp_algebraMap, comp_algebraMap.symm, derivationToSquareZeroEquivLift, e.symm, ext_iff, linearMapEquivDerivation, of_algebraMap_eq, subsingleton, surjective, surjective.subsingleton, toAlgebra, toEquiv
+-/
+theorem comp_injective [FormallyUnramified R A] (hI : I ^ 2 = ⊥) :
+    Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+  intro f₁ f₂ e
+  let := f₁.toRingHom.toAlgebra
+  have := IsScalarTower.of_algebraMap_eq' f₁.comp_algebraMap.symm
+  have :=
+    ((KaehlerDifferential.linearMapEquivDerivation R A).toEquiv.trans
+          (derivationToSquareZeroEquivLift I hI)).surjective.subsingleton
+  exact Subtype.ext_iff.mp (@Subsingleton.elim _ this ⟨f₁, rfl⟩ ⟨f₂, e.symm⟩)
+
+set_option backward.isDefEq.respectTransparency false in
+/--
+theorem `iff_comp_injective_of_small` / 定理 `iff_comp_injective_of_small`
+
+English:
+theorem iff_comp_injective_of_small
+  given: [Small.{w} A]
+  proof: by
+  constructor
+  · intros; exact comp_injective _ ‹_›
+  · intro H
+    replace H : forall ⦃B : Type u⦄ [CommRing B] [Small.{w} B],
+        forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+          Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+      in
+
+中文:
+定理 iff_comp_injective_of_small
+  条件: [Small.{w} A]
+  证明: by
+  constructor
+  · intros; exact comp_injective _ ‹_›
+  · intro H
+    replace H : forall ⦃B : Type u⦄ [CommRing B] [Small.{w} B],
+        forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+          Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+      in
+
+Depends on / 依赖: Algebra, CommRing, DFunLike, DFunLike.ext_iff, Function, Function.Injective, I.comap, Ideal.Quotient.mk, Ideal.map_pow, Ideal.map_symm, Injective, Quotient, Shrink, Shrink.algEquiv, Shrink.ringEquiv, algEquiv, comp_injective, ext_iff, intros, map_pow
+-/
+theorem iff_comp_injective_of_small [Small.{w} A] :
+    FormallyUnramified R A ↔
+      forall ⦃B : Type w⦄ [CommRing B],
+        forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+          Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+  constructor
+  · intros; exact comp_injective _ ‹_›
+  · intro H
+    replace H : forall ⦃B : Type u⦄ [CommRing B] [Small.{w} B],
+        forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+          Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
+      intro B _ _ _ I hI f g e
+      simpa [DFunLike.ext_iff] using H (B := Shrink B) (I.comap (Shrink.ringEquiv _))
+        (by rw [← Ideal.map_symm, ← Ideal.map_pow, hI]; simp)
+        (a₁ := (Shrink.algEquiv _ _).symm.toAlgHom.comp f)
+        (a₂ := (Shrink.algEquiv _ _).symm.toAlgHom.comp g)
+        (by simpa [DFunLike.ext_iff, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Shrink.ringEquiv] using e)
+    constructor
+    by_contra! h
+    obtain ⟨f₁, f₂, e⟩ := (KaehlerDifferential.endEquiv R A).injective.nontrivial
+    apply e
+    ext1
+    let f := RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+    refine H
+      (RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom) ?_ ?_
+    · rw [AlgHom.ker_kerSquareLift]
+      exact Ideal.cotangentIdeal_square _
+    · ext x
+      apply RingHom.kerLift_injective (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+      simpa using DFunLike.congr_fun (f₁.2.trans f₂.2.symm) x
+
+/--
+theorem `iff_comp_injective` / 定理 `iff_comp_injective`
+
+English:
+theorem iff_comp_injective
+  proof: iff_comp_injective_of_small
+
+中文:
+定理 iff_comp_injective
+  证明: iff_comp_injective_of_small
+
+Depends on / 依赖: iff_comp_injective_of_small
+-/
+theorem iff_comp_injective :
+    FormallyUnramified R A ↔
+      forall ⦃B : Type u⦄ [CommRing B],
+        forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
+          Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) :=
+  iff_comp_injective_of_small
+
+/--
+theorem `lift_unique` / 定理 `lift_unique`
+
+English:
+theorem lift_unique
+  proof: by
+  revert g₁ g₂
+  change Function.Injective (Ideal.Quotient.mkₐ R I).comp
+  revert ‹Algebra R B›
+  apply Ideal.IsNilpotent.induction_on (S := B) I hI
+  · intro B _ I hI _; exact FormallyUnramified.comp_injective I hI
+  · intro B _ I J hIJ h₁ h₂ _ g₁ g₂ e
+    apply h₁
+    apply h₂
+    ext x
+    rep
+
+中文:
+定理 lift_unique
+  证明: by
+  revert g₁ g₂
+  change Function.Injective (Ideal.Quotient.mkₐ R I).comp
+  revert ‹Algebra R B›
+  apply Ideal.IsNilpotent.induction_on (S := B) I hI
+  · intro B _ I hI _; exact FormallyUnramified.comp_injective I hI
+  · intro B _ I J hIJ h₁ h₂ _ g₁ g₂ e
+    apply h₁
+    apply h₂
+    ext x
+    rep
+
+Depends on / 依赖: AlgHom, AlgHom.comp_apply, AlgHom.congr_fun, Algebra, FormallyUnramified, FormallyUnramified.comp_injective, Function, Function.Injective, Ideal.IsNilpotent.induction_on, Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.mem_quotient_iff_mem, Injective, IsNilpotent, Quotient, comp_apply, comp_injective, congr_fun, induction_on, map_sub
+-/
+theorem lift_unique
+    [FormallyUnramified R A] (I : Ideal B) (hI : IsNilpotent I) (g₁ g₂ : A ->ₐ[R] B)
+    (h : (Ideal.Quotient.mkₐ R I).comp g₁ = (Ideal.Quotient.mkₐ R I).comp g₂) : g₁ = g₂ := by
+  revert g₁ g₂
+  change Function.Injective (Ideal.Quotient.mkₐ R I).comp
+  revert ‹Algebra R B›
+  apply Ideal.IsNilpotent.induction_on (S := B) I hI
+  · intro B _ I hI _; exact FormallyUnramified.comp_injective I hI
+  · intro B _ I J hIJ h₁ h₂ _ g₁ g₂ e
+    apply h₁
+    apply h₂
+    ext x
+    replace e := AlgHom.congr_fun e x
+    dsimp only [AlgHom.comp_apply, Ideal.Quotient.mkₐ_eq_mk] at e ⊢
+    rwa [Ideal.Quotient.eq, ← map_sub, Ideal.mem_quotient_iff_mem hIJ, ← Ideal.Quotient.eq]
+
+/--
+theorem `ext` / 定理 `ext`
+
+English:
+theorem ext
+  statement: [FormallyUnramified R A] (hI : IsNilpotent I) {g₁ g₂ : A ->ₐ[R] B}
+  proof: FormallyUnramified.lift_unique I hI g₁ g₂ (AlgHom.ext H)
+
+中文:
+定理 ext
+  结论: [FormallyUnramified R A] (hI : IsNilpotent I) {g₁ g₂ : A ->ₐ[R] B}
+  证明: FormallyUnramified.lift_unique I hI g₁ g₂ (AlgHom.ext H)
+
+Depends on / 依赖: AlgHom, AlgHom.ext, FormallyUnramified, FormallyUnramified.lift_unique, lift_unique
+-/
+theorem ext [FormallyUnramified R A] (hI : IsNilpotent I) {g₁ g₂ : A ->ₐ[R] B}
+    (H : forall x, Ideal.Quotient.mk I (g₁ x) = Ideal.Quotient.mk I (g₂ x)) : g₁ = g₂ :=
+  FormallyUnramified.lift_unique I hI g₁ g₂ (AlgHom.ext H)
+
+/--
+theorem `lift_unique_of_ringHom` / 定理 `lift_unique_of_ringHom`
+
+English:
+theorem lift_unique_of_ringHom
+  statement: [FormallyUnramified R A] {C : Type*} [Ring C]
+  proof: FormallyUnramified.lift_unique _ hf _ _
+    (by
+      ext x
+      have := RingHom.congr_fun h x
+      simpa only [Ideal.Quotient.eq, Function.comp_apply, AlgHom.coe_comp, Ideal.Quotient.mkₐ_eq_mk,
+        RingHom.mem_ker, map_sub, sub_eq_zero])
+
+中文:
+定理 lift_unique_of_ringHom
+  结论: [FormallyUnramified R A] {C : 类型} [Ring C]
+  证明: FormallyUnramified.lift_unique _ hf _ _
+    (by
+      ext x
+      have := RingHom.congr_fun h x
+      simpa only [Ideal.Quotient.eq, Function.comp_apply, AlgHom.coe_comp, Ideal.Quotient.mkₐ_eq_mk,
+        RingHom.mem_ker, map_sub, sub_eq_zero])
+
+Depends on / 依赖: AlgHom, AlgHom.coe_comp, FormallyUnramified, FormallyUnramified.lift_unique, Function, Function.comp_apply, Ideal.Quotient.eq, Ideal.Quotient.mk, Quotient, RingHom, RingHom.congr_fun, RingHom.mem_ker, coe_comp, comp_apply, congr_fun, lift_unique, map_sub, mem_ker, sub_eq_zero
+-/
+theorem lift_unique_of_ringHom [FormallyUnramified R A] {C : Type*} [Ring C]
+    (f : B ->+* C) (hf : IsNilpotent <| RingHom.ker f) (g₁ g₂ : A ->ₐ[R] B)
+    (h : f.comp ↑g₁ = f.comp (g₂ : A ->+* B)) : g₁ = g₂ :=
+  FormallyUnramified.lift_unique _ hf _ _
+    (by
+      ext x
+      have := RingHom.congr_fun h x
+      simpa only [Ideal.Quotient.eq, Function.comp_apply, AlgHom.coe_comp, Ideal.Quotient.mkₐ_eq_mk,
+        RingHom.mem_ker, map_sub, sub_eq_zero])
+
+/--
+theorem `ext'` / 定理 `ext'`
+
+English:
+theorem ext'
+  statement: [FormallyUnramified R A] {C : Type*} [Ring C] (f : B ->+* C)
+  proof: FormallyUnramified.lift_unique_of_ringHom f hf g₁ g₂ (RingHom.ext h)
+
+中文:
+定理 ext'
+  结论: [FormallyUnramified R A] {C : 类型} [Ring C] (f : B ->+* C)
+  证明: FormallyUnramified.lift_unique_of_ringHom f hf g₁ g₂ (RingHom.ext h)
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.lift_unique_of_ringHom, RingHom, RingHom.ext, lift_unique_of_ringHom
+-/
+theorem ext' [FormallyUnramified R A] {C : Type*} [Ring C] (f : B ->+* C)
+    (hf : IsNilpotent <| RingHom.ker f) (g₁ g₂ : A ->ₐ[R] B) (h : forall x, f (g₁ x) = f (g₂ x)) :
+    g₁ = g₂ :=
+  FormallyUnramified.lift_unique_of_ringHom f hf g₁ g₂ (RingHom.ext h)
+
+/--
+theorem `lift_unique'` / 定理 `lift_unique'`
+
+English:
+theorem lift_unique'
+  statement: [FormallyUnramified R A] {C : Type*} [Ring C]
+  proof: FormallyUnramified.ext' _ hf g₁ g₂ (AlgHom.congr_fun h)
+
+中文:
+定理 lift_unique'
+  结论: [FormallyUnramified R A] {C : 类型} [Ring C]
+  证明: FormallyUnramified.ext' _ hf g₁ g₂ (AlgHom.congr_fun h)
+
+Depends on / 依赖: AlgHom, AlgHom.congr_fun, FormallyUnramified, FormallyUnramified.ext, congr_fun
+-/
+theorem lift_unique' [FormallyUnramified R A] {C : Type*} [Ring C]
+    [Algebra R C] (f : B ->ₐ[R] C) (hf : IsNilpotent <| RingHom.ker (f : B ->+* C))
+    (g₁ g₂ : A ->ₐ[R] B) (h : f.comp g₁ = f.comp g₂) : g₁ = g₂ :=
+  FormallyUnramified.ext' _ hf g₁ g₂ (AlgHom.congr_fun h)
+
+/--
+theorem `ext_of_iInf` / 定理 `ext_of_iInf`
+
+English:
+theorem ext_of_iInf
+  statement: [FormallyUnramified R A] (hI : ⨅ i, I ^ i = ⊥) {g₁ g₂ : A ->ₐ[R] B}
+  proof: by
+  have (i : Nat) :
+      (Ideal.Quotient.mkₐ R (I ^ i)).comp g₁ = (Ideal.Quotient.mkₐ R (I ^ i)).comp g₂ := by
+    by_cases hi : i = 0
+    · ext x
+      have : Subsingleton (B ⧸ I ^ i) := by
+        rw [hi]; rw [pow_zero]; rw [Ideal.one_eq_top]
+        infer_instance
+      exact Subsingleton.elim
+
+中文:
+定理 ext_of_iInf
+  结论: [FormallyUnramified R A] (hI : ⨅ i, I ^ i = ⊥) {g₁ g₂ : A ->ₐ[R] B}
+  证明: by
+  have (i : Nat) :
+      (Ideal.Quotient.mkₐ R (I ^ i)).comp g₁ = (Ideal.Quotient.mkₐ R (I ^ i)).comp g₂ := by
+    by_cases hi : i = 0
+    · ext x
+      have : Subsingleton (B ⧸ I ^ i) := by
+        rw [hi]; rw [pow_zero]; rw [Ideal.one_eq_top]
+        infer_instance
+      exact Subsingleton.elim
+
+Depends on / 依赖: I.map, Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.comap_map_of_surjective, Ideal.map_pow, Ideal.mem_comap, Ideal.one_eq_top, Quotient, Subsingleton, Subsingleton.elim, algebraMap, comap_map_of_surjective, infer_instance, map_pow, map_sub, mem_comap, one_eq_top, pow_zero, sup_eq_left, sup_eq_left.mpr
+-/
+theorem ext_of_iInf [FormallyUnramified R A] (hI : ⨅ i, I ^ i = ⊥) {g₁ g₂ : A ->ₐ[R] B}
+    (H : forall x, Ideal.Quotient.mk I (g₁ x) = Ideal.Quotient.mk I (g₂ x)) : g₁ = g₂ := by
+  have (i : Nat) :
+      (Ideal.Quotient.mkₐ R (I ^ i)).comp g₁ = (Ideal.Quotient.mkₐ R (I ^ i)).comp g₂ := by
+    by_cases hi : i = 0
+    · ext x
+      have : Subsingleton (B ⧸ I ^ i) := by
+        rw [hi]; rw [pow_zero]; rw [Ideal.one_eq_top]
+        infer_instance
+      exact Subsingleton.elim _ _
+    apply ext (I.map (algebraMap _ _)) ⟨i, by simp [← Ideal.map_pow]⟩
+    intro x
+    dsimp
+    rw [Ideal.Quotient.eq]; rw [← map_sub]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective']; rw [sup_eq_left.mpr]; rw [← Ideal.Quotient.eq]
+    · exact H _
+    · simpa using Ideal.pow_le_self hi
+    · exact Ideal.Quotient.mk_surjective
+  ext x
+  rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← hI]; rw [Ideal.mem_iInf]
+  intro i
+  rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]
+  exact DFunLike.congr_fun (this i) x
+
+end
+
+instance {R : Type u} [CommRing R] : FormallyUnramified R R := by
+  rw [iff_comp_injective]
+  intro B _ _ _ _ f₁ f₂ _
+  exact Subsingleton.elim _ _
+
+section OfEquiv
+
+variable {R : Type*} [CommRing R]
+variable {A B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
+
+/--
+theorem `of_equiv` / 定理 `of_equiv`
+
+English:
+theorem of_equiv
+  given: [FormallyUnramified R A] (e : A ≃ₐ[R] B)
+  proof: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e'
+  rw [← f₁.comp_id]; rw [← f₂.comp_id]; rw [← e.comp_symm]; rw [← AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc]
+  congr 1
+  refine FormallyUnramified.comp_injective I hI ?_
+  rw [← AlgHom.comp_assoc]; rw [e']; rw [AlgHom.comp_assoc]
+
+中文:
+定理 of_equiv
+  条件: [FormallyUnramified R A] (e : A ≃ₐ[R] B)
+  证明: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e'
+  rw [← f₁.comp_id]; rw [← f₂.comp_id]; rw [← e.comp_symm]; rw [← AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc]
+  congr 1
+  refine FormallyUnramified.comp_injective I hI ?_
+  rw [← AlgHom.comp_assoc]; rw [e']; rw [AlgHom.comp_assoc]
+
+Depends on / 依赖: AlgHom, AlgHom.comp_assoc, FormallyUnramified, FormallyUnramified.comp_injective, comp_assoc, comp_id, comp_injective, comp_symm, e.comp_symm, iff_comp_injective
+-/
+theorem of_equiv [FormallyUnramified R A] (e : A ≃ₐ[R] B) :
+    FormallyUnramified R B := by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e'
+  rw [← f₁.comp_id]; rw [← f₂.comp_id]; rw [← e.comp_symm]; rw [← AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc]
+  congr 1
+  refine FormallyUnramified.comp_injective I hI ?_
+  rw [← AlgHom.comp_assoc]; rw [e']; rw [AlgHom.comp_assoc]
+
+end OfEquiv
+
+section Comp
+
+variable (R : Type*) [CommRing R]
+variable (A : Type*) [CommRing A] [Algebra R A]
+variable (B : Type*) [CommRing B] [Algebra R B] [Algebra A B] [IsScalarTower R A B]
+
+/--
+theorem `comp` / 定理 `comp`
+
+English:
+theorem comp
+  given: [FormallyUnramified R A] [FormallyUnramified A B]
+  proof: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  have e' :=
+    FormallyUnramified.lift_unique I ⟨2, hI⟩ (f₁.comp <| IsScalarTower.toAlgHom R A B)
+      (f₂.comp <| IsScalarTower.toAlgHom R A B) (by rw [← AlgHom.comp_assoc, e, AlgHom.comp_assoc])
+  let := (f₁.domRestrict A).toAlgebra
+  let 
+
+中文:
+定理 comp
+  条件: [FormallyUnramified R A] [FormallyUnramified A B]
+  证明: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  have e' :=
+    FormallyUnramified.lift_unique I ⟨2, hI⟩ (f₁.comp <| IsScalarTower.toAlgHom R A B)
+      (f₂.comp <| IsScalarTower.toAlgHom R A B) (by rw [← AlgHom.comp_assoc, e, AlgHom.comp_assoc])
+  let := (f₁.domRestrict A).toAlgebra
+  let 
+
+Depends on / 依赖: AlgHom, AlgHom.comp_assoc, AlgHom.congr_fun, FormallyUnramified, FormallyUnramified.ext, FormallyUnramified.lift_unique, IsScalarTower, IsScalarTower.toAlgHom, commutes, comp_assoc, congr_fun, domRestrict, iff_comp_injective, lift_unique, toAlgHom, toAlgebra
+-/
+theorem comp [FormallyUnramified R A] [FormallyUnramified A B] :
+    FormallyUnramified R B := by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  have e' :=
+    FormallyUnramified.lift_unique I ⟨2, hI⟩ (f₁.comp <| IsScalarTower.toAlgHom R A B)
+      (f₂.comp <| IsScalarTower.toAlgHom R A B) (by rw [← AlgHom.comp_assoc, e, AlgHom.comp_assoc])
+  let := (f₁.domRestrict A).toAlgebra
+  let F₁ : B ->ₐ[A] C := { f₁ with commutes' := fun r => rfl }
+  let F₂ : B ->ₐ[A] C := { f₂ with commutes' := AlgHom.congr_fun e'.symm }
+  ext1 x
+  change F₁ x = F₂ x
+  congr
+  exact FormallyUnramified.ext I ⟨2, hI⟩ (AlgHom.congr_fun e)
+
+/--
+theorem `of_restrictScalars` / 定理 `of_restrictScalars`
+
+English:
+theorem of_restrictScalars
+  given: [FormallyUnramified R B]
+  statement: FormallyUnramified A B
+  proof: by
+  rw [iff_comp_injective]
+  intro Q _ _ I e f₁ f₂ e'
+  let := ((algebraMap A Q).comp (algebraMap R A)).toAlgebra
+  let : IsScalarTower R A Q := IsScalarTower.of_algebraMap_eq' rfl
+  refine AlgHom.restrictScalars_injective R ?_
+  refine FormallyUnramified.ext I ⟨2, e⟩ ?_
+  intro x
+  exact AlgHom.c
+
+中文:
+定理 of_restrictScalars
+  条件: [FormallyUnramified R B]
+  结论: FormallyUnramified A B
+  证明: by
+  rw [iff_comp_injective]
+  intro Q _ _ I e f₁ f₂ e'
+  let := ((algebraMap A Q).comp (algebraMap R A)).toAlgebra
+  let : IsScalarTower R A Q := IsScalarTower.of_algebraMap_eq' rfl
+  refine AlgHom.restrictScalars_injective R ?_
+  refine FormallyUnramified.ext I ⟨2, e⟩ ?_
+  intro x
+  exact AlgHom.c
+
+Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.restrictScalars_injective, FormallyUnramified, FormallyUnramified.ext, IsScalarTower, IsScalarTower.of_algebraMap_eq, algebraMap, congr_fun, iff_comp_injective, of_algebraMap_eq, restrictScalars_injective, toAlgebra
+-/
+theorem of_restrictScalars [FormallyUnramified R B] : FormallyUnramified A B := by
+  rw [iff_comp_injective]
+  intro Q _ _ I e f₁ f₂ e'
+  let := ((algebraMap A Q).comp (algebraMap R A)).toAlgebra
+  let : IsScalarTower R A Q := IsScalarTower.of_algebraMap_eq' rfl
+  refine AlgHom.restrictScalars_injective R ?_
+  refine FormallyUnramified.ext I ⟨2, e⟩ ?_
+  intro x
+  exact AlgHom.congr_fun e' x
+
+end Comp
+
+section of_surjective
+
+variable {R : Type*} [CommRing R]
+variable {A B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
+
+/--
+theorem `of_surjective` / 定理 `of_surjective`
+
+English:
+theorem of_surjective
+  given: [FormallyUnramified R A] (f : A ->ₐ[R] B) (H : Function.Surjective f)
+  proof: by
+  rw [iff_comp_injective]
+  intro Q _ _ I hI f₁ f₂ e
+  ext x
+  obtain ⟨x, rfl⟩ := H x
+  rw [← AlgHom.comp_apply]; rw [← AlgHom.comp_apply]
+  congr 1
+  apply FormallyUnramified.comp_injective I hI
+  ext x; exact DFunLike.congr_fun e (f x)
+
+中文:
+定理 of_surjective
+  条件: [FormallyUnramified R A] (f : A ->ₐ[R] B) (H : Function.Surjective f)
+  证明: by
+  rw [iff_comp_injective]
+  intro Q _ _ I hI f₁ f₂ e
+  ext x
+  obtain ⟨x, rfl⟩ := H x
+  rw [← AlgHom.comp_apply]; rw [← AlgHom.comp_apply]
+  congr 1
+  apply FormallyUnramified.comp_injective I hI
+  ext x; exact DFunLike.congr_fun e (f x)
+
+Depends on / 依赖: AlgHom, AlgHom.comp_apply, DFunLike, DFunLike.congr_fun, FormallyUnramified, FormallyUnramified.comp_injective, comp_apply, comp_injective, congr_fun, iff_comp_injective
+-/
+theorem of_surjective [FormallyUnramified R A] (f : A ->ₐ[R] B) (H : Function.Surjective f) :
+    FormallyUnramified R B := by
+  rw [iff_comp_injective]
+  intro Q _ _ I hI f₁ f₂ e
+  ext x
+  obtain ⟨x, rfl⟩ := H x
+  rw [← AlgHom.comp_apply]; rw [← AlgHom.comp_apply]
+  congr 1
+  apply FormallyUnramified.comp_injective I hI
+  ext x; exact DFunLike.congr_fun e (f x)
+
+/--
+Instance `quotient` / 实例 `quotient`
+
+English:
+instance quotient
+  signature: {A} [CommRing A] [Algebra R A] [FormallyUnramified R A] (I : Ideal A)
+  body: FormallyUnramified.of_surjective (IsScalarTower.toAlgHom R A (A ⧸ I)) Ideal.Quotient.mk_surjective
+
+中文:
+实例 quotient
+  签名: {A} [CommRing A] [Algebra R A] [FormallyUnramified R A] (I : Ideal A)
+  定义体: FormallyUnramified.of_surjective (IsScalarTower.toAlgHom R A (A ⧸ I)) Ideal.Quotient.mk_surjective
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_surjective, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.toAlgHom, Quotient, mk_surjective, of_surjective, toAlgHom
+-/
+instance quotient {A} [CommRing A] [Algebra R A] [FormallyUnramified R A] (I : Ideal A) :
+    FormallyUnramified R (A ⧸ I) :=
+  FormallyUnramified.of_surjective (IsScalarTower.toAlgHom R A (A ⧸ I)) Ideal.Quotient.mk_surjective
+
+/--
+theorem `iff_of_equiv` / 定理 `iff_of_equiv`
+
+English:
+theorem iff_of_equiv
+  given: (e : A ≃ₐ[R] B)
+  statement: FormallyUnramified R A ↔ FormallyUnramified R B
+  proof: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
+
+中文:
+定理 iff_of_equiv
+  条件: (e : A ≃ₐ[R] B)
+  结论: FormallyUnramified R A ↔ FormallyUnramified R B
+  证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
+
+Depends on / 依赖: e.symm, of_equiv
+-/
+theorem iff_of_equiv (e : A ≃ₐ[R] B) : FormallyUnramified R A ↔ FormallyUnramified R B :=
+  ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
+
+end of_surjective
+
+section BaseChange
+
+
+variable {R : Type*} [CommRing R]
+variable {A : Type*} [CommRing A] [Algebra R A]
+variable (B : Type*) [CommRing B] [Algebra R B]
+
+/--
+Instance `base_change` / 实例 `base_change`
+
+English:
+instance base_change
+  signature: [FormallyUnramified R A]
+  body: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
+  have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
+  ext : 1
+  exact FormallyUnramified.ext I ⟨2, hI⟩ fun x => AlgHom.congr_fun e (1 otimesₜ x)
+
+中文:
+实例 base_change
+  签名: [FormallyUnramified R A]
+  定义体: by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
+  have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
+  ext : 1
+  exact FormallyUnramified.ext I ⟨2, hI⟩ fun x => AlgHom.congr_fun e (1 otimesₜ x)
+
+Depends on / 依赖: AlgHom, AlgHom.congr_fun, FormallyUnramified, FormallyUnramified.ext, IsScalarTower, IsScalarTower.of_algebraMap_eq, algebraMap, congr_fun, iff_comp_injective, of_algebraMap_eq, toAlgebra
+-/
+instance base_change [FormallyUnramified R A] :
+    FormallyUnramified B (B otimes[R] A) := by
+  rw [iff_comp_injective]
+  intro C _ _ I hI f₁ f₂ e
+  let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
+  have : IsScalarTower R B C := IsScalarTower.of_algebraMap_eq' rfl
+  ext : 1
+  exact FormallyUnramified.ext I ⟨2, hI⟩ fun x => AlgHom.congr_fun e (1 otimesₜ x)
+
+/--
+Instance `quotient_map` / 实例 `quotient_map`
+
+English:
+instance quotient_map
+  signature: [FormallyUnramified R B] (p : Ideal R)
+  body: .of_equiv (Algebra.TensorProduct.quotIdealMapEquivQuotTensor B p).symm
+
+中文:
+实例 quotient_map
+  签名: [FormallyUnramified R B] (p : Ideal R)
+  定义体: .of_equiv (Algebra.TensorProduct.quotIdealMapEquivQuotTensor B p).symm
+
+Depends on / 依赖: Algebra, Algebra.TensorProduct.quotIdealMapEquivQuotTensor, TensorProduct, of_equiv, quotIdealMapEquivQuotTensor
+-/
+instance quotient_map [FormallyUnramified R B] (p : Ideal R) :
+    FormallyUnramified (R ⧸ p) (B ⧸ p.map (algebraMap R B)) :=
+  .of_equiv (Algebra.TensorProduct.quotIdealMapEquivQuotTensor B p).symm
+
+end BaseChange
+
+section Localization
+
+variable {R S Rₘ Sₘ : Type*} [CommRing R] [CommRing S] [CommRing Rₘ] [CommRing Sₘ]
+variable (M : Submonoid R)
+variable [Algebra R S] [Algebra R Sₘ] [Algebra S Sₘ] [Algebra R Rₘ] [Algebra Rₘ Sₘ]
+variable [IsScalarTower R Rₘ Sₘ] [IsScalarTower R S Sₘ]
+variable [IsLocalization (M.map (algebraMap R S)) Sₘ]
+include M
+
+/--
+theorem `of_isLocalization` / 定理 `of_isLocalization`
+
+English:
+theorem of_isLocalization
+  given: [IsLocalization M Rₘ]
+  statement: FormallyUnramified R Rₘ
+  proof: by
+  rw [iff_comp_injective]
+  intro Q _ _ I _ f₁ f₂ _
+  apply AlgHom.coe_ringHom_injective
+  refine IsLocalization.ringHom_ext M ?_
+  ext
+  simp
+
+中文:
+定理 of_isLocalization
+  条件: [IsLocalization M Rₘ]
+  结论: FormallyUnramified R Rₘ
+  证明: by
+  rw [iff_comp_injective]
+  intro Q _ _ I _ f₁ f₂ _
+  apply AlgHom.coe_ringHom_injective
+  refine IsLocalization.ringHom_ext M ?_
+  ext
+  simp
+
+Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, IsLocalization, IsLocalization.ringHom_ext, coe_ringHom_injective, iff_comp_injective, ringHom_ext
+-/
+theorem of_isLocalization [IsLocalization M Rₘ] : FormallyUnramified R Rₘ := by
+  rw [iff_comp_injective]
+  intro Q _ _ I _ f₁ f₂ _
+  apply AlgHom.coe_ringHom_injective
+  refine IsLocalization.ringHom_ext M ?_
+  ext
+  simp
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance [FormallyUnramified
+  signature: R S] (M
+  body: have := of_isLocalization (Rₘ := Localization M) M
+  .comp _ S _
+
+中文:
+实例 [FormallyUnramified
+  签名: R S] (M
+  定义体: have := of_isLocalization (Rₘ := Localization M) M
+  .comp _ S _
+
+Depends on / 依赖: Localization, of_isLocalization
+-/
+instance [FormallyUnramified R S] (M : Submonoid S) : FormallyUnramified R (Localization M) :=
+  have := of_isLocalization (Rₘ := Localization M) M
+  .comp _ S _
+
+set_option linter.unusedSectionVars false in
+/-- This actually does not need the localization instance, and is stated here again for
+consistency. See `Algebra.FormallyUnramified.of_comp` instead.
+
+The intended use is for copying proofs between `Formally{Unramified, Smooth, Etale}`
+without the need to change anything (including removing redundant arguments). -/
+@[nolint unusedArguments]
+/--
+theorem `localization_base` / 定理 `localization_base`
+
+English:
+theorem localization_base
+  given: [FormallyUnramified R Sₘ]
+  statement: FormallyUnramified Rₘ Sₘ
+  proof: FormallyUnramified.of_restrictScalars R Rₘ Sₘ
+
+中文:
+定理 localization_base
+  条件: [FormallyUnramified R Sₘ]
+  结论: FormallyUnramified Rₘ Sₘ
+  证明: FormallyUnramified.of_restrictScalars R Rₘ Sₘ
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_restrictScalars, of_restrictScalars
+-/
+theorem localization_base [FormallyUnramified R Sₘ] : FormallyUnramified Rₘ Sₘ :=
+  FormallyUnramified.of_restrictScalars R Rₘ Sₘ
+
+/--
+theorem `localization_map` / 定理 `localization_map`
+
+English:
+theorem localization_map
+  given: [FormallyUnramified R S]
+  proof: by
+  have : FormallyUnramified S Sₘ :=
+    FormallyUnramified.of_isLocalization (M.map (algebraMap R S))
+  have : FormallyUnramified R Sₘ := FormallyUnramified.comp R S Sₘ
+  exact FormallyUnramified.localization_base M
+
+中文:
+定理 localization_map
+  条件: [FormallyUnramified R S]
+  证明: by
+  have : FormallyUnramified S Sₘ :=
+    FormallyUnramified.of_isLocalization (M.map (algebraMap R S))
+  have : FormallyUnramified R Sₘ := FormallyUnramified.comp R S Sₘ
+  exact FormallyUnramified.localization_base M
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.comp, FormallyUnramified.localization_base, FormallyUnramified.of_isLocalization, M.map, algebraMap, localization_base, of_isLocalization
+-/
+theorem localization_map [FormallyUnramified R S] :
+    FormallyUnramified Rₘ Sₘ := by
+  have : FormallyUnramified S Sₘ :=
+    FormallyUnramified.of_isLocalization (M.map (algebraMap R S))
+  have : FormallyUnramified R Sₘ := FormallyUnramified.comp R S Sₘ
+  exact FormallyUnramified.localization_base M
+
+end Localization
+
+/--
+lemma `exists_algEquiv_prod` / 引理 `exists_algEquiv_prod`
+
+English:
+lemma exists_algEquiv_prod
+  statement: (R S : Type u) [CommRing R] [CommRing S]
+  proof: by
+  obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
+(Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
+(Ideal.cotangent_subsingleton_iff _).mp inferInstanceAs Subsingleton Ω[S⁄R]
+  let e₁ := AlgEquiv.prodQuotientOfIsI
+
+中文:
+引理 exists_algEquiv_prod
+  结论: (R S : 类型u) [CommRing R] [CommRing S]
+  证明: by
+  obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
+(Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
+(Ideal.cotangent_subsingleton_iff _).mp inferInstanceAs Subsingleton Ω[S⁄R]
+  let e₁ := AlgEquiv.prodQuotientOfIsI
+
+Depends on / 依赖: AlgEquiv, AlgEquiv.prodQuotientOfIsIdempotentElem, Ideal.cotangent_subsingleton_iff, Ideal.isIdempotentElem_iff_of_fg, Ideal.quotientKerAlgEquivOfSurje, Ideal.span, IsIdempotentElem, KaehlerDifferential, KaehlerDifferential.ideal, KaehlerDifferential.ideal_fg, Subsingleton, cotangent_subsingleton_iff, he.one_sub, hsp.symm, ideal_fg, isIdempotentElem_iff_of_fg, one_sub, otimes, prodQuotientOfIsIdempotentElem, quotientEquivAlgOfEq
+-/
+lemma exists_algEquiv_prod (R S : Type u) [CommRing R] [CommRing S]
+    [Algebra R S] [Algebra.EssFiniteType R S] [Algebra.FormallyUnramified R S] :
+    exists (T : Type u) (_ : CommRing T) (_ : Algebra S T), Nonempty (S otimes[R] S ≃ₐ[S] S × T) := by
+  obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
+(Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
+(Ideal.cotangent_subsingleton_iff _).mp inferInstanceAs Subsingleton Ω[S⁄R]
+  let e₁ := AlgEquiv.prodQuotientOfIsIdempotentElem (R := S) he he.one_sub (by simp) (by simp [he])
+  let e₂ : (S otimes[R] S ⧸ Ideal.span {e}) ≃ₐ[S] S :=
+((Ideal.span {e}).quotientEquivAlgOfEq S hsp.symm).trans
+Ideal.quotientKerAlgEquivOfSurjective
+        (⟨· otimesₜ 1, by simp [Algebra.TensorProduct.lmul'']⟩)
+  exact ⟨(S otimes[R] S) ⧸ Ideal.span {1 - e}, inferInstance, inferInstance,
+    ⟨e₁.trans (.prodCongr e₂ .refl)⟩⟩
+
+end FormallyUnramified
+
+section
+
+variable (R : Type*) [CommRing R]
+variable (A : Type*) [CommRing A] [Algebra R A]
+
+/-- An `R`-algebra `A` is unramified if it is formally unramified and of finite type. -/
+@[stacks 00UT "Note that the Stacks project has a different definition of unramified, and tag
+<https://stacks.math.columbia.edu/tag/00UU> shows that their definition is the same as this one."]
+/--
+Definition of `Unramified` / `Unramified` 的定义
+
+English:
+class Unramified
+  parameters: : Prop where
+  axioms and operations (2):
+    - formallyUnramified : FormallyUnramified R A  [default: by infer_instance]
+    - finiteType : FiniteType R A  [default: by infer_instance]
+
+中文:
+类 Unramified
+  参数: : 命题 where
+  公理与运算 (2 个):
+    - formallyUnramified : FormallyUnramified R A  [默认: by infer_instance]
+    - finiteType : FiniteType R A  [默认: by infer_instance]
+
+Depends on / 依赖: FiniteType, finiteType, infer_instance
+-/
+class Unramified : Prop where
+  formallyUnramified : FormallyUnramified R A := by infer_instance
+  finiteType : FiniteType R A := by infer_instance
+
+end
+
+namespace Unramified
+
+attribute [instance] formallyUnramified finiteType
+
+variable {R : Type*} [CommRing R]
+variable {A B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
+
+/--
+theorem `of_equiv` / 定理 `of_equiv`
+
+English:
+theorem of_equiv
+  given: [Unramified R A] (e : A ≃ₐ[R] B)
+  statement: Unramified R B where
+  proof: FormallyUnramified.of_equiv e
+  finiteType := FiniteType.equiv Unramified.finiteType e
+
+中文:
+定理 of_equiv
+  条件: [Unramified R A] (e : A ≃ₐ[R] B)
+  结论: Unramified R B where
+  证明: FormallyUnramified.of_equiv e
+  finiteType := FiniteType.equiv Unramified.finiteType e
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_equiv, of_equiv
+-/
+theorem of_equiv [Unramified R A] (e : A ≃ₐ[R] B) : Unramified R B where
+  formallyUnramified := FormallyUnramified.of_equiv e
+  finiteType := FiniteType.equiv Unramified.finiteType e
+
+/--
+theorem `of_isLocalization_Away` / 定理 `of_isLocalization_Away`
+
+English:
+theorem of_isLocalization_Away
+  given: (r : R) [IsLocalization.Away r A]
+  statement: Unramified R A where
+  proof: Algebra.FormallyUnramified.of_isLocalization (Submonoid.powers r)
+  finiteType :=
+    haveI : FinitePresentation R A := IsLocalization.Away.finitePresentation r
+    inferInstance
+
+中文:
+定理 of_isLocalization_Away
+  条件: (r : R) [IsLocalization.Away r A]
+  结论: Unramified R A where
+  证明: Algebra.FormallyUnramified.of_isLocalization (Submonoid.powers r)
+  finiteType :=
+    haveI : FinitePresentation R A := IsLocalization.Away.finitePresentation r
+    inferInstance
+
+Depends on / 依赖: Algebra, Algebra.FormallyUnramified.of_isLocalization, FormallyUnramified, Submonoid, Submonoid.powers, of_isLocalization, powers
+-/
+theorem of_isLocalization_Away (r : R) [IsLocalization.Away r A] : Unramified R A where
+  formallyUnramified := Algebra.FormallyUnramified.of_isLocalization (Submonoid.powers r)
+  finiteType :=
+    haveI : FinitePresentation R A := IsLocalization.Away.finitePresentation r
+    inferInstance
+
+section Comp
+
+variable (R A B)
+
+/--
+theorem `comp` / 定理 `comp`
+
+English:
+theorem comp
+  given: [Algebra A B] [IsScalarTower R A B] [Unramified R A] [Unramified A B]
+  proof: FormallyUnramified.comp R A B
+  finiteType := FiniteType.trans (S := A) Unramified.finiteType
+    Unramified.finiteType
+
+中文:
+定理 comp
+  条件: [Algebra A B] [IsScalarTower R A B] [Unramified R A] [Unramified A B]
+  证明: FormallyUnramified.comp R A B
+  finiteType := FiniteType.trans (S := A) Unramified.finiteType
+    Unramified.finiteType
+
+Depends on / 依赖: FormallyUnramified, FormallyUnramified.comp
+-/
+theorem comp [Algebra A B] [IsScalarTower R A B] [Unramified R A] [Unramified A B] :
+    Unramified R B where
+  formallyUnramified := FormallyUnramified.comp R A B
+  finiteType := FiniteType.trans (S := A) Unramified.finiteType
+    Unramified.finiteType
+
+/--
+Instance `baseChange` / 实例 `baseChange`
+
+English:
+instance baseChange
+  signature: [Unramified R A]
+
+中文:
+实例 baseChange
+  签名: [Unramified R A]
+-/
+instance baseChange [Unramified R A] : Unramified B (B otimes[R] A) where
+
+end Comp
+
+end Unramified
+
+end Algebra

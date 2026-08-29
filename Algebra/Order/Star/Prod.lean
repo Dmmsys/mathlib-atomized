@@ -1,0 +1,56 @@
+/-
+Copyright (c) 2024 Eric Wieser. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Eric Wieser
+-/
+module
+
+public import Mathlib.Algebra.Order.Star.Basic
+public import Mathlib.Algebra.Star.Prod
+public import Mathlib.Algebra.Ring.Prod
+
+/-!
+# Products of star-ordered rings
+-/
+
+public section
+
+variable {α β : Type*}
+
+open AddSubmonoid in
+/--
+Instance `Prod.instStarOrderedRing` / 实例 `Prod.instStarOrderedRing`
+
+English:
+instance Prod.instStarOrderedRing
+  body: Prod.forall.2 fun xa xy => Prod.forall.2 fun ya yb => by
+    have :
+        closure (Set.range fun s : α × β => star s * s) =
+          (closure <| Set.range fun s : α => star s * s).prod
+          (closure <| Set.range fun s : β => star s * s) := by
+      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw
+
+中文:
+实例 Prod.instStarOrderedRing
+  定义体: Prod.forall.2 fun xa xy => Prod.forall.2 fun ya yb => by
+    have :
+        closure (Set.range fun s : α × β => star s * s) =
+          (closure <| Set.range fun s : α => star s * s).prod
+          (closure <| Set.range fun s : β => star s * s) := by
+      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw
+
+Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_prod, Prod.exists, Prod.forall, Prod.mul_def, Prod.star_def, Set.mem_range, Set.prod_range_range_eq, Set.range, StarOrderedRing, StarOrderedRing.le_iff, closure, closure_prod, exists_and_ex, le_iff, mem_prod, mem_range, mk.injEq, mk_add_mk, mk_le_mk
+-/
+instance Prod.instStarOrderedRing
+    [NonUnitalSemiring α] [NonUnitalSemiring β] [PartialOrder α] [PartialOrder β]
+    [StarRing α] [StarRing β] [StarOrderedRing α] [StarOrderedRing β] :
+    StarOrderedRing (α × β) where
+  le_iff := Prod.forall.2 fun xa xy => Prod.forall.2 fun ya yb => by
+    have :
+        closure (Set.range fun s : α × β => star s * s) =
+          (closure <| Set.range fun s : α => star s * s).prod
+          (closure <| Set.range fun s : β => star s * s) := by
+      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw [by simp⟩) (Set.mem_range.2 ⟨0]; rw [by simp⟩)]; rw [Set.prod_range_range_eq]
+      simp_rw [Prod.mul_def, Prod.star_def]
+    simp only [mk_le_mk, Prod.exists, mk_add_mk, mk.injEq, StarOrderedRing.le_iff, this,
+      AddSubmonoid.mem_prod, exists_and_exists_comm, and_and_and_comm]

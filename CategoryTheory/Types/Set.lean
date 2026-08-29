@@ -1,0 +1,50 @@
+/-
+Copyright (c) 2025 Joël Riou. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Joël Riou
+-/
+module
+
+public import Mathlib.CategoryTheory.Category.Preorder
+public import Mathlib.CategoryTheory.Types.Basic
+public import Mathlib.Data.Set.Basic
+
+/-!
+# The functor from `Set X` to types
+
+Given `X : Type u`, we define the functor `Set.functorToTypes : Set X ⥤ Type u`
+which sends `A : Set X` to its underlying type.
+
+-/
+
+@[expose] public section
+
+universe u
+
+open CategoryTheory
+
+namespace Set
+
+/-- Given `X : Type u`, this is the functor `Set X ⥤ Type u` which sends `A`
+to its underlying type. -/
+@[simps obj map]
+/--
+Definition of `functorToTypes` / `functorToTypes` 的定义
+
+English:
+definition functorToTypes
+  signature: {X : Type u}
+  body: S
+  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
+
+中文:
+定义 functorToTypes
+  签名: {X : 类型u}
+  定义体: S
+  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
+-/
+def functorToTypes {X : Type u} : Set X ⥤ Type u where
+  obj S := S
+  map {S T} f := ↾fun ⟨x, hx⟩ => ⟨x, leOfHom f hx⟩
+
+end Set

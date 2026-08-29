@@ -1,0 +1,127 @@
+/-
+Copyright (c) 2024 Matthew Robert Ballard. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Matthew Robert Ballard, Damiano Testa
+-/
+module
+
+public meta import Lean.Elab.Command
+-- Import this linter explicitly to ensure that
+-- this file has a valid copyright header and module docstring.
+public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+
+/-!
+# `#parse` -- a command to parse text and log outputs
+-/
+
+public meta section
+
+namespace Mathlib.GuardExceptions
+
+open Lean Parser Elab Command
+/--
+Definition of `captureException` / `captureException` 的定义
+
+English:
+definition captureException
+  signature: (env : Environment) (s : ParserFn) (input : String)
+  body: let ictx := mkInputContext input "<input>"
+  let s := s.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if !s.allErrors.isEmpty then
+    .error (s.toErrorMsg ictx)
+  else if ictx.atEnd s.pos then
+    .ok s.stxStack.back
+  else
+    .error ((s.mkError "end of input").toErro
+
+中文:
+定义 captureException
+  签名: (env : Environment) (s : ParserFn) (input : String)
+  定义体: let ictx := mkInputContext input "<input>"
+  let s := s.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if !s.allErrors.isEmpty then
+    .error (s.toErrorMsg ictx)
+  else if ictx.atEnd s.pos then
+    .ok s.stxStack.back
+  else
+    .error ((s.mkError "end of input").toErro
+
+Depends on / 依赖: allErrors, getTokenTable, ictx.atEnd, isEmpty, mkError, mkInputContext, mkParserState, options, s.allErrors.isEmpty, s.mkError, s.pos, s.run, s.stxStack.back, s.toErrorMsg, stxStack, toErrorMsg
+-/
+def captureException (env : Environment) (s : ParserFn) (input : String) : Except String Syntax :=
+  let ictx := mkInputContext input "<input>"
+  let s := s.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if !s.allErrors.isEmpty then
+    .error (s.toErrorMsg ictx)
+  else if ictx.atEnd s.pos then
+    .ok s.stxStack.back
+  else
+    .error ((s.mkError "end of input").toErrorMsg ictx)
+
+/--
+Definition of `parseAsTacticSeq` / `parseAsTacticSeq` 的定义
+
+English:
+definition parseAsTacticSeq
+  signature: (env : Environment) (input : String) (fileName := "<input>")
+  body: let p := andthenFn whitespace Tactic.tacticSeq.fn
+  let ictx := mkInputContext input fileName
+  let s := p.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if s.hasError then
+    .error (s.toErrorMsg ictx)
+  else if s.pos.atEnd input then
+    .ok ⟨s.stxStack.back⟩
+  else
+ 
+
+中文:
+定义 parseAsTacticSeq
+  签名: (env : Environment) (input : String) (fileName := "<input>")
+  定义体: let p := andthenFn whitespace Tactic.tacticSeq.fn
+  let ictx := mkInputContext input fileName
+  let s := p.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if s.hasError then
+    .error (s.toErrorMsg ictx)
+  else if s.pos.atEnd input then
+    .ok ⟨s.stxStack.back⟩
+  else
+ 
+-/
+def parseAsTacticSeq (env : Environment) (input : String) (fileName := "<input>") :
+    Except String (TSyntax ``Lean.Parser.Tactic.tacticSeq) :=
+  let p := andthenFn whitespace Tactic.tacticSeq.fn
+  let ictx := mkInputContext input fileName
+  let s := p.run ictx { env, options := {} } (getTokenTable env) (mkParserState input)
+  if s.hasError then
+    .error (s.toErrorMsg ictx)
+  else if s.pos.atEnd input then
+    .ok ⟨s.stxStack.back⟩
+  else
+    .error ((s.mkError "end of input").toErrorMsg ictx)
+
+/-- `#parse parserFnId => str` allows to capture parsing exceptions.
+`parserFnId` is the identifier of a `ParserFn` and `str` is the string that
+`parserFnId` should parse.
+
+If the parse is successful, then the output is logged;
+if the parse is successful, then the output is captured in an exception.
+
+In either case, `#guard_msgs` can then be used to capture the resulting parsing errors.
+
+For instance, `#parse` can be used as follows
+```lean
+/-- error: <input>:1:3: Stacks tags must be exactly 4 characters -/
+#guard_msgs in #parse Mathlib.Stacks.stacksTagFn => "A05"
+```
+-/
+syntax (name := parseCmd) "#parse " ident " => " str : command
+
+@[inherit_doc parseCmd]
+elab_rules : command
+  | `(command| #parse $parserFnId => $str) => do
+elabCommand ← `(command|
+      run_cmd do
+let exc ← Lean.ofExcept captureException (← getEnv) parserFnId str
+logInfo str)
+
+end Mathlib.GuardExceptions

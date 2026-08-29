@@ -1,0 +1,158 @@
+/-
+Copyright (c) 2024 Dagur Asgeirsson. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Dagur Asgeirsson
+-/
+module
+
+public import Mathlib.Algebra.Category.ModuleCat.AB
+public import Mathlib.CategoryTheory.Abelian.GrothendieckAxioms.Sheaf
+public import Mathlib.CategoryTheory.Sites.Coherent.ExtensiveColimits
+public import Mathlib.Condensed.Equivalence
+public import Mathlib.Condensed.Limits
+/-!
+
+# AB axioms in condensed modules
+
+This file proves that the category of condensed modules over a ring satisfies Grothendieck's axioms
+AB5, AB4, and AB4`*`.
+-/
+
+public section
+
+universe u
+
+open Condensed CategoryTheory Limits
+
+namespace Condensed
+
+variable (A J : Type*) [Category* A] [Category* J] [Preadditive A]
+  [forall X, HasLimitsOfShape (StructuredArrow X Stonean.toCompHaus.op) A]
+  [HasWeakSheafify (coherentTopology CompHaus.{u}) A]
+  [HasWeakSheafify (extensiveTopology Stonean.{u}) A]
+-- One of the `HasWeakSheafify` instances could be deduced from the other using the dense subsite
+-- API, but when `A` is a concrete category, these will both be synthesized anyway.
+
+set_option Elab.async false in -- TODO: universe levels from type are unified in proof
+/--
+lemma `hasExactColimitsOfShape` / 引理 `hasExactColimitsOfShape`
+
+English:
+lemma hasExactColimitsOfShape
+  statement: [HasColimitsOfShape J A] [HasExactColimitsOfShape J A]
+  proof: by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactColimitsOfShape.domain_of_functor _ e.functor
+
+中文:
+引理 hasExactColimitsOfShape
+  结论: [HasColimitsOfShape J A] [HasExactColimitsOfShape J A]
+  证明: by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactColimitsOfShape.domain_of_functor _ e.functor
+
+Depends on / 依赖: Condensed, HasExactColimitsOfShape, HasExactColimitsOfShape.domain_of_functor, Presheaf, Presheaf.coherentExtensiveEquivalence, Stonean, StoneanCompHaus, StoneanCompHaus.equivalence, coherentExtensiveEquivalence, domain_of_functor, e.functor, equivalence, extensiveTopology, functor, symm.trans
+-/
+lemma hasExactColimitsOfShape [HasColimitsOfShape J A] [HasExactColimitsOfShape J A]
+    [HasFiniteLimits A] : HasExactColimitsOfShape J (Condensed.{u} A) := by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactColimitsOfShape.domain_of_functor _ e.functor
+
+set_option Elab.async false in -- TODO: universe levels from type are unified in proof
+/--
+lemma `hasExactLimitsOfShape` / 引理 `hasExactLimitsOfShape`
+
+English:
+lemma hasExactLimitsOfShape
+  statement: [HasLimitsOfShape J A] [HasExactLimitsOfShape J A]
+  proof: by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactLimitsOfShape.domain_of_functor _ e.functor
+
+中文:
+引理 hasExactLimitsOfShape
+  结论: [HasLimitsOfShape J A] [HasExactLimitsOfShape J A]
+  证明: by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactLimitsOfShape.domain_of_functor _ e.functor
+
+Depends on / 依赖: Condensed, HasExactLimitsOfShape, HasExactLimitsOfShape.domain_of_functor, Presheaf, Presheaf.coherentExtensiveEquivalence, Stonean, StoneanCompHaus, StoneanCompHaus.equivalence, coherentExtensiveEquivalence, domain_of_functor, e.functor, equivalence, extensiveTopology, functor, symm.trans
+-/
+lemma hasExactLimitsOfShape [HasLimitsOfShape J A] [HasExactLimitsOfShape J A]
+    [HasFiniteColimits A] : HasExactLimitsOfShape J (Condensed.{u} A) := by
+  let e : Condensed.{u} A ≌ Sheaf (extensiveTopology Stonean.{u}) A :=
+    (StoneanCompHaus.equivalence A).symm.trans Presheaf.coherentExtensiveEquivalence
+  exact HasExactLimitsOfShape.domain_of_functor _ e.functor
+
+section Module
+
+variable (R : Type (u + 1)) [Ring R]
+
+local instance : HasLimitsOfSize.{u, u + 1} (ModuleCat.{u + 1} R) :=
+  hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
+
+variable (X Y : CondensedMod.{u} R)
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance :
+  signature: AB5 (CondensedMod.{u} R)
+  body: hasExactColimitsOfShape (ModuleCat R) J
+
+中文:
+实例 :
+  签名: AB5 (CondensedMod.{u} R)
+  定义体: hasExactColimitsOfShape (ModuleCat R) J
+
+Depends on / 依赖: ModuleCat, hasExactColimitsOfShape
+-/
+instance : AB5 (CondensedMod.{u} R) where
+  ofShape J _ _ := hasExactColimitsOfShape (ModuleCat R) J
+
+attribute [local instance] Abelian.hasFiniteBiproducts
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance :
+  signature: AB4 (CondensedMod.{u} R)
+  body: AB4.of_AB5 _
+
+中文:
+实例 :
+  签名: AB4 (CondensedMod.{u} R)
+  定义体: AB4.of_AB5 _
+
+Depends on / 依赖: AB4.of_AB5, of_AB5
+-/
+instance : AB4 (CondensedMod.{u} R) := AB4.of_AB5 _
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance :
+  signature: AB4Star (CondensedMod.{u} R)
+  body: hasExactLimitsOfShape (ModuleCat R) (Discrete J)
+
+中文:
+实例 :
+  签名: AB4Star (CondensedMod.{u} R)
+  定义体: hasExactLimitsOfShape (ModuleCat R) (Discrete J)
+
+Depends on / 依赖: Discrete, ModuleCat, hasExactLimitsOfShape
+-/
+instance : AB4Star (CondensedMod.{u} R) where
+  ofShape J := hasExactLimitsOfShape (ModuleCat R) (Discrete J)
+
+end Module
+
+end Condensed

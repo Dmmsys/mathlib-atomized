@@ -1,0 +1,554 @@
+/-
+Copyright (c) 2024 Rémy Degenne. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Rémy Degenne, Lorenzo Luccioli
+-/
+module
+
+public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.Probability.Kernel.Composition.MapComap
+public import Mathlib.Probability.Kernel.MeasurableLIntegral
+
+/-!
+
+# Parallel composition of kernels
+
+Two kernels `κ : Kernel α β` and `η : Kernel γ δ` can be applied in parallel to give a kernel
+`κ ∥ₖ η` from `α × γ` to `β × δ`: `(κ ∥ₖ η) (a, c) = (κ a).prod (η c)`.
+
+## Main definitions
+
+* `parallelComp (κ : Kernel α β) (η : Kernel γ δ) : Kernel (α × γ) (β × δ)`: parallel composition
+  of two s-finite kernels. We define a notation `κ ∥ₖ η = parallelComp κ η`.
+  `∫⁻ bd, g bd ∂(κ ∥ₖ η) ac = ∫⁻ b, ∫⁻ d, g (b, d) ∂η ac.2 ∂κ ac.1`
+
+## Notation
+
+* `κ ∥ₖ η = ProbabilityTheory.Kernel.parallelComp κ η`
+
+-/
+
+@[expose] public section
+
+open MeasureTheory
+
+open scoped ENNReal
+
+namespace ProbabilityTheory.Kernel
+
+variable {α β γ δ : Type*} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}
+  {mγ : MeasurableSpace γ} {mδ : MeasurableSpace δ}
+  {κ : Kernel α β} {η : Kernel γ δ} {x : α × γ}
+
+open scoped Classical in
+/-- Parallel product of two kernels. -/
+noncomputable
+irreducible_def parallelComp (κ : Kernel α β) (η : Kernel γ δ) : Kernel (α × γ) (β × δ) :=
+  if h : IsSFiniteKernel κ ∧ IsSFiniteKernel η then
+  { toFun := fun x => (κ x.1).prod (η x.2)
+    measurable' := by
+      have hκ := h.1
+      have hη := h.2
+      refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
+      simp_rw [Measure.prod_apply hs]
+      refine Measurable.lintegral_kernel_prod_right'
+        (f := fun y => prodMkLeft α η y.1 (Prod.mk y.2 ⁻¹' s)) (κ := prodMkRight γ κ) ?_
+      have : (fun y => prodMkLeft α η y.1 (Prod.mk y.2 ⁻¹' s))
+          = fun y => prodMkRight β (prodMkLeft α η) y (Prod.mk y.2 ⁻¹' s) := rfl
+      rw [this]
+      exact measurable_kernel_prodMk_left (measurable_fst.snd.prodMk measurable_snd hs) }
+  else 0
+
+@[inherit_doc]
+scoped[ProbabilityTheory] infixl:100 " ∥ₖ " => ProbabilityTheory.Kernel.parallelComp
+
+@[simp]
+/--
+lemma `parallelComp_of_not_isSFiniteKernel_left` / 引理 `parallelComp_of_not_isSFiniteKernel_left`
+
+English:
+lemma parallelComp_of_not_isSFiniteKernel_left
+  given: (η : Kernel γ δ) (h : ¬ IsSFiniteKernel κ)
+  proof: by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_left _ h)]
+
+@[simp]
+
+中文:
+引理 parallelComp_of_not_isSFiniteKernel_left
+  条件: (η : Kernel γ δ) (h : ¬ IsSFiniteKernel κ)
+  证明: by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_left _ h)]
+
+@[simp]
+
+Depends on / 依赖: dif_neg, not_and_of_not_left, parallelComp
+-/
+lemma parallelComp_of_not_isSFiniteKernel_left (η : Kernel γ δ) (h : ¬ IsSFiniteKernel κ) :
+    κ ∥ₖ η = 0 := by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_left _ h)]
+
+@[simp]
+/--
+lemma `parallelComp_of_not_isSFiniteKernel_right` / 引理 `parallelComp_of_not_isSFiniteKernel_right`
+
+English:
+lemma parallelComp_of_not_isSFiniteKernel_right
+  given: (κ : Kernel α β) (h : ¬ IsSFiniteKernel η)
+  proof: by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_right _ h)]
+
+中文:
+引理 parallelComp_of_not_isSFiniteKernel_right
+  条件: (κ : Kernel α β) (h : ¬ IsSFiniteKernel η)
+  证明: by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_right _ h)]
+
+Depends on / 依赖: dif_neg, not_and_of_not_right, parallelComp
+-/
+lemma parallelComp_of_not_isSFiniteKernel_right (κ : Kernel α β) (h : ¬ IsSFiniteKernel η) :
+    κ ∥ₖ η = 0 := by
+  rw [parallelComp]; rw [dif_neg (not_and_of_not_right _ h)]
+
+/--
+lemma `parallelComp_apply` / 引理 `parallelComp_apply`
+
+English:
+lemma parallelComp_apply
+  statement: (κ : Kernel α β) [IsSFiniteKernel κ]
+  proof: by
+  rw [parallelComp]; rw [dif_pos ⟨inferInstance]; rw [inferInstance⟩]; rw [coe_mk]
+
+中文:
+引理 parallelComp_apply
+  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+  证明: by
+  rw [parallelComp]; rw [dif_pos ⟨inferInstance]; rw [inferInstance⟩]; rw [coe_mk]
+
+Depends on / 依赖: coe_mk, dif_pos, parallelComp
+-/
+lemma parallelComp_apply (κ : Kernel α β) [IsSFiniteKernel κ]
+    (η : Kernel γ δ) [IsSFiniteKernel η] (x : α × γ) :
+    (κ ∥ₖ η) x = (κ x.1).prod (η x.2) := by
+  rw [parallelComp]; rw [dif_pos ⟨inferInstance]; rw [inferInstance⟩]; rw [coe_mk]
+
+/--
+lemma `parallelComp_apply'` / 引理 `parallelComp_apply'`
+
+English:
+lemma parallelComp_apply'
+  statement: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  proof: by
+  rw [parallelComp_apply]; rw [Measure.prod_apply hs]
+
+中文:
+引理 parallelComp_apply'
+  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  证明: by
+  rw [parallelComp_apply]; rw [Measure.prod_apply hs]
+
+Depends on / 依赖: Measure, Measure.prod_apply, parallelComp_apply, prod_apply
+-/
+lemma parallelComp_apply' [IsSFiniteKernel κ] [IsSFiniteKernel η]
+    {s : Set (β × δ)} (hs : MeasurableSet s) :
+    (κ ∥ₖ η) x s = ∫⁻ b, η x.2 (Prod.mk b ⁻¹' s) ∂κ x.1 := by
+  rw [parallelComp_apply]; rw [Measure.prod_apply hs]
+
+/--
+lemma `parallelComp_apply_prod` / 引理 `parallelComp_apply_prod`
+
+English:
+lemma parallelComp_apply_prod
+  given: [IsSFiniteKernel κ] [IsSFiniteKernel η] (s : Set β) (t : Set δ)
+  proof: by
+  rw [parallelComp_apply]; rw [Measure.prod_prod]
+
+@[simp]
+
+中文:
+引理 parallelComp_apply_prod
+  条件: [IsSFiniteKernel κ] [IsSFiniteKernel η] (s : Set β) (t : Set δ)
+  证明: by
+  rw [parallelComp_apply]; rw [Measure.prod_prod]
+
+@[simp]
+
+Depends on / 依赖: Measure, Measure.prod_prod, parallelComp_apply, prod_prod
+-/
+lemma parallelComp_apply_prod [IsSFiniteKernel κ] [IsSFiniteKernel η] (s : Set β) (t : Set δ) :
+    (κ ∥ₖ η) x (s ×ˢ t) = (κ x.1 s) * (η x.2 t) := by
+  rw [parallelComp_apply]; rw [Measure.prod_prod]
+
+@[simp]
+/--
+lemma `parallelComp_apply_univ` / 引理 `parallelComp_apply_univ`
+
+English:
+lemma parallelComp_apply_univ
+  given: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  proof: by
+  rw [parallelComp_apply]; rw [Measure.prod_apply .univ]; rw [mul_comm]
+  simp
+
+@[simp]
+
+中文:
+引理 parallelComp_apply_univ
+  条件: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  证明: by
+  rw [parallelComp_apply]; rw [Measure.prod_apply .univ]; rw [mul_comm]
+  simp
+
+@[simp]
+
+Depends on / 依赖: Measure, Measure.prod_apply, mul_comm, parallelComp_apply, prod_apply
+-/
+lemma parallelComp_apply_univ [IsSFiniteKernel κ] [IsSFiniteKernel η] :
+    (κ ∥ₖ η) x Set.univ = κ x.1 Set.univ * η x.2 Set.univ := by
+  rw [parallelComp_apply]; rw [Measure.prod_apply .univ]; rw [mul_comm]
+  simp
+
+@[simp]
+/--
+lemma `parallelComp_zero_left` / 引理 `parallelComp_zero_left`
+
+English:
+lemma parallelComp_zero_left
+  given: (η : Kernel γ δ)
+  statement: (0 : Kernel α β) ∥ₖ η = 0
+  proof: by
+  by_cases h : IsSFiniteKernel η
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_right _ h
+
+@[simp]
+
+中文:
+引理 parallelComp_zero_left
+  条件: (η : Kernel γ δ)
+  结论: (0 : Kernel α β) ∥ₖ η = 0
+  证明: by
+  by_cases h : IsSFiniteKernel η
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_right _ h
+
+@[simp]
+
+Depends on / 依赖: IsSFiniteKernel, parallelComp_apply, parallelComp_of_not_isSFiniteKernel_right
+-/
+lemma parallelComp_zero_left (η : Kernel γ δ) : (0 : Kernel α β) ∥ₖ η = 0 := by
+  by_cases h : IsSFiniteKernel η
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_right _ h
+
+@[simp]
+/--
+lemma `parallelComp_zero_right` / 引理 `parallelComp_zero_right`
+
+English:
+lemma parallelComp_zero_right
+  given: (κ : Kernel α β)
+  statement: κ ∥ₖ (0 : Kernel γ δ) = 0
+  proof: by
+  by_cases h : IsSFiniteKernel κ
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_left _ h
+
+@[simp]
+
+中文:
+引理 parallelComp_zero_right
+  条件: (κ : Kernel α β)
+  结论: κ ∥ₖ (0 : Kernel γ δ) = 0
+  证明: by
+  by_cases h : IsSFiniteKernel κ
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_left _ h
+
+@[simp]
+
+Depends on / 依赖: IsSFiniteKernel, parallelComp_apply, parallelComp_of_not_isSFiniteKernel_left
+-/
+lemma parallelComp_zero_right (κ : Kernel α β) : κ ∥ₖ (0 : Kernel γ δ) = 0 := by
+  by_cases h : IsSFiniteKernel κ
+  · ext; simp [parallelComp_apply]
+  · exact parallelComp_of_not_isSFiniteKernel_left _ h
+
+@[simp]
+/--
+lemma `id_parallelComp_id` / 引理 `id_parallelComp_id`
+
+English:
+lemma id_parallelComp_id
+  proof: by
+  ext : 1
+  simp [parallelComp_apply, id_apply, Measure.dirac_prod_dirac]
+
+中文:
+引理 id_parallelComp_id
+  证明: by
+  ext : 1
+  simp [parallelComp_apply, id_apply, Measure.dirac_prod_dirac]
+
+Depends on / 依赖: Measure, Measure.dirac_prod_dirac, dirac_prod_dirac, id_apply, parallelComp_apply
+-/
+lemma id_parallelComp_id :
+    Kernel.id ∥ₖ Kernel.id = (Kernel.id : Kernel (α × β) (α × β)) := by
+  ext : 1
+  simp [parallelComp_apply, id_apply, Measure.dirac_prod_dirac]
+
+/--
+lemma `deterministic_parallelComp_deterministic` / 引理 `deterministic_parallelComp_deterministic`
+
+English:
+lemma deterministic_parallelComp_deterministic
+  proof: by
+  ext x : 1
+  simp_rw [parallelComp_apply, deterministic_apply, Prod.map, Measure.dirac_prod_dirac]
+
+中文:
+引理 deterministic_parallelComp_deterministic
+  证明: by
+  ext x : 1
+  simp_rw [parallelComp_apply, deterministic_apply, Prod.map, Measure.dirac_prod_dirac]
+
+Depends on / 依赖: Measure, Measure.dirac_prod_dirac, Prod.map, deterministic_apply, dirac_prod_dirac, parallelComp_apply, simp_rw
+-/
+lemma deterministic_parallelComp_deterministic
+    {f : α -> γ} {g : β -> δ} (hf : Measurable f) (hg : Measurable g) :
+    (deterministic f hf) ∥ₖ (deterministic g hg)
+      = deterministic (Prod.map f g) (hf.prodMap hg) := by
+  ext x : 1
+  simp_rw [parallelComp_apply, deterministic_apply, Prod.map, Measure.dirac_prod_dirac]
+
+/--
+lemma `lintegral_parallelComp` / 引理 `lintegral_parallelComp`
+
+English:
+lemma lintegral_parallelComp
+  statement: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  proof: by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ hg.aemeasurable]
+
+中文:
+引理 lintegral_parallelComp
+  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  证明: by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ hg.aemeasurable]
+
+Depends on / 依赖: MeasureTheory, MeasureTheory.lintegral_prod, aemeasurable, hg.aemeasurable, lintegral_prod, parallelComp_apply
+-/
+lemma lintegral_parallelComp [IsSFiniteKernel κ] [IsSFiniteKernel η]
+    (ac : α × γ) {g : β × δ -> Real>=0∞} (hg : Measurable g) :
+    ∫⁻ bd, g bd ∂(κ ∥ₖ η) ac = ∫⁻ b, ∫⁻ d, g (b, d) ∂η ac.2 ∂κ ac.1 := by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ hg.aemeasurable]
+
+/--
+lemma `lintegral_parallelComp_symm` / 引理 `lintegral_parallelComp_symm`
+
+English:
+lemma lintegral_parallelComp_symm
+  statement: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  proof: by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod_symm _ hg.aemeasurable]
+
+中文:
+引理 lintegral_parallelComp_symm
+  结论: [IsSFiniteKernel κ] [IsSFiniteKernel η]
+  证明: by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod_symm _ hg.aemeasurable]
+
+Depends on / 依赖: MeasureTheory, MeasureTheory.lintegral_prod_symm, aemeasurable, hg.aemeasurable, lintegral_prod_symm, parallelComp_apply
+-/
+lemma lintegral_parallelComp_symm [IsSFiniteKernel κ] [IsSFiniteKernel η]
+    (ac : α × γ) {g : β × δ -> Real>=0∞} (hg : Measurable g) :
+    ∫⁻ bd, g bd ∂(κ ∥ₖ η) ac = ∫⁻ d, ∫⁻ b, g (b, d) ∂κ ac.1 ∂η ac.2 := by
+  rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod_symm _ hg.aemeasurable]
+
+/--
+lemma `parallelComp_sum_left` / 引理 `parallelComp_sum_left`
+
+English:
+lemma parallelComp_sum_left
+  statement: {ι : Type*} [Countable ι] (κ : ι -> Kernel α β)
+  proof: by
+  by_cases h : IsSFiniteKernel η
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_left]
+
+中文:
+引理 parallelComp_sum_left
+  结论: {ι : 类型} [Countable ι] (κ : ι -> Kernel α β)
+  证明: by
+  by_cases h : IsSFiniteKernel η
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_left]
+
+Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.sum_apply, Measure, Measure.prod_sum_left, parallelComp_apply, prod_sum_left, simp_rw, sum_apply
+-/
+lemma parallelComp_sum_left {ι : Type*} [Countable ι] (κ : ι -> Kernel α β)
+    [forall i, IsSFiniteKernel (κ i)] (η : Kernel γ δ) :
+    Kernel.sum κ ∥ₖ η = Kernel.sum fun i => κ i ∥ₖ η := by
+  by_cases h : IsSFiniteKernel η
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_left]
+
+/--
+lemma `parallelComp_sum_right` / 引理 `parallelComp_sum_right`
+
+English:
+lemma parallelComp_sum_right
+  statement: {ι : Type*} [Countable ι] (κ : Kernel α β)
+  proof: by
+  by_cases h : IsSFiniteKernel κ
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_right]
+
+中文:
+引理 parallelComp_sum_right
+  结论: {ι : 类型} [Countable ι] (κ : Kernel α β)
+  证明: by
+  by_cases h : IsSFiniteKernel κ
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_right]
+
+Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.sum_apply, Measure, Measure.prod_sum_right, parallelComp_apply, prod_sum_right, simp_rw, sum_apply
+-/
+lemma parallelComp_sum_right {ι : Type*} [Countable ι] (κ : Kernel α β)
+    (η : ι -> Kernel γ δ) [forall i, IsSFiniteKernel (η i)] :
+    κ ∥ₖ Kernel.sum η = Kernel.sum fun i => κ ∥ₖ η i := by
+  by_cases h : IsSFiniteKernel κ
+  swap; · simp [h]
+  ext x
+  simp_rw [Kernel.sum_apply, parallelComp_apply, Kernel.sum_apply, Measure.prod_sum_right]
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance [IsMarkovKernel
+  signature: κ] [IsMarkovKernel η] : IsMarkovKernel (κ ∥ₖ η)
+  body: ⟨fun x => ⟨by simp [parallelComp_apply_univ]⟩⟩
+
+中文:
+实例 [IsMarkovKernel
+  签名: κ] [IsMarkovKernel η] : IsMarkovKernel (κ ∥ₖ η)
+  定义体: ⟨fun x => ⟨by simp [parallelComp_apply_univ]⟩⟩
+
+Depends on / 依赖: parallelComp_apply_univ
+-/
+instance [IsMarkovKernel κ] [IsMarkovKernel η] : IsMarkovKernel (κ ∥ₖ η) :=
+  ⟨fun x => ⟨by simp [parallelComp_apply_univ]⟩⟩
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance [IsZeroOrMarkovKernel
+  signature: κ] [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ∥ₖ η)
+  body: by
+  obtain rfl | _ := eq_zero_or_isMarkovKernel κ <;> obtain rfl | _ := eq_zero_or_isMarkovKernel η
+  all_goals simpa using by infer_instance
+
+中文:
+实例 [IsZeroOrMarkovKernel
+  签名: κ] [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ∥ₖ η)
+  定义体: by
+  obtain rfl | _ := eq_zero_or_isMarkovKernel κ <;> obtain rfl | _ := eq_zero_or_isMarkovKernel η
+  all_goals simpa using by infer_instance
+
+Depends on / 依赖: all_goals, eq_zero_or_isMarkovKernel, infer_instance
+-/
+instance [IsZeroOrMarkovKernel κ] [IsZeroOrMarkovKernel η] : IsZeroOrMarkovKernel (κ ∥ₖ η) := by
+  obtain rfl | _ := eq_zero_or_isMarkovKernel κ <;> obtain rfl | _ := eq_zero_or_isMarkovKernel η
+  all_goals simpa using by infer_instance
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance [IsFiniteKernel
+  signature: κ] [IsFiniteKernel η] : IsFiniteKernel (κ ∥ₖ η)
+  body: by
+  refine ⟨⟨κ.bound * η.bound, ENNReal.mul_lt_top κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
+  calc (κ ∥ₖ η) a Set.univ
+  _ = κ a.1 Set.univ * η a.2 Set.univ := parallelComp_apply_univ
+  _ <= κ.bound * η.bound := by
+    gcongr
+    · exact measure_le_bound κ a.1 Set.univ
+    · exact measure_le_bo
+
+中文:
+实例 [IsFiniteKernel
+  签名: κ] [IsFiniteKernel η] : IsFiniteKernel (κ ∥ₖ η)
+  定义体: by
+  refine ⟨⟨κ.bound * η.bound, ENNReal.mul_lt_top κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
+  calc (κ ∥ₖ η) a Set.univ
+  _ = κ a.1 Set.univ * η a.2 Set.univ := parallelComp_apply_univ
+  _ <= κ.bound * η.bound := by
+    gcongr
+    · exact measure_le_bound κ a.1 Set.univ
+    · exact measure_le_bo
+
+Depends on / 依赖: ENNReal, ENNReal.mul_lt_top, Set.univ, bound_lt_top, measure_le_bound, mul_lt_top, parallelComp_apply_univ
+-/
+instance [IsFiniteKernel κ] [IsFiniteKernel η] : IsFiniteKernel (κ ∥ₖ η) := by
+  refine ⟨⟨κ.bound * η.bound, ENNReal.mul_lt_top κ.bound_lt_top η.bound_lt_top, fun a => ?_⟩⟩
+  calc (κ ∥ₖ η) a Set.univ
+  _ = κ a.1 Set.univ * η a.2 Set.univ := parallelComp_apply_univ
+  _ <= κ.bound * η.bound := by
+    gcongr
+    · exact measure_le_bound κ a.1 Set.univ
+    · exact measure_le_bound η a.2 Set.univ
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance :
+  signature: IsSFiniteKernel (κ ∥ₖ η)
+  body: by
+  by_cases h : IsSFiniteKernel κ
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_left]
+    infer_instance
+  by_cases h : IsSFiniteKernel η
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_right]
+    infer_instance
+  simp_rw [← kernel_
+
+中文:
+实例 :
+  签名: IsSFiniteKernel (κ ∥ₖ η)
+  定义体: by
+  by_cases h : IsSFiniteKernel κ
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_left]
+    infer_instance
+  by_cases h : IsSFiniteKernel η
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_right]
+    infer_instance
+  simp_rw [← kernel_
+
+Depends on / 依赖: IsSFiniteKernel, infer_instance, kernel_sum_seq, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_left, parallelComp_of_not_isSFiniteKernel_right, parallelComp_sum_left, parallelComp_sum_right, simp_rw
+-/
+instance : IsSFiniteKernel (κ ∥ₖ η) := by
+  by_cases h : IsSFiniteKernel κ
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_left]
+    infer_instance
+  by_cases h : IsSFiniteKernel η
+  swap
+  · simp only [h, not_false_eq_true, parallelComp_of_not_isSFiniteKernel_right]
+    infer_instance
+  simp_rw [← kernel_sum_seq κ, ← kernel_sum_seq η, parallelComp_sum_left, parallelComp_sum_right]
+  infer_instance
+
+end ProbabilityTheory.Kernel

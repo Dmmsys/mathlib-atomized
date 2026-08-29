@@ -1,0 +1,446 @@
+/-
+Copyright (c) 2022 Yaël Dillies, Bhavik Mehta. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yaël Dillies, Bhavik Mehta
+-/
+module
+
+public import Mathlib.Combinatorics.Additive.AP.Three.Defs
+public import Mathlib.Combinatorics.Additive.Corner.Defs
+public import Mathlib.Combinatorics.SimpleGraph.Triangle.Removal
+public import Mathlib.Combinatorics.SimpleGraph.Triangle.Tripartite
+
+/-!
+# The corners theorem and Roth's theorem
+
+This file proves the corners theorem and Roth's theorem on arithmetic progressions of length three.
+
+## References
+
+* [Yaël Dillies, Bhavik Mehta, *Formalising Szemerédi’s Regularity Lemma in Lean*][srl_itp]
+* [Wikipedia, *Corners theorem*](https://en.wikipedia.org/wiki/Corners_theorem)
+-/
+
+@[expose] public section
+
+open Finset SimpleGraph TripartiteFromTriangles
+open Function hiding graph
+open Fintype (card)
+
+variable {G : Type*} [AddCommGroup G] {A : Finset (G × G)} {a b c : G} {n : Nat} {ε : Real}
+
+namespace Corners
+
+/--
+Definition of `triangleIndices` / `triangleIndices` 的定义
+
+English:
+definition triangleIndices
+  signature: (A : Finset (G × G))
+  body: A.map ⟨fun (a, b) => (a, b, a + b), by rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ ⟨⟩; rfl⟩
+
+@[simp]
+
+中文:
+定义 triangleIndices
+  签名: (A : Finset (G × G))
+  定义体: A.map ⟨fun (a, b) => (a, b, a + b), by rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ ⟨⟩; rfl⟩
+
+@[simp]
+-/
+private def triangleIndices (A : Finset (G × G)) : Finset (G × G × G) :=
+  A.map ⟨fun (a, b) => (a, b, a + b), by rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ ⟨⟩; rfl⟩
+
+@[simp]
+/--
+lemma `mk_mem_triangleIndices` / 引理 `mk_mem_triangleIndices`
+
+English:
+lemma mk_mem_triangleIndices
+  statement: (a, b, c) in triangleIndices A ↔ (a, b) in A ∧ c = a + b
+  proof: by
+  simp only [triangleIndices, Prod.ext_iff, mem_map, Prod.exists, eq_comm]
+  refine ⟨?_, fun h => ⟨_, _, h.1, rfl, rfl, h.2⟩⟩
+  rintro ⟨_, _, h₁, rfl, rfl, h₂⟩
+  exact ⟨h₁, h₂⟩
+
+中文:
+引理 mk_mem_triangleIndices
+  结论: (a, b, c) in triangleIndices A ↔ (a, b) in A ∧ c = a + b
+  证明: by
+  simp only [triangleIndices, Prod.ext_iff, mem_map, Prod.exists, eq_comm]
+  refine ⟨?_, fun h => ⟨_, _, h.1, rfl, rfl, h.2⟩⟩
+  rintro ⟨_, _, h₁, rfl, rfl, h₂⟩
+  exact ⟨h₁, h₂⟩
+-/
+private lemma mk_mem_triangleIndices : (a, b, c) in triangleIndices A ↔ (a, b) in A ∧ c = a + b := by
+  simp only [triangleIndices, Prod.ext_iff, mem_map, Prod.exists, eq_comm]
+  refine ⟨?_, fun h => ⟨_, _, h.1, rfl, rfl, h.2⟩⟩
+  rintro ⟨_, _, h₁, rfl, rfl, h₂⟩
+  exact ⟨h₁, h₂⟩
+
+/--
+lemma `card_triangleIndices` / 引理 `card_triangleIndices`
+
+English:
+lemma card_triangleIndices
+  statement: #(triangleIndices A) = #A
+  proof: card_map _
+
+中文:
+引理 card_triangleIndices
+  结论: #(triangleIndices A) = #A
+  证明: card_map _
+-/
+@[simp] private lemma card_triangleIndices : #(triangleIndices A) = #A := card_map _
+
+/--
+Instance `triangleIndices.instExplicitDisjoint` / 实例 `triangleIndices.instExplicitDisjoint`
+
+English:
+instance triangleIndices.instExplicitDisjoint
+  signature: : ExplicitDisjoint (triangleIndices A)
+  body: by
+  constructor <;> simp +contextual
+
+中文:
+实例 triangleIndices.instExplicitDisjoint
+  签名: : ExplicitDisjoint (triangleIndices A)
+  定义体: by
+  constructor <;> simp +contextual
+-/
+private instance triangleIndices.instExplicitDisjoint : ExplicitDisjoint (triangleIndices A) := by
+  constructor <;> simp +contextual
+
+/--
+lemma `noAccidental` / 引理 `noAccidental`
+
+English:
+lemma noAccidental
+  given: (hs : IsCornerFree (A : Set (G × G)))
+  proof: by
+    simp only [mk_mem_triangleIndices] at ha hb hc
+exact .inl hs ⟨hc.1, hb.1, ha.1, hb.2.symm.trans ha.2⟩
+
+中文:
+引理 noAccidental
+  条件: (hs : IsCornerFree (A : Set (G × G)))
+  证明: by
+    simp only [mk_mem_triangleIndices] at ha hb hc
+exact .inl hs ⟨hc.1, hb.1, ha.1, hb.2.symm.trans ha.2⟩
+-/
+private lemma noAccidental (hs : IsCornerFree (A : Set (G × G))) :
+    NoAccidental (triangleIndices A) where
+  eq_or_eq_or_eq a a' b b' c c' ha hb hc := by
+    simp only [mk_mem_triangleIndices] at ha hb hc
+exact .inl hs ⟨hc.1, hb.1, ha.1, hb.2.symm.trans ha.2⟩
+
+/--
+lemma `farFromTriangleFree_graph` / 引理 `farFromTriangleFree_graph`
+
+English:
+lemma farFromTriangleFree_graph
+  given: [Fintype G] [DecidableEq G] (hε : ε * card G ^ 2 <= #A)
+  proof: by
+  refine farFromTriangleFree _ ?_
+  simp_rw [card_triangleIndices, mul_comm_div, Nat.cast_pow, Nat.cast_add]
+  ring_nf
+  simpa only [mul_comm] using hε
+
+中文:
+引理 farFromTriangleFree_graph
+  条件: [Fintype G] [DecidableEq G] (hε : ε * card G ^ 2 <= #A)
+  证明: by
+  refine farFromTriangleFree _ ?_
+  simp_rw [card_triangleIndices, mul_comm_div, Nat.cast_pow, Nat.cast_add]
+  ring_nf
+  simpa only [mul_comm] using hε
+-/
+private lemma farFromTriangleFree_graph [Fintype G] [DecidableEq G] (hε : ε * card G ^ 2 <= #A) :
+    (graph <| triangleIndices A).FarFromTriangleFree (ε / 9) := by
+  refine farFromTriangleFree _ ?_
+  simp_rw [card_triangleIndices, mul_comm_div, Nat.cast_pow, Nat.cast_add]
+  ring_nf
+  simpa only [mul_comm] using hε
+
+end Corners
+
+variable [Fintype G]
+
+open Corners
+
+
+/--
+Definition of `cornersTheoremBound` / `cornersTheoremBound` 的定义
+
+English:
+definition cornersTheoremBound
+  signature: (ε : Real)
+  body: ⌊(triangleRemovalBound (ε / 9) * 27)⁻¹⌋₊ + 1
+
+中文:
+定义 cornersTheoremBound
+  签名: (ε : 实数)
+  定义体: ⌊(triangleRemovalBound (ε / 9) * 27)⁻¹⌋₊ + 1
+
+Depends on / 依赖: triangleRemovalBound
+-/
+noncomputable def cornersTheoremBound (ε : Real) : Nat := ⌊(triangleRemovalBound (ε / 9) * 27)⁻¹⌋₊ + 1
+
+/--
+theorem `corners_theorem` / 定理 `corners_theorem`
+
+English:
+theorem corners_theorem
+  statement: (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+  proof: by
+  rintro hA
+  rw [cornersTheoremBound]; rw [Nat.add_one_le_iff] at hG
+  have hε₁ : ε <= 1 := by
+    have := hAε.trans (Nat.cast_le.2 A.card_le_univ)
+    simp only [sq, Nat.cast_mul, Fintype.card_prod] at this
+    rwa [mul_le_iff_le_one_left] at this
+    positivity
+  have := noAccidental hA
+  rw [
+
+中文:
+定理 corners_theorem
+  结论: (ε : 实数) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+  证明: by
+  rintro hA
+  rw [cornersTheoremBound]; rw [Nat.add_one_le_iff] at hG
+  have hε₁ : ε <= 1 := by
+    have := hAε.trans (Nat.cast_le.2 A.card_le_univ)
+    simp only [sq, Nat.cast_mul, Fintype.card_prod] at this
+    rwa [mul_le_iff_le_one_left] at this
+    positivity
+  have := noAccidental hA
+  rw [
+
+Depends on / 依赖: A.card_le_univ, Fintype, Fintype.card_prod, Nat.add_one_le_iff, Nat.cast_le, Nat.cast_mul, Nat.floor_lt, add_one_le_iff, card_le_univ, card_prod, cast_le, cast_mul, classical, cornersTheoremBound, farFromTriangleFree_graph, floor_lt, hG.not_ge, le_of_mul_le_mul_right, mul_le_iff_le_one_left, noAccidental
+-/
+theorem corners_theorem (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+    (A : Finset (G × G)) (hAε : ε * card G ^ 2 <= #A) : ¬ IsCornerFree (A : Set (G × G)) := by
+  rintro hA
+  rw [cornersTheoremBound]; rw [Nat.add_one_le_iff] at hG
+  have hε₁ : ε <= 1 := by
+    have := hAε.trans (Nat.cast_le.2 A.card_le_univ)
+    simp only [sq, Nat.cast_mul, Fintype.card_prod] at this
+    rwa [mul_le_iff_le_one_left] at this
+    positivity
+  have := noAccidental hA
+  rw [Nat.floor_lt' (by positivity)]; rw [inv_lt_iff_one_lt_mul₀' (by positivity)] at hG
+  refine hG.not_ge (le_of_mul_le_mul_right ?_ (by positivity : (0 : Real) < card G ^ 2))
+  classical
+  have h₁ := (farFromTriangleFree_graph hAε).le_card_cliqueFinset
+  rw [card_triangles]; rw [card_triangleIndices] at h₁
+  convert! h₁.trans (Nat.cast_le.2 <| card_le_univ _) using 1 <;> simp <;> ring
+
+open Fin.NatCast in -- TODO: refactor to avoid needing the coercion
+/--
+theorem `corners_theorem_nat` / 定理 `corners_theorem_nat`
+
+English:
+theorem corners_theorem_nat
+  statement: (hε : 0 < ε) (hn : cornersTheoremBound (ε / 9) <= n)
+  proof: by
+  rintro hA
+  rw [← coe_subset]; rw [coe_product] at hAn
+  have : A = Prod.map Fin.val Fin.val ''
+      (Prod.map Nat.cast Nat.cast '' A : Set (Fin (2 * n).succ × Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one
+
+中文:
+定理 corners_theorem_nat
+  结论: (hε : 0 < ε) (hn : cornersTheoremBound (ε / 9) <= n)
+  证明: by
+  rintro hA
+  rw [← coe_subset]; rw [coe_product] at hAn
+  have : A = Prod.map Fin.val Fin.val ''
+      (Prod.map Nat.cast Nat.cast '' A : Set (Fin (2 * n).succ × Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one
+
+Depends on / 依赖: Fin.isAddFreimanIso_Iio, Fin.val, Fin.val_natCast, Nat.cast, Nat.mod_succ_eq_iff_lt, Nat.succ_eq_add_one, Prod.forall, Prod.map, Prod.map_apply, Prod.mk.injEq, Set.image_congr, Set.image_id, Set.image_image, coe_product, coe_subset, id_eq, image_congr, image_id, image_image, isAddFreimanIso_Iio
+-/
+theorem corners_theorem_nat (hε : 0 < ε) (hn : cornersTheoremBound (ε / 9) <= n)
+    (A : Finset (Nat × Nat)) (hAn : A subseteq range n ×ˢ range n) (hAε : ε * n ^ 2 <= #A) :
+    ¬ IsCornerFree (A : Set (Nat × Nat)) := by
+  rintro hA
+  rw [← coe_subset]; rw [coe_product] at hAn
+  have : A = Prod.map Fin.val Fin.val ''
+      (Prod.map Nat.cast Nat.cast '' A : Set (Fin (2 * n).succ × Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one, Prod.map_apply, Fin.val_natCast, id_eq, Prod.forall,
+      Prod.mk.injEq, Nat.mod_succ_eq_iff_lt]
+    rintro a b hab
+    have := hAn hab
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn by
+refine Set.image_subset_iff.2 hAn.trans fun x hx => ?_
+    simp only [coe_range, Set.mem_prod, Set.mem_Iio] at hx
+    exact ⟨Fin.natCast_strictMono (by lia) hx.1, Fin.natCast_strictMono (by lia) hx.2⟩
+  rw [← coe_image] at this
+  refine corners_theorem (ε / 9) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 9 * (2 * n + 1) ^ 2 := by simp
+    _ <= ε / 9 * (2 * n + n) ^ 2 := by gcongr; simp; unfold cornersTheoremBound at hn; lia
+    _ = ε * n ^ 2 := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+      have : Set.InjOn Nat.cast (range n) :=
+        (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono (by simp; lia)
+      exact (this.prodMap this).mono hAn
+
+/--
+theorem `roth_3ap_theorem` / 定理 `roth_3ap_theorem`
+
+English:
+theorem roth_3ap_theorem
+  statement: (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+  proof: by
+  rintro hA
+  classical
+  let B : Finset (G × G) := univ.filter fun (x, y) => y - x in A
+  have : ε * card G ^ 2 <= #B := by
+    calc
+      _ = card G * (ε * card G) := by ring
+      _ <= card G * #A := by gcongr
+      _ = #B := ?_
+    norm_cast
+    rw [← card_univ]; rw [← card_product]
+    exact
+
+中文:
+定理 roth_3ap_theorem
+  结论: (ε : 实数) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+  证明: by
+  rintro hA
+  classical
+  let B : Finset (G × G) := univ.filter fun (x, y) => y - x in A
+  have : ε * card G ^ 2 <= #B := by
+    calc
+      _ = card G * (ε * card G) := by ring
+      _ <= card G * #A := by gcongr
+      _ = #B := ?_
+    norm_cast
+    rw [← card_univ]; rw [← card_product]
+    exact
+
+Depends on / 依赖: Equiv.addLeft, Equiv.refl, Finset, addLeft, card_equiv, card_product, card_univ, classical, filter, prodShear, univ.filter
+-/
+theorem roth_3ap_theorem (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound ε <= card G)
+    (A : Finset G) (hAε : ε * card G <= #A) : ¬ ThreeAPFree (A : Set G) := by
+  rintro hA
+  classical
+  let B : Finset (G × G) := univ.filter fun (x, y) => y - x in A
+  have : ε * card G ^ 2 <= #B := by
+    calc
+      _ = card G * (ε * card G) := by ring
+      _ <= card G * #A := by gcongr
+      _ = #B := ?_
+    norm_cast
+    rw [← card_univ]; rw [← card_product]
+    exact card_equiv ((Equiv.refl _).prodShear fun a => Equiv.addLeft a) (by simp [B])
+  obtain ⟨x₁, y₁, x₂, y₂, hx₁y₁, hx₁y₂, hx₂y₁, hxy, hx₁x₂⟩ :
+      exists x₁ y₁ x₂ y₂, y₁ - x₁ in A ∧ y₂ - x₁ in A ∧ y₁ - x₂ in A ∧ x₁ + y₂ = x₂ + y₁ ∧ x₁ != x₂ := by
+    simpa [IsCornerFree, isCorner_iff, B, -exists_and_left, -exists_and_right]
+      using corners_theorem ε hε hG B this
+have := hA hx₂y₁ hx₁y₁ hx₁y₂ by-- TODO: This really ought to just be `by linear_combination h`
+    rw [sub_add_sub_comm]; rw [add_comm]; rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [sub_eq_sub_iff_add_eq_add]; rw [add_comm]; rw [hxy]; rw [add_comm]
+exact hx₁x₂ by simpa using this.symm
+
+open Fin.NatCast in -- TODO: refactor to avoid needing the coercion
+/--
+theorem `roth_3ap_theorem_nat` / 定理 `roth_3ap_theorem_nat`
+
+English:
+theorem roth_3ap_theorem_nat
+  statement: (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound (ε / 3) <= n)
+  proof: by
+  rintro hA
+  rw [← coe_subset]; rw [coe_range] at hAn
+  have : A = Fin.val '' (Nat.cast '' A : Set (Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one, Fin.val_natCast, id_eq, Nat.mod_succ_eq_iff_lt]
+    rintro a
+
+中文:
+定理 roth_3ap_theorem_nat
+  结论: (ε : 实数) (hε : 0 < ε) (hG : cornersTheoremBound (ε / 3) <= n)
+  证明: by
+  rintro hA
+  rw [← coe_subset]; rw [coe_range] at hAn
+  have : A = Fin.val '' (Nat.cast '' A : Set (Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one, Fin.val_natCast, id_eq, Nat.mod_succ_eq_iff_lt]
+    rintro a
+
+Depends on / 依赖: Fin.isAddFreimanIso_Iio, Fin.val, Fin.val_injective.injOn, Fin.val_natCast, Nat.cast, Nat.mod_succ_eq_iff_lt, Nat.succ_eq_add_one, Set.image_congr, Set.image_id, Set.image_image, Set.image_subset_iff, coe_range, coe_subset, hA.of_image, hAn.trans, id_eq, image_congr, image_id, image_image, image_subset_iff
+-/
+theorem roth_3ap_theorem_nat (ε : Real) (hε : 0 < ε) (hG : cornersTheoremBound (ε / 3) <= n)
+    (A : Finset Nat) (hAn : A subseteq range n) (hAε : ε * n <= #A) : ¬ ThreeAPFree (A : Set Nat) := by
+  rintro hA
+  rw [← coe_subset]; rw [coe_range] at hAn
+  have : A = Fin.val '' (Nat.cast '' A : Set (Fin (2 * n).succ)) := by
+    rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
+    simp only [mem_coe, Nat.succ_eq_add_one, Fin.val_natCast, id_eq, Nat.mod_succ_eq_iff_lt]
+    rintro a ha
+    have := hAn ha
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn Set.image_subset_iff.2
+hAn.trans fun x hx => Fin.natCast_strictMono (by lia) by
+        simpa only [coe_range, Set.mem_Iio] using hx
+  rw [← coe_image] at this
+  refine roth_3ap_theorem (ε / 3) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 3 * (2 * n + 1) := by simp
+    _ <= ε / 3 * (2 * n + n) := by gcongr; simp; unfold cornersTheoremBound at hG; lia
+    _ = ε * n := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+exact (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono hAn.trans by
+        simp; lia
+
+open Asymptotics Filter
+
+/--
+theorem `rothNumberNat_isLittleO_id` / 定理 `rothNumberNat_isLittleO_id`
+
+English:
+theorem rothNumberNat_isLittleO_id
+  proof: by
+  simp only [isLittleO_iff, eventually_atTop, RCLike.norm_natCast]
+  refine fun ε hε => ⟨cornersTheoremBound (ε / 3), fun n hn => ?_⟩
+  obtain ⟨A, hs₁, hs₂, hs₃⟩ := rothNumberNat_spec n
+  rw [← hs₂]; rw [← not_lt]
+  exact fun hδn => roth_3ap_theorem_nat ε hε hn _ hs₁ hδn.le hs₃
+
+中文:
+定理 rothNumberNat_isLittleO_id
+  证明: by
+  simp only [isLittleO_iff, eventually_atTop, RCLike.norm_natCast]
+  refine fun ε hε => ⟨cornersTheoremBound (ε / 3), fun n hn => ?_⟩
+  obtain ⟨A, hs₁, hs₂, hs₃⟩ := rothNumberNat_spec n
+  rw [← hs₂]; rw [← not_lt]
+  exact fun hδn => roth_3ap_theorem_nat ε hε hn _ hs₁ hδn.le hs₃
+
+Depends on / 依赖: RCLike, RCLike.norm_natCast, cornersTheoremBound, eventually_atTop, isLittleO_iff, n.le, norm_natCast, not_lt, rothNumberNat_spec, roth_3ap_theorem_nat
+-/
+theorem rothNumberNat_isLittleO_id :
+    IsLittleO atTop (fun N => (rothNumberNat N : Real)) (fun N => (N : Real)) := by
+  simp only [isLittleO_iff, eventually_atTop, RCLike.norm_natCast]
+  refine fun ε hε => ⟨cornersTheoremBound (ε / 3), fun n hn => ?_⟩
+  obtain ⟨A, hs₁, hs₂, hs₃⟩ := rothNumberNat_spec n
+  rw [← hs₂]; rw [← not_lt]
+  exact fun hδn => roth_3ap_theorem_nat ε hε hn _ hs₁ hδn.le hs₃

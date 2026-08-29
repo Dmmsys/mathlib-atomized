@@ -1,0 +1,142 @@
+/-
+Copyright (c) 2020 Riccardo Brasca. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Riccardo Brasca
+-/
+module
+
+public import Mathlib.RingTheory.Polynomial.Cyclotomic.Eval
+
+/-!
+# Primes congruent to one
+
+We prove that, for any positive `k : ℕ`, there are infinitely many primes `p` such that
+`p ≡ 1 [MOD k]`.
+-/
+
+public section
+
+
+namespace Nat
+
+open Polynomial Nat Filter
+
+open scoped Nat
+
+/--
+theorem `exists_prime_gt_modEq_one` / 定理 `exists_prime_gt_modEq_one`
+
+English:
+theorem exists_prime_gt_modEq_one
+  given: {k : Nat} (n : Nat) (hk0 : k != 0)
+  proof: by
+  rcases (one_le_iff_ne_zero.2 hk0).eq_or_lt with (rfl | hk1)
+  · rcases exists_infinite_primes (n + 1) with ⟨p, hnp, hp⟩
+    exact ⟨p, hp, hnp, modEq_one⟩
+  let b := k * (n !)
+  have hgt : 1 < (eval (↑b) (cyclotomic k Int)).natAbs := by
+    rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
+    ha
+
+中文:
+定理 exists_prime_gt_modEq_one
+  条件: {k : 自然数} (n : 自然数) (hk0 : k != 0)
+  证明: by
+  rcases (one_le_iff_ne_zero.2 hk0).eq_or_lt with (rfl | hk1)
+  · rcases exists_infinite_primes (n + 1) with ⟨p, hnp, hp⟩
+    exact ⟨p, hp, hnp, modEq_one⟩
+  let b := k * (n !)
+  have hgt : 1 < (eval (↑b) (cyclotomic k Int)).natAbs := by
+    rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
+    ha
+
+Depends on / 依赖: cyclotomic, eq_or_lt, exists_infinite_primes, factorial_pos, hk1.le, le_iff_exists_add, le_mul_of_le_of_one_le, le_tsub_of_add_le_left, modEq_one, n.factorial_pos, natAbs, one_le_iff_ne_zero, sub_one_lt_natAbs_cyclotomic_eval, succ_le_iff
+-/
+theorem exists_prime_gt_modEq_one {k : Nat} (n : Nat) (hk0 : k != 0) :
+    exists p : Nat, Nat.Prime p ∧ n < p ∧ p ≡ 1 [MOD k] := by
+  rcases (one_le_iff_ne_zero.2 hk0).eq_or_lt with (rfl | hk1)
+  · rcases exists_infinite_primes (n + 1) with ⟨p, hnp, hp⟩
+    exact ⟨p, hp, hnp, modEq_one⟩
+  let b := k * (n !)
+  have hgt : 1 < (eval (↑b) (cyclotomic k Int)).natAbs := by
+    rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
+    have hb : 2 <= b := le_mul_of_le_of_one_le hk1 n.factorial_pos
+    calc
+      1 <= b - 1 := le_tsub_of_add_le_left hb
+      _ < (eval (b : Int) (cyclotomic (k + 1) Int)).natAbs :=
+        sub_one_lt_natAbs_cyclotomic_eval hk1 (succ_le_iff.1 hb).ne'
+  let p := minFac (eval (↑b) (cyclotomic k Int)).natAbs
+  have hprime : Fact p.Prime := ⟨minFac_prime (ne_of_lt hgt).symm⟩
+  have hroot : IsRoot (cyclotomic k (ZMod p)) (castRingHom (ZMod p) b) := by
+    have : ((b : Int) : ZMod p) = ↑(Int.castRingHom (ZMod p) b) := by simp
+    rw [IsRoot.def]; rw [← map_cyclotomic_int k (ZMod p)]; rw [eval_map]; rw [coe_castRingHom]; rw [← Int.cast_natCast]; rw [this]; rw [eval₂_hom]; rw [Int.coe_castRingHom]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]
+    apply Int.dvd_natAbs.1
+    exact mod_cast minFac_dvd (eval (↑b) (cyclotomic k Int)).natAbs
+  have hpb : ¬p ∣ b :=
+    hprime.1.coprime_iff_not_dvd.1 (coprime_of_root_cyclotomic hk0.bot_lt hroot).symm
+  refine ⟨p, hprime.1, not_le.1 fun habs => ?_, ?_⟩
+  · exact hpb (dvd_mul_of_dvd_right (dvd_factorial (minFac_pos _) habs) _)
+  · have hdiv : orderOf (b : ZMod p) ∣ p - 1 :=
+      ZMod.orderOf_dvd_card_sub_one (mt (CharP.cast_eq_zero_iff _ _ _).1 hpb)
+    have : NeZero (k : ZMod p) :=
+      NeZero.of_not_dvd (ZMod p) fun hpk => hpb (dvd_mul_of_dvd_left hpk _)
+    have : k = orderOf (b : ZMod p) := (isRoot_cyclotomic_iff.mp hroot).eq_orderOf
+    rw [← this] at hdiv
+    exact ((modEq_iff_dvd' hprime.1.pos).2 hdiv).symm
+
+/--
+theorem `frequently_atTop_modEq_one` / 定理 `frequently_atTop_modEq_one`
+
+English:
+theorem frequently_atTop_modEq_one
+  given: {k : Nat} (hk0 : k != 0)
+  proof: by
+  refine frequently_atTop.2 fun n => ?_
+  obtain ⟨p, hp⟩ := exists_prime_gt_modEq_one n hk0
+  exact ⟨p, ⟨hp.2.1.le, hp.1, hp.2.2⟩⟩
+
+中文:
+定理 frequently_atTop_modEq_one
+  条件: {k : 自然数} (hk0 : k != 0)
+  证明: by
+  refine frequently_atTop.2 fun n => ?_
+  obtain ⟨p, hp⟩ := exists_prime_gt_modEq_one n hk0
+  exact ⟨p, ⟨hp.2.1.le, hp.1, hp.2.2⟩⟩
+
+Depends on / 依赖: exists_prime_gt_modEq_one, frequently_atTop
+-/
+theorem frequently_atTop_modEq_one {k : Nat} (hk0 : k != 0) :
+    existsᶠ p in atTop, Nat.Prime p ∧ p ≡ 1 [MOD k] := by
+  refine frequently_atTop.2 fun n => ?_
+  obtain ⟨p, hp⟩ := exists_prime_gt_modEq_one n hk0
+  exact ⟨p, ⟨hp.2.1.le, hp.1, hp.2.2⟩⟩
+
+/--
+theorem `infinite_setOfPred_prime_modEq_one` / 定理 `infinite_setOfPred_prime_modEq_one`
+
+English:
+theorem infinite_setOfPred_prime_modEq_one
+  given: {k : Nat} (hk0 : k != 0)
+  proof: frequently_atTop_iff_infinite.1 (frequently_atTop_modEq_one hk0)
+
+@[deprecated (since := "2026-07-09")]
+alias infinite_setOf_prime_modEq_one := infinite_setOfPred_prime_modEq_one
+
+中文:
+定理 infinite_setOfPred_prime_modEq_one
+  条件: {k : 自然数} (hk0 : k != 0)
+  证明: frequently_atTop_iff_infinite.1 (frequently_atTop_modEq_one hk0)
+
+@[deprecated (since := "2026-07-09")]
+alias infinite_setOf_prime_modEq_one := infinite_setOfPred_prime_modEq_one
+
+Depends on / 依赖: frequently_atTop_iff_infinite, frequently_atTop_modEq_one
+-/
+theorem infinite_setOfPred_prime_modEq_one {k : Nat} (hk0 : k != 0) :
+    Set.Infinite {p : Nat | Nat.Prime p ∧ p ≡ 1 [MOD k]} :=
+  frequently_atTop_iff_infinite.1 (frequently_atTop_modEq_one hk0)
+
+@[deprecated (since := "2026-07-09")]
+alias infinite_setOf_prime_modEq_one := infinite_setOfPred_prime_modEq_one
+
+end Nat

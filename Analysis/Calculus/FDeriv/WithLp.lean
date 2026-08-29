@@ -1,0 +1,302 @@
+/-
+Copyright (c) 2022 Anatole Dedecker. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Anatole Dedecker, Eric Wieser
+-/
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Prod
+public import Mathlib.Analysis.Calculus.FDeriv.Equiv
+public import Mathlib.Analysis.Normed.Lp.PiLp
+
+/-!
+# Derivatives on `WithLp`
+-/
+
+public section
+
+open ContinuousLinearMap PiLp WithLp
+
+section PiLp
+
+variable {𝕜 ι : Type*} {E : ι -> Type*} {H : Type*}
+variable [NontriviallyNormedField 𝕜] [NormedAddCommGroup H] [forall i, NormedAddCommGroup (E i)]
+  [forall i, NormedSpace 𝕜 (E i)] [NormedSpace 𝕜 H] [Finite ι] (p) [Fact (1 <= p)]
+  {f : H -> PiLp p E} {f' : H ->L[𝕜] PiLp p E} {t : Set H} {y : H}
+
+/--
+theorem `differentiableWithinAt_piLp` / 定理 `differentiableWithinAt_piLp`
+
+English:
+theorem differentiableWithinAt_piLp
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableWithinAt_iff]; rw [differentiableWithinAt_pi]
+  rfl
+
+中文:
+定理 differentiableWithinAt_piLp
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableWithinAt_iff]; rw [differentiableWithinAt_pi]
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_differentiableWithinAt_iff, continuousLinearEquiv, differentiableWithinAt_pi, ofFinite
+-/
+theorem differentiableWithinAt_piLp :
+    DifferentiableWithinAt 𝕜 f t y ↔ forall i, DifferentiableWithinAt 𝕜 (fun x => f x i) t y := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableWithinAt_iff]; rw [differentiableWithinAt_pi]
+  rfl
+
+/--
+theorem `differentiableAt_piLp` / 定理 `differentiableAt_piLp`
+
+English:
+theorem differentiableAt_piLp
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableAt_iff]; rw [differentiableAt_pi]
+  rfl
+
+中文:
+定理 differentiableAt_piLp
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableAt_iff]; rw [differentiableAt_pi]
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_differentiableAt_iff, continuousLinearEquiv, differentiableAt_pi, ofFinite
+-/
+theorem differentiableAt_piLp :
+    DifferentiableAt 𝕜 f y ↔ forall i, DifferentiableAt 𝕜 (fun x => f x i) y := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableAt_iff]; rw [differentiableAt_pi]
+  rfl
+
+/--
+theorem `differentiableOn_piLp` / 定理 `differentiableOn_piLp`
+
+English:
+theorem differentiableOn_piLp
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableOn_iff]; rw [differentiableOn_pi]
+  rfl
+
+中文:
+定理 differentiableOn_piLp
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableOn_iff]; rw [differentiableOn_pi]
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_differentiableOn_iff, continuousLinearEquiv, differentiableOn_pi, ofFinite
+-/
+theorem differentiableOn_piLp :
+    DifferentiableOn 𝕜 f t ↔ forall i, DifferentiableOn 𝕜 (fun x => f x i) t := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiableOn_iff]; rw [differentiableOn_pi]
+  rfl
+
+/--
+theorem `differentiable_piLp` / 定理 `differentiable_piLp`
+
+English:
+theorem differentiable_piLp
+  statement: Differentiable 𝕜 f ↔ forall i, Differentiable 𝕜 fun x => f x i
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiable_iff]; rw [differentiable_pi]
+  rfl
+
+中文:
+定理 differentiable_piLp
+  结论: Differentiable 𝕜 f ↔ 对任意 i, Differentiable 𝕜 fun x => f x i
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiable_iff]; rw [differentiable_pi]
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_differentiable_iff, continuousLinearEquiv, differentiable_pi, ofFinite
+-/
+theorem differentiable_piLp : Differentiable 𝕜 f ↔ forall i, Differentiable 𝕜 fun x => f x i := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_differentiable_iff]; rw [differentiable_pi]
+  rfl
+
+/--
+theorem `hasStrictFDerivAt_piLp` / 定理 `hasStrictFDerivAt_piLp`
+
+English:
+theorem hasStrictFDerivAt_piLp
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasStrictFDerivAt_iff]; rw [hasStrictFDerivAt_pi']
+  rfl
+
+中文:
+定理 hasStrictFDerivAt_piLp
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasStrictFDerivAt_iff]; rw [hasStrictFDerivAt_pi']
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_hasStrictFDerivAt_iff, continuousLinearEquiv, hasStrictFDerivAt_pi, ofFinite
+-/
+theorem hasStrictFDerivAt_piLp :
+    HasStrictFDerivAt f f' y ↔
+      forall i, HasStrictFDerivAt (fun x => f x i) (PiLp.proj _ _ i ∘L f') y := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasStrictFDerivAt_iff]; rw [hasStrictFDerivAt_pi']
+  rfl
+
+/--
+theorem `hasFDerivWithinAt_piLp` / 定理 `hasFDerivWithinAt_piLp`
+
+English:
+theorem hasFDerivWithinAt_piLp
+  proof: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasFDerivWithinAt_iff]; rw [hasFDerivWithinAt_pi']
+  rfl
+
+中文:
+定理 hasFDerivWithinAt_piLp
+  证明: by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasFDerivWithinAt_iff]; rw [hasFDerivWithinAt_pi']
+  rfl
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, PiLp.continuousLinearEquiv, comp_hasFDerivWithinAt_iff, continuousLinearEquiv, hasFDerivWithinAt_pi, ofFinite
+-/
+theorem hasFDerivWithinAt_piLp :
+    HasFDerivWithinAt f f' t y ↔
+      forall i, HasFDerivWithinAt (fun x => f x i) (PiLp.proj _ _ i ∘L f') t y := by
+  have := Fintype.ofFinite ι
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_hasFDerivWithinAt_iff]; rw [hasFDerivWithinAt_pi']
+  rfl
+
+namespace PiLp
+
+/--
+theorem `hasStrictFDerivAt_ofLp` / 定理 `hasStrictFDerivAt_ofLp`
+
+English:
+theorem hasStrictFDerivAt_ofLp
+  given: (f : PiLp p E)
+  proof: have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+中文:
+定理 hasStrictFDerivAt_ofLp
+  条件: (f : PiLp p E)
+  证明: have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_zero, Fintype, Fintype.ofFinite, congr_left, isLittleO_zero, ofFinite, of_isLittleO, sub_self
+-/
+theorem hasStrictFDerivAt_ofLp (f : PiLp p E) :
+    HasStrictFDerivAt ofLp (continuousLinearEquiv p 𝕜 _).toContinuousLinearMap f :=
+  have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+/--
+theorem `hasStrictFDerivAt_toLp` / 定理 `hasStrictFDerivAt_toLp`
+
+English:
+theorem hasStrictFDerivAt_toLp
+  given: (f : forall i, E i)
+  proof: have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasStrictFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivA
+
+中文:
+定理 hasStrictFDerivAt_toLp
+  条件: (f : 对任意 i, E i)
+  证明: have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasStrictFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivA
+
+Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_zero, Fintype, Fintype.ofFinite, congr_left, isLittleO_zero, ofFinite, of_isLittleO, sub_self
+-/
+theorem hasStrictFDerivAt_toLp (f : forall i, E i) :
+    HasStrictFDerivAt (toLp p) (continuousLinearEquiv p 𝕜 _).symm.toContinuousLinearMap f :=
+  have := Fintype.ofFinite ι
+.of_isLittleO (Asymptotics.isLittleO_zero _ _).congr_left fun _ => (sub_self _).symm
+
+nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasStrictFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_apply i f).comp f (hasStrictFDerivAt_ofLp (𝕜 := 𝕜) p f)
+
+/--
+theorem `hasFDerivAt_ofLp` / 定理 `hasFDerivAt_ofLp`
+
+English:
+theorem hasFDerivAt_ofLp
+  given: (f : PiLp p E)
+  proof: have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_ofLp p f).hasFDerivAt
+
+中文:
+定理 hasFDerivAt_ofLp
+  条件: (f : PiLp p E)
+  证明: have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_ofLp p f).hasFDerivAt
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, hasFDerivAt, hasStrictFDerivAt_ofLp, ofFinite
+-/
+theorem hasFDerivAt_ofLp (f : PiLp p E) :
+    HasFDerivAt ofLp (continuousLinearEquiv p 𝕜 _).toContinuousLinearMap f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_ofLp p f).hasFDerivAt
+
+/--
+theorem `hasFDerivAt_toLp` / 定理 `hasFDerivAt_toLp`
+
+English:
+theorem hasFDerivAt_toLp
+  given: (f : forall i, E i)
+  proof: have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_toLp p f).hasFDerivAt
+
+nonrec theorem hasFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_apply p f i).hasFDerivAt
+
+中文:
+定理 hasFDerivAt_toLp
+  条件: (f : 对任意 i, E i)
+  证明: have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_toLp p f).hasFDerivAt
+
+nonrec theorem hasFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_apply p f i).hasFDerivAt
+
+Depends on / 依赖: Fintype, Fintype.ofFinite, hasFDerivAt, hasStrictFDerivAt_toLp, ofFinite
+-/
+theorem hasFDerivAt_toLp (f : forall i, E i) :
+    HasFDerivAt (toLp p) (continuousLinearEquiv p 𝕜 _).symm.toContinuousLinearMap f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_toLp p f).hasFDerivAt
+
+nonrec theorem hasFDerivAt_apply (f : PiLp p E) (i : ι) :
+    HasFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
+  have := Fintype.ofFinite ι
+  (hasStrictFDerivAt_apply p f i).hasFDerivAt
+
+end PiLp
+
+end PiLp

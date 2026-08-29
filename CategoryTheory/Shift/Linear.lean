@@ -1,0 +1,89 @@
+/-
+Copyright (c) 2024 Joël Riou. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Joël Riou
+-/
+module
+
+public import Mathlib.CategoryTheory.Shift.CommShift
+public import Mathlib.CategoryTheory.Localization.Linear
+
+/-!
+# Localization of the linearity of the shift functors
+
+If `L : C ⥤ D` is a localization functor with respect to `W : MorphismProperty C`
+and both `C` and `D` have been equipped with `R`-linear category structures
+such that `L` is `R`-linear and the shift functors on `C` are `R`-linear,
+then the shift functors on `D` are `R`-linear.
+
+-/
+
+public section
+
+namespace CategoryTheory
+
+namespace Shift
+
+variable (R : Type*) [Ring R] {C : Type _} [Category* C] [Preadditive C] [Linear R C]
+  {D : Type*} [Category* D] [Preadditive D] [Linear R D]
+  {M : Type*} [AddMonoid M] [HasShift C M]
+  [forall (n : M), (shiftFunctor C n).Linear R]
+  (L : C ⥤ D) (W : MorphismProperty C)
+
+/--
+lemma `linear_of_localization` / 引理 `linear_of_localization`
+
+English:
+lemma linear_of_localization
+  statement: [L.IsLocalization W] [L.Linear R] [HasShift D M]
+  proof: by
+  have : Localization.Lifting L W (shiftFunctor C n ⋙ L) (shiftFunctor D n) :=
+    ⟨(L.commShiftIso n).symm⟩
+  rw [← Localization.functor_linear_iff L W R (shiftFunctor C n ⋙ L) (shiftFunctor D n)]
+  infer_instance
+
+中文:
+引理 linear_of_localization
+  结论: [L.IsLocalization W] [L.Linear R] [HasShift D M]
+  证明: by
+  have : Localization.Lifting L W (shiftFunctor C n ⋙ L) (shiftFunctor D n) :=
+    ⟨(L.commShiftIso n).symm⟩
+  rw [← Localization.functor_linear_iff L W R (shiftFunctor C n ⋙ L) (shiftFunctor D n)]
+  infer_instance
+
+Depends on / 依赖: L.commShiftIso, Lifting, Localization, Localization.Lifting, Localization.functor_linear_iff, commShiftIso, functor_linear_iff, infer_instance, shiftFunctor
+-/
+lemma linear_of_localization [L.IsLocalization W] [L.Linear R] [HasShift D M]
+    [L.CommShift M] (n : M) : (shiftFunctor D n).Linear R := by
+  have : Localization.Lifting L W (shiftFunctor C n ⋙ L) (shiftFunctor D n) :=
+    ⟨(L.commShiftIso n).symm⟩
+  rw [← Localization.functor_linear_iff L W R (shiftFunctor C n ⋙ L) (shiftFunctor D n)]
+  infer_instance
+
+/--
+Instance `_anonymous_` / 实例 `_anonymous_`
+
+English:
+instance [HasShift
+  signature: W.Localization M] [W.Q.CommShift M] [Preadditive W.Localization]
+  body: linear_of_localization _ W.Q W _
+
+中文:
+实例 [HasShift
+  签名: W.Localization M] [W.Q.CommShift M] [Preadditive W.Localization]
+  定义体: linear_of_localization _ W.Q W _
+
+Depends on / 依赖: linear_of_localization
+-/
+instance [HasShift W.Localization M] [W.Q.CommShift M] [Preadditive W.Localization]
+    [Linear R W.Localization] [W.Q.Linear R] (n : M) :
+    (shiftFunctor W.Localization n).Linear R := linear_of_localization _ W.Q W _
+
+instance (n : M) [W.HasLocalization] [HasShift W.Localization' M] [W.Q'.CommShift M]
+    [Preadditive W.Localization'] [Linear R W.Localization'] [W.Q'.Linear R] :
+    (shiftFunctor W.Localization' n).Linear R :=
+  linear_of_localization _ W.Q' W _
+
+end Shift
+
+end CategoryTheory

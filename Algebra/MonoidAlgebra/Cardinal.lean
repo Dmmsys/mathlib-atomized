@@ -1,0 +1,188 @@
+/-
+Copyright (c) 2025 Yaël Dillies. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yaël Dillies
+-/
+module
+
+public import Mathlib.Algebra.MonoidAlgebra.Defs
+public import Mathlib.SetTheory.Cardinal.Finsupp
+
+/-!
+# Cardinality of monoid algebras
+
+This file computes the cardinality of `R[M]` in terms of `#R` and `#M`.
+-/
+
+public section
+
+open Cardinal Fintype
+
+universe u v
+variable (R M : Type u) (M' : Type v) [Semiring R]
+
+namespace MonoidAlgebra
+
+@[to_additive (attr := simp)]
+/--
+lemma `cardinalMk_eq_lift_of_fintype` / 引理 `cardinalMk_eq_lift_of_fintype`
+
+English:
+lemma cardinalMk_eq_lift_of_fintype
+  given: [Fintype M']
+  statement: #R[M'] = lift.{v} #R ^ card M'
+  proof: by
+  simp [coeffEquiv.cardinal_eq]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_fintype := cardinalMk_eq_lift_of_fintype
+
+@[to_additive]
+
+中文:
+引理 cardinalMk_eq_lift_of_fintype
+  条件: [Fintype M']
+  结论: #R[M'] = lift.{v} #R ^ card M'
+  证明: by
+  simp [coeffEquiv.cardinal_eq]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_fintype := cardinalMk_eq_lift_of_fintype
+
+@[to_additive]
+
+Depends on / 依赖: cardinal_eq, coeffEquiv, coeffEquiv.cardinal_eq
+-/
+lemma cardinalMk_eq_lift_of_fintype [Fintype M'] : #R[M'] = lift.{v} #R ^ card M' := by
+  simp [coeffEquiv.cardinal_eq]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_fintype := cardinalMk_eq_lift_of_fintype
+
+@[to_additive]
+/--
+lemma `cardinalMk_of_fintype` / 引理 `cardinalMk_of_fintype`
+
+English:
+lemma cardinalMk_of_fintype
+  given: [Fintype M]
+  statement: #R[M] = #R ^ card M
+  proof: by simp
+
+@[to_additive (attr := simp)]
+
+中文:
+引理 cardinalMk_of_fintype
+  条件: [Fintype M]
+  结论: #R[M] = #R ^ card M
+  证明: by simp
+
+@[to_additive (attr := simp)]
+-/
+lemma cardinalMk_of_fintype [Fintype M] : #R[M] = #R ^ card M := by simp
+
+@[to_additive (attr := simp)]
+/--
+lemma `cardinalMk_eq_max_lift_of_infinite` / 引理 `cardinalMk_eq_max_lift_of_infinite`
+
+English:
+lemma cardinalMk_eq_max_lift_of_infinite
+  given: [Infinite M'] [Nontrivial R]
+  proof: by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite := cardinalMk_eq_max_lift_of_infinite
+
+@[to_additive]
+
+中文:
+引理 cardinalMk_eq_max_lift_of_infinite
+  条件: [Infinite M'] [Nontrivial R]
+  证明: by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite := cardinalMk_eq_max_lift_of_infinite
+
+@[to_additive]
+
+Depends on / 依赖: cardinal_eq, coeffEquiv, coeffEquiv.cardinal_eq, max_comm
+-/
+lemma cardinalMk_eq_max_lift_of_infinite [Infinite M'] [Nontrivial R] :
+    #R[M'] = max (lift.{v} #R) (lift.{u} #M') := by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite := cardinalMk_eq_max_lift_of_infinite
+
+@[to_additive]
+/--
+lemma `cardinalMk_of_infinite` / 引理 `cardinalMk_of_infinite`
+
+English:
+lemma cardinalMk_of_infinite
+  given: [Infinite M] [Nontrivial R]
+  statement: #R[M] = max #R #M
+  proof: by simp
+
+@[to_additive (attr := simp)]
+
+中文:
+引理 cardinalMk_of_infinite
+  条件: [Infinite M] [Nontrivial R]
+  结论: #R[M] = max #R #M
+  证明: by simp
+
+@[to_additive (attr := simp)]
+-/
+lemma cardinalMk_of_infinite [Infinite M] [Nontrivial R] : #R[M] = max #R #M := by simp
+
+@[to_additive (attr := simp)]
+/--
+lemma `cardinalMk_eq_max_lift_of_infinite'` / 引理 `cardinalMk_eq_max_lift_of_infinite'`
+
+English:
+lemma cardinalMk_eq_max_lift_of_infinite'
+  given: [Nonempty M'] [Infinite R]
+  proof: by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite' := cardinalMk_eq_max_lift_of_infinite'
+
+@[to_additive]
+
+中文:
+引理 cardinalMk_eq_max_lift_of_infinite'
+  条件: [Nonempty M'] [Infinite R]
+  证明: by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite' := cardinalMk_eq_max_lift_of_infinite'
+
+@[to_additive]
+
+Depends on / 依赖: cardinal_eq, coeffEquiv, coeffEquiv.cardinal_eq, max_comm
+-/
+lemma cardinalMk_eq_max_lift_of_infinite' [Nonempty M'] [Infinite R] :
+    #R[M'] = max (lift.{v} #R) (lift.{u} #M') := by simp [coeffEquiv.cardinal_eq, max_comm]
+
+@[deprecated (since := "2026-03-26")]
+alias cardinalMk_lift_of_infinite' := cardinalMk_eq_max_lift_of_infinite'
+
+@[to_additive]
+/--
+lemma `cardinalMk_of_infinite'` / 引理 `cardinalMk_of_infinite'`
+
+English:
+lemma cardinalMk_of_infinite'
+  given: [Nonempty M] [Infinite R]
+  statement: #R[M] = max #R #M
+  proof: by simp
+
+中文:
+引理 cardinalMk_of_infinite'
+  条件: [Nonempty M] [Infinite R]
+  结论: #R[M] = max #R #M
+  证明: by simp
+-/
+lemma cardinalMk_of_infinite' [Nonempty M] [Infinite R] : #R[M] = max #R #M := by simp
+
+end MonoidAlgebra

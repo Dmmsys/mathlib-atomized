@@ -1,0 +1,68 @@
+/-
+Copyright (c) 2024 Bjørn Kjos-Hanssen. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Bjørn Kjos-Hanssen, Patrick Massot
+-/
+module
+
+public import Mathlib.Topology.Order.OrderClosed
+public import Mathlib.Topology.Order.LocalExtr
+
+/-!
+# Local maxima from monotonicity and antitonicity
+
+In this file we prove a lemma that is useful for the First Derivative Test in calculus,
+and its dual.
+
+## Main statements
+
+* `isLocalMax_of_mono_anti` : if a function `f` is monotone to the left of `x`
+  and antitone to the right of `x` then `f` has a local maximum at `x`.
+
+* `isLocalMin_of_anti_mono` : the dual statement for minima.
+
+-/
+
+public section
+
+open Set
+
+/--
+lemma `isLocalMax_of_mono_anti` / 引理 `isLocalMax_of_mono_anti`
+
+English:
+lemma isLocalMax_of_mono_anti
+  proof: (isMaxOn_Ioo_of_mono_anti h₀ h₁).isLocalMax (Ioo_mem_nhds g₀ g₁)
+
+中文:
+引理 isLocalMax_of_mono_anti
+  证明: (isMaxOn_Ioo_of_mono_anti h₀ h₁).isLocalMax (Ioo_mem_nhds g₀ g₁)
+
+Depends on / 依赖: Ioo_mem_nhds, isLocalMax, isMaxOn_Ioo_of_mono_anti
+-/
+lemma isLocalMax_of_mono_anti
+    {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderClosedTopology α]
+    {β : Type*} [Preorder β]
+    {a b c : α} (g₀ : a < b) (g₁ : b < c) {f : α -> β}
+    (h₀ : MonotoneOn f (Ioc a b))
+    (h₁ : AntitoneOn f (Ico b c)) : IsLocalMax f b :=
+  (isMaxOn_Ioo_of_mono_anti h₀ h₁).isLocalMax (Ioo_mem_nhds g₀ g₁)
+
+/--
+lemma `isLocalMin_of_anti_mono` / 引理 `isLocalMin_of_anti_mono`
+
+English:
+lemma isLocalMin_of_anti_mono
+  proof: isLocalMax_of_mono_anti (β := βᵒᵈ) g₀ g₁ h₀ h₁
+
+中文:
+引理 isLocalMin_of_anti_mono
+  证明: isLocalMax_of_mono_anti (β := βᵒᵈ) g₀ g₁ h₀ h₁
+
+Depends on / 依赖: isLocalMax_of_mono_anti
+-/
+lemma isLocalMin_of_anti_mono
+    {α : Type*} [TopologicalSpace α] [LinearOrder α] [OrderClosedTopology α]
+    {β : Type*} [Preorder β] {a b c : α} (g₀ : a < b) (g₁ : b < c) {f : α -> β}
+    (h₀ : AntitoneOn f (Ioc a b)) (h₁ : MonotoneOn f (Ico b c)) : IsLocalMin f b :=
+  isLocalMax_of_mono_anti (β := βᵒᵈ) g₀ g₁ h₀ h₁

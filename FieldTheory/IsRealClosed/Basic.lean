@@ -1,0 +1,356 @@
+/-
+Copyright (c) 2025 Artie Khovanov. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Artie Khovanov
+-/
+module
+
+public import Mathlib.Algebra.Polynomial.Degree.Domain
+public import Mathlib.Algebra.Polynomial.Eval.Defs
+public import Mathlib.Algebra.Ring.Semireal.Defs
+public import Mathlib.Tactic.LinearCombination
+
+/-!
+# Real Closed Field
+
+A field `R` is real closed if all of the following hold:
+1. `R` is real (that is, `-1` is not a sum of squares in `R`).
+2. for every `x` in `R`, one of `x` or `-x` is a square.
+3. every odd-degree polynomial over `R` has a root in `R`.
+
+A real closed field is an algebraic generalisation of the real numbers.
+
+In this file we define real closed fields and prove some of their properties.
+
+TODO (Artie Khovanov) : equivalent conditions for a real field to be real closed
+TODO (Artie Khovanov) : real numbers, real algebraic numbers, hyperreals form a real closed field
+
+## Main Definitions
+
+- `IsRealClosed R` is the typeclass saying `R` is a real closed field.
+
+## Tags
+
+real closed, rcf
+
+-/
+
+public section
+
+open Polynomial
+
+/--
+Definition of `IsRealClosed` / `IsRealClosed` 的定义
+
+English:
+class IsRealClosed
+  parameters: (R : Type*) [Field R]
+  extends: IsSemireal R
+  axioms and operations (2):
+    - isSquare_or_isSquare_neg((x : R)) : IsSquare x ∨ IsSquare (-x)
+    - exists_isRoot_of_odd_natDegree({f : R[X]} (hf : Odd f.natDegree)) : exists x, f.IsRoot x
+
+中文:
+类 IsRealClosed
+  参数: (R : 类型) [Field R]
+  继承: IsSemireal R
+  公理与运算 (2 个):
+    - isSquare_or_isSquare_neg((x : R)) : IsSquare x ∨ IsSquare (-x)
+    - exists_isRoot_of_odd_natDegree({f : R[X]} (hf : Odd f.natDegree)) : 存在 x, f.IsRoot x
+-/
+class IsRealClosed (R : Type*) [Field R] : Prop extends IsSemireal R where
+  isSquare_or_isSquare_neg (x : R) : IsSquare x ∨ IsSquare (-x)
+  exists_isRoot_of_odd_natDegree {f : R[X]} (hf : Odd f.natDegree) : exists x, f.IsRoot x
+
+attribute [aesop 90% forward] IsRealClosed.isSquare_or_isSquare_neg
+
+namespace IsRealClosed
+
+universe u
+
+variable {R : Type u} [Field R]
+
+/--
+theorem `of_linearOrderedField` / 定理 `of_linearOrderedField`
+
+English:
+theorem of_linearOrderedField
+  statement: [LinearOrder R] [IsStrictOrderedRing R]
+  proof: by
+    rcases le_total x 0 with (neg | pos)
+· exact .inr isSquare_of_nonneg (neg_nonneg_of_nonpos neg)
+· exact .inl isSquare_of_nonneg pos
+  exists_isRoot_of_odd_natDegree := exists_isRoot_of_odd_natDegree
+
+中文:
+定理 of_linearOrderedField
+  结论: [LinearOrder R] [IsStrictOrderedRing R]
+  证明: by
+    rcases le_total x 0 with (neg | pos)
+· exact .inr isSquare_of_nonneg (neg_nonneg_of_nonpos neg)
+· exact .inl isSquare_of_nonneg pos
+  exists_isRoot_of_odd_natDegree := exists_isRoot_of_odd_natDegree
+
+Depends on / 依赖: exists_isRoot_of_odd_natDegree, isSquare_of_nonneg, le_total, neg_nonneg_of_nonpos
+-/
+theorem of_linearOrderedField [LinearOrder R] [IsStrictOrderedRing R]
+    (isSquare_of_nonneg : forall {x : R}, 0 <= x -> IsSquare x)
+    (exists_isRoot_of_odd_natDegree : forall {f : R[X]}, Odd f.natDegree -> exists x, f.IsRoot x) :
+    IsRealClosed R where
+  isSquare_or_isSquare_neg {x} := by
+    rcases le_total x 0 with (neg | pos)
+· exact .inr isSquare_of_nonneg (neg_nonneg_of_nonpos neg)
+· exact .inl isSquare_of_nonneg pos
+  exists_isRoot_of_odd_natDegree := exists_isRoot_of_odd_natDegree
+
+variable [IsRealClosed R]
+
+@[aesop 50%]
+/--
+theorem `_root_.IsSquare.of_not_isSquare_neg` / 定理 `_root_.IsSquare.of_not_isSquare_neg`
+
+English:
+theorem _root_.IsSquare.of_not_isSquare_neg
+  given: {x : R} (hx : ¬ IsSquare (-x))
+  statement: IsSquare x
+  proof: by aesop
+
+@[aesop 80%]
+
+中文:
+定理 _root_.IsSquare.of_not_isSquare_neg
+  条件: {x : R} (hx : ¬ IsSquare (-x))
+  结论: IsSquare x
+  证明: by aesop
+
+@[aesop 80%]
+-/
+theorem _root_.IsSquare.of_not_isSquare_neg {x : R} (hx : ¬ IsSquare (-x)) : IsSquare x := by aesop
+
+@[aesop 80%]
+/--
+theorem `isSquare_neg_of_not_isSquare` / 定理 `isSquare_neg_of_not_isSquare`
+
+English:
+theorem isSquare_neg_of_not_isSquare
+  given: {x : R} (hx : ¬ IsSquare x)
+  statement: IsSquare (-x)
+  proof: by aesop
+
+中文:
+定理 isSquare_neg_of_not_isSquare
+  条件: {x : R} (hx : ¬ IsSquare x)
+  结论: IsSquare (-x)
+  证明: by aesop
+-/
+theorem isSquare_neg_of_not_isSquare {x : R} (hx : ¬ IsSquare x) : IsSquare (-x) := by aesop
+
+/--
+theorem `exists_eq_pow_of_odd` / 定理 `exists_eq_pow_of_odd`
+
+English:
+theorem exists_eq_pow_of_odd
+  given: (x : R) {n : Nat} (hn : Odd n)
+  statement: exists r, x = r ^ n
+  proof: by
+  rcases exists_isRoot_of_odd_natDegree (f := X ^ n - C x) (by simp [hn]) with ⟨r, hr⟩
+  exact ⟨r, by linear_combination - (by simpa using hr : r ^ n - x = 0)⟩
+
+中文:
+定理 exists_eq_pow_of_odd
+  条件: (x : R) {n : 自然数} (hn : Odd n)
+  结论: 存在 r, x = r ^ n
+  证明: by
+  rcases exists_isRoot_of_odd_natDegree (f := X ^ n - C x) (by simp [hn]) with ⟨r, hr⟩
+  exact ⟨r, by linear_combination - (by simpa using hr : r ^ n - x = 0)⟩
+
+Depends on / 依赖: exists_isRoot_of_odd_natDegree, linear_combination
+-/
+theorem exists_eq_pow_of_odd (x : R) {n : Nat} (hn : Odd n) : exists r, x = r ^ n := by
+  rcases exists_isRoot_of_odd_natDegree (f := X ^ n - C x) (by simp [hn]) with ⟨r, hr⟩
+  exact ⟨r, by linear_combination - (by simpa using hr : r ^ n - x = 0)⟩
+
+/--
+theorem `exists_eq_zpow_of_odd` / 定理 `exists_eq_zpow_of_odd`
+
+English:
+theorem exists_eq_zpow_of_odd
+  given: (x : R) {k : Int} (hk : Odd k)
+  statement: exists r, x = r ^ k
+  proof: by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_odd x (by simpa using hk)
+  · rcases exists_eq_pow_of_odd x (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+中文:
+定理 exists_eq_zpow_of_odd
+  条件: (x : R) {k : 整数} (hk : Odd k)
+  结论: 存在 r, x = r ^ k
+  证明: by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_odd x (by simpa using hk)
+  · rcases exists_eq_pow_of_odd x (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+Depends on / 依赖: eq_nat_or_neg, exists_eq_pow_of_odd, k.eq_nat_or_neg
+-/
+theorem exists_eq_zpow_of_odd (x : R) {k : Int} (hk : Odd k) : exists r, x = r ^ k := by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_odd x (by simpa using hk)
+  · rcases exists_eq_pow_of_odd x (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+/--
+theorem `exists_eq_pow_of_isSquare` / 定理 `exists_eq_pow_of_isSquare`
+
+English:
+theorem exists_eq_pow_of_isSquare
+  given: {x : R} (hx : IsSquare x) {n : Nat} (hn : n != 0)
+  proof: by
+  induction n using Nat.strong_induction_on generalizing x with
+  | h n ih =>
+    rcases Nat.even_or_odd n with (even | odd)
+    · rcases even with ⟨m, hm⟩
+      rcases hx with ⟨s, hs⟩
+      rcases isSquare_or_isSquare_neg s with (h | h) <;>
+        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;
+
+中文:
+定理 exists_eq_pow_of_isSquare
+  条件: {x : R} (hx : IsSquare x) {n : 自然数} (hn : n != 0)
+  证明: by
+  induction n using Nat.strong_induction_on generalizing x with
+  | h n ih =>
+    rcases Nat.even_or_odd n with (even | odd)
+    · rcases even with ⟨m, hm⟩
+      rcases hx with ⟨s, hs⟩
+      rcases isSquare_or_isSquare_neg s with (h | h) <;>
+        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;
+
+Depends on / 依赖: Nat.even_or_odd, Nat.strong_induction_on, even_or_odd, exists_eq_pow_of_odd, generalizing, isSquare_or_isSquare_neg, pow_add, strong_induction_on
+-/
+theorem exists_eq_pow_of_isSquare {x : R} (hx : IsSquare x) {n : Nat} (hn : n != 0) :
+    exists r, x = r ^ n := by
+  induction n using Nat.strong_induction_on generalizing x with
+  | h n ih =>
+    rcases Nat.even_or_odd n with (even | odd)
+    · rcases even with ⟨m, hm⟩
+      rcases hx with ⟨s, hs⟩
+      rcases isSquare_or_isSquare_neg s with (h | h) <;>
+        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;>
+        exact ⟨r, by simp [hm, pow_add, ← hr, hs]⟩
+    · exact exists_eq_pow_of_odd x odd
+
+/--
+theorem `exists_eq_zpow_of_isSquare` / 定理 `exists_eq_zpow_of_isSquare`
+
+English:
+theorem exists_eq_zpow_of_isSquare
+  given: {x : R} (hx : IsSquare x) {k : Int} (hk : k != 0)
+  proof: by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_isSquare hx (by simpa using hk)
+  · rcases exists_eq_pow_of_isSquare hx (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+中文:
+定理 exists_eq_zpow_of_isSquare
+  条件: {x : R} (hx : IsSquare x) {k : 整数} (hk : k != 0)
+  证明: by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_isSquare hx (by simpa using hk)
+  · rcases exists_eq_pow_of_isSquare hx (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+Depends on / 依赖: eq_nat_or_neg, exists_eq_pow_of_isSquare, k.eq_nat_or_neg
+-/
+theorem exists_eq_zpow_of_isSquare {x : R} (hx : IsSquare x) {k : Int} (hk : k != 0) :
+    exists r, x = r ^ k := by
+  rcases k.eq_nat_or_neg with ⟨n, rfl | rfl⟩
+  · simpa using exists_eq_pow_of_isSquare hx (by simpa using hk)
+  · rcases exists_eq_pow_of_isSquare hx (by simpa using hk) with ⟨r, hr⟩
+    exact ⟨r⁻¹, by simpa using hr⟩
+
+section LinearOrderedField
+
+variable [LinearOrder R] [IsStrictOrderedRing R]
+
+/--
+theorem `nonneg_iff_isSquare` / 定理 `nonneg_iff_isSquare`
+
+English:
+theorem nonneg_iff_isSquare
+  given: {x : R}
+  statement: 0 <= x ↔ IsSquare x where
+  proof: by
+    suffices IsSquare (-x) -> x = 0 by aesop
+    exact fun hc => le_antisymm (nonpos_of_neg_nonneg (IsSquare.nonneg hc)) h
+  mpr := IsSquare.nonneg
+
+alias ⟨_root_.IsSquare.of_nonneg, _⟩ := nonneg_iff_isSquare
+
+中文:
+定理 nonneg_iff_isSquare
+  条件: {x : R}
+  结论: 0 <= x ↔ IsSquare x where
+  证明: by
+    suffices IsSquare (-x) -> x = 0 by aesop
+    exact fun hc => le_antisymm (nonpos_of_neg_nonneg (IsSquare.nonneg hc)) h
+  mpr := IsSquare.nonneg
+
+alias ⟨_root_.IsSquare.of_nonneg, _⟩ := nonneg_iff_isSquare
+
+Depends on / 依赖: IsSquare, IsSquare.nonneg, le_antisymm, nonneg, nonpos_of_neg_nonneg
+-/
+theorem nonneg_iff_isSquare {x : R} : 0 <= x ↔ IsSquare x where
+  mp h := by
+    suffices IsSquare (-x) -> x = 0 by aesop
+    exact fun hc => le_antisymm (nonpos_of_neg_nonneg (IsSquare.nonneg hc)) h
+  mpr := IsSquare.nonneg
+
+alias ⟨_root_.IsSquare.of_nonneg, _⟩ := nonneg_iff_isSquare
+
+/--
+theorem `exists_eq_pow_of_nonneg` / 定理 `exists_eq_pow_of_nonneg`
+
+English:
+theorem exists_eq_pow_of_nonneg
+  given: {x : R} (hx : 0 <= x) {n : Nat} (hn : n != 0)
+  statement: exists r, x = r ^ n
+  proof: exists_eq_pow_of_isSquare (.of_nonneg hx) hn
+
+中文:
+定理 exists_eq_pow_of_nonneg
+  条件: {x : R} (hx : 0 <= x) {n : 自然数} (hn : n != 0)
+  结论: 存在 r, x = r ^ n
+  证明: exists_eq_pow_of_isSquare (.of_nonneg hx) hn
+
+Depends on / 依赖: exists_eq_pow_of_isSquare, of_nonneg
+-/
+theorem exists_eq_pow_of_nonneg {x : R} (hx : 0 <= x) {n : Nat} (hn : n != 0) : exists r, x = r ^ n :=
+  exists_eq_pow_of_isSquare (.of_nonneg hx) hn
+
+/--
+theorem `exists_eq_zpow_of_nonneg` / 定理 `exists_eq_zpow_of_nonneg`
+
+English:
+theorem exists_eq_zpow_of_nonneg
+  given: {x : R} (hx : 0 <= x) {k : Int} (hk : k != 0)
+  statement: exists r, x = r ^ k
+  proof: exists_eq_zpow_of_isSquare (.of_nonneg hx) hk
+
+中文:
+定理 exists_eq_zpow_of_nonneg
+  条件: {x : R} (hx : 0 <= x) {k : 整数} (hk : k != 0)
+  结论: 存在 r, x = r ^ k
+  证明: exists_eq_zpow_of_isSquare (.of_nonneg hx) hk
+
+Depends on / 依赖: exists_eq_zpow_of_isSquare, of_nonneg
+-/
+theorem exists_eq_zpow_of_nonneg {x : R} (hx : 0 <= x) {k : Int} (hk : k != 0) : exists r, x = r ^ k :=
+  exists_eq_zpow_of_isSquare (.of_nonneg hx) hk
+
+end LinearOrderedField
+
+end IsRealClosed

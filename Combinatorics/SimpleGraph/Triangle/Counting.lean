@@ -1,0 +1,353 @@
+/-
+Copyright (c) 2022 Yaël Dillies, Bhavik Mehta. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yaël Dillies, Bhavik Mehta
+-/
+module
+
+public import Mathlib.Combinatorics.SimpleGraph.Clique
+public import Mathlib.Combinatorics.SimpleGraph.Regularity.Uniform
+public import Mathlib.Data.Real.Basic
+public import Mathlib.Tactic.Linarith
+
+/-!
+# Triangle counting lemma
+
+In this file, we prove the triangle counting lemma.
+
+## References
+
+[Yaël Dillies, Bhavik Mehta, *Formalising Szemerédi’s Regularity Lemma in Lean*][srl_itp]
+-/
+
+public section
+
+-- TODO: This instance is bad because it creates data out of a Prop
+attribute [-instance] decidableEq_of_subsingleton
+
+open Finset Fintype
+
+variable {α : Type*} (G : SimpleGraph α) [DecidableRel G.Adj] {ε : Real} {s t u : Finset α}
+
+namespace SimpleGraph
+
+/--
+Definition of `noncomputable` / `noncomputable` 的定义
+
+English:
+definition noncomputable
+  signature: def badVertices (ε : Real) (s t : Finset α)
+  body: {x in s | #{y in t | G.Adj x y} < (G.edgeDensity s t - ε) * #t}
+
+中文:
+定义 noncomputable
+  签名: def badVertices (ε : 实数) (s t : Finset α)
+  定义体: {x in s | #{y in t | G.Adj x y} < (G.edgeDensity s t - ε) * #t}
+-/
+private noncomputable def badVertices (ε : Real) (s t : Finset α) : Finset α :=
+  {x in s | #{y in t | G.Adj x y} < (G.edgeDensity s t - ε) * #t}
+
+/--
+lemma `card_interedges_badVertices_le` / 引理 `card_interedges_badVertices_le`
+
+English:
+lemma card_interedges_badVertices_le
+  proof: by
+  classical
+  refine (Nat.cast_le.2 <| (card_le_card <| subset_of_eq (Rel.interedges_eq_biUnion _)).trans
+    card_biUnion_le).trans ?_
+  simp_rw [Nat.cast_sum, card_map, ← nsmul_eq_mul, smul_mul_assoc, mul_comm (#t : Real)]
+  exact sum_le_card_nsmul _ _ _ fun x hx => (mem_filter.1 hx).2.le
+
+中文:
+引理 card_interedges_badVertices_le
+  证明: by
+  classical
+  refine (Nat.cast_le.2 <| (card_le_card <| subset_of_eq (Rel.interedges_eq_biUnion _)).trans
+    card_biUnion_le).trans ?_
+  simp_rw [Nat.cast_sum, card_map, ← nsmul_eq_mul, smul_mul_assoc, mul_comm (#t : Real)]
+  exact sum_le_card_nsmul _ _ _ fun x hx => (mem_filter.1 hx).2.le
+-/
+private lemma card_interedges_badVertices_le :
+    #(Rel.interedges G.Adj (badVertices G ε s t) t) <=
+      #(badVertices G ε s t) * #t * (G.edgeDensity s t - ε) := by
+  classical
+  refine (Nat.cast_le.2 <| (card_le_card <| subset_of_eq (Rel.interedges_eq_biUnion _)).trans
+    card_biUnion_le).trans ?_
+  simp_rw [Nat.cast_sum, card_map, ← nsmul_eq_mul, smul_mul_assoc, mul_comm (#t : Real)]
+  exact sum_le_card_nsmul _ _ _ fun x hx => (mem_filter.1 hx).2.le
+
+/--
+lemma `edgeDensity_badVertices_le` / 引理 `edgeDensity_badVertices_le`
+
+English:
+lemma edgeDensity_badVertices_le
+  given: (hε : 0 <= ε) (dst : 2 * ε <= G.edgeDensity s t)
+  proof: by
+  rw [edgeDensity_def]
+  push_cast
+  refine div_le_of_le_mul₀ (by positivity) (sub_nonneg_of_le <| by linarith) ?_
+  rw [mul_comm]
+  exact G.card_interedges_badVertices_le
+
+中文:
+引理 edgeDensity_badVertices_le
+  条件: (hε : 0 <= ε) (dst : 2 * ε <= G.edgeDensity s t)
+  证明: by
+  rw [edgeDensity_def]
+  push_cast
+  refine div_le_of_le_mul₀ (by positivity) (sub_nonneg_of_le <| by linarith) ?_
+  rw [mul_comm]
+  exact G.card_interedges_badVertices_le
+-/
+private lemma edgeDensity_badVertices_le (hε : 0 <= ε) (dst : 2 * ε <= G.edgeDensity s t) :
+    G.edgeDensity (badVertices G ε s t) t <= G.edgeDensity s t - ε := by
+  rw [edgeDensity_def]
+  push_cast
+  refine div_le_of_le_mul₀ (by positivity) (sub_nonneg_of_le <| by linarith) ?_
+  rw [mul_comm]
+  exact G.card_interedges_badVertices_le
+
+/--
+lemma `card_badVertices_le` / 引理 `card_badVertices_le`
+
+English:
+lemma card_badVertices_le
+  given: (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t)
+  proof: by
+  have hε : ε <= 1 := (le_mul_of_one_le_left hst.pos.le (by simp)).trans
+    (dst.trans <| mod_cast edgeDensity_le_one _ _ _)
+  by_contra! h
+  have : |(G.edgeDensity (badVertices G ε s t) t - G.edgeDensity s t : Real)| < ε :=
+    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Na
+
+中文:
+引理 card_badVertices_le
+  条件: (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t)
+  证明: by
+  have hε : ε <= 1 := (le_mul_of_one_le_left hst.pos.le (by simp)).trans
+    (dst.trans <| mod_cast edgeDensity_le_one _ _ _)
+  by_contra! h
+  have : |(G.edgeDensity (badVertices G ε s t) t - G.edgeDensity s t : Real)| < ε :=
+    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Na
+-/
+private lemma card_badVertices_le (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t) :
+    #(badVertices G ε s t) <= #s * ε := by
+  have hε : ε <= 1 := (le_mul_of_one_le_left hst.pos.le (by simp)).trans
+    (dst.trans <| mod_cast edgeDensity_le_one _ _ _)
+  by_contra! h
+  have : |(G.edgeDensity (badVertices G ε s t) t - G.edgeDensity s t : Real)| < ε :=
+    hst (filter_subset _ _) Subset.rfl h.le (mul_le_of_le_one_right (Nat.cast_nonneg _) hε)
+  rw [abs_sub_lt_iff] at this
+  linarith [G.edgeDensity_badVertices_le hst.pos.le dst]
+
+/--
+lemma `triangle_split_helper` / 引理 `triangle_split_helper`
+
+English:
+lemma triangle_split_helper
+  given: [DecidableEq α]
+  proof: by
+  rintro ⟨x, y, z⟩
+  simp only [mem_filter, mem_product, mem_biUnion, mem_sdiff, mem_union,
+    mem_image, Prod.exists, and_assoc, exists_imp, and_imp, Prod.mk_inj, mem_interedges_iff]
+  rintro x hx - y z hy xy hz xz yz rfl rfl rfl
+  exact ⟨hx, hy, hz, xy, xz, yz⟩
+
+中文:
+引理 triangle_split_helper
+  条件: [DecidableEq α]
+  证明: by
+  rintro ⟨x, y, z⟩
+  simp only [mem_filter, mem_product, mem_biUnion, mem_sdiff, mem_union,
+    mem_image, Prod.exists, and_assoc, exists_imp, and_imp, Prod.mk_inj, mem_interedges_iff]
+  rintro x hx - y z hy xy hz xz yz rfl rfl rfl
+  exact ⟨hx, hy, hz, xy, xz, yz⟩
+-/
+private lemma triangle_split_helper [DecidableEq α] :
+    (s \ (badVertices G ε s t union badVertices G ε s u)).biUnion
+      (fun x => (G.interedges {y in t | G.Adj x y} {y in u | G.Adj x y}).image (x, ·)) subseteq
+      (s ×ˢ t ×ˢ u).filter (fun (x, y, z) => G.Adj x y ∧ G.Adj x z ∧ G.Adj y z) := by
+  rintro ⟨x, y, z⟩
+  simp only [mem_filter, mem_product, mem_biUnion, mem_sdiff, mem_union,
+    mem_image, Prod.exists, and_assoc, exists_imp, and_imp, Prod.mk_inj, mem_interedges_iff]
+  rintro x hx - y z hy xy hz xz yz rfl rfl rfl
+  exact ⟨hx, hy, hz, xy, xz, yz⟩
+
+/--
+lemma `good_vertices_triangle_card` / 引理 `good_vertices_triangle_card`
+
+English:
+lemma good_vertices_triangle_card
+  statement: [DecidableEq α] (dst : 2 * ε <= G.edgeDensity s t)
+  proof: by
+  simp only [mem_sdiff, badVertices, mem_union, not_or, mem_filter, not_and_or, not_lt] at hx
+  rw [← or_and_left]; rw [and_or_left] at hx
+  simp only [false_or, and_not_self, mul_comm (_ - _)] at hx
+  obtain ⟨-, hxY, hsu⟩ := hx
+  have hY : #t * ε <= #{y in t | G.Adj x y} := by
+    refine le_tran
+
+中文:
+引理 good_vertices_triangle_card
+  结论: [DecidableEq α] (dst : 2 * ε <= G.edgeDensity s t)
+  证明: by
+  simp only [mem_sdiff, badVertices, mem_union, not_or, mem_filter, not_and_or, not_lt] at hx
+  rw [← or_and_left]; rw [and_or_left] at hx
+  simp only [false_or, and_not_self, mul_comm (_ - _)] at hx
+  obtain ⟨-, hxY, hsu⟩ := hx
+  have hY : #t * ε <= #{y in t | G.Adj x y} := by
+    refine le_tran
+-/
+private lemma good_vertices_triangle_card [DecidableEq α] (dst : 2 * ε <= G.edgeDensity s t)
+    (dsu : 2 * ε <= G.edgeDensity s u) (dtu : 2 * ε <= G.edgeDensity t u) (utu : G.IsUniform ε t u)
+    (x : α) (hx : x in s \ (badVertices G ε s t union badVertices G ε s u)) :
+    ε ^ 3 * #t * #u <= #((({y in t | G.Adj x y} ×ˢ {y in u | G.Adj x y}).filter
+        fun (y, z) => G.Adj y z).image (x, ·)) := by
+  simp only [mem_sdiff, badVertices, mem_union, not_or, mem_filter, not_and_or, not_lt] at hx
+  rw [← or_and_left]; rw [and_or_left] at hx
+  simp only [false_or, and_not_self, mul_comm (_ - _)] at hx
+  obtain ⟨-, hxY, hsu⟩ := hx
+  have hY : #t * ε <= #{y in t | G.Adj x y} := by
+    refine le_trans ?_ hxY; gcongr; linarith
+  have hZ : #u * ε <= #{y in u | G.Adj x y} := by
+    refine le_trans ?_ hsu; gcongr; linarith
+  rw [card_image_of_injective _ (Prod.mk_right_injective _)]
+  have := utu (filter_subset (G.Adj x) _) (filter_subset (G.Adj x) _) hY hZ
+  have : ε <= G.edgeDensity {y in t | G.Adj x y} {y in u | G.Adj x y} := by
+    rw [abs_sub_lt_iff] at this; linarith
+  rw [edgeDensity_def] at this
+  push_cast at this
+  have hε := utu.pos.le
+  refine le_trans ?_ (mul_le_of_le_div₀ (Nat.cast_nonneg _) (by positivity) this)
+  refine Eq.trans_le ?_
+    (mul_le_mul_of_nonneg_left (mul_le_mul hY hZ (by positivity) (by positivity)) hε)
+  ring
+
+/--
+lemma `triangle_counting'` / 引理 `triangle_counting'`
+
+English:
+lemma triangle_counting'
+  proof: by
+  classical
+  have h₁ : #(badVertices G ε s t) <= #s * ε := G.card_badVertices_le dst hst
+  have h₂ : #(badVertices G ε s u) <= #s * ε := G.card_badVertices_le dsu usu
+  let X' := s \ (badVertices G ε s t union badVertices G ε s u)
+  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c)
+
+中文:
+引理 triangle_counting'
+  证明: by
+  classical
+  have h₁ : #(badVertices G ε s t) <= #s * ε := G.card_badVertices_le dst hst
+  have h₂ : #(badVertices G ε s u) <= #s * ε := G.card_badVertices_le dsu usu
+  let X' := s \ (badVertices G ε s t union badVertices G ε s u)
+  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c)
+
+Depends on / 依赖: G.Adj, G.card_badVertices_le, G.go, Nat.cast_le, Nat.cast_sum, badVertices, biUnion, card_badVertices_le, card_biUnion, card_le_card, card_nsmul_le_sum, cast_le, cast_sum, classical, filter, le_trans, subseteq, triangle_split_helper
+-/
+lemma triangle_counting'
+    (dst : 2 * ε <= G.edgeDensity s t) (hst : G.IsUniform ε s t)
+    (dsu : 2 * ε <= G.edgeDensity s u) (usu : G.IsUniform ε s u)
+    (dtu : 2 * ε <= G.edgeDensity t u) (utu : G.IsUniform ε t u) :
+    (1 - 2 * ε) * ε ^ 3 * #s * #t * #u <=
+      #((s ×ˢ t ×ˢ u).filter fun (a, b, c) => G.Adj a b ∧ G.Adj a c ∧ G.Adj b c) := by
+  classical
+  have h₁ : #(badVertices G ε s t) <= #s * ε := G.card_badVertices_le dst hst
+  have h₂ : #(badVertices G ε s u) <= #s * ε := G.card_badVertices_le dsu usu
+  let X' := s \ (badVertices G ε s t union badVertices G ε s u)
+  have : X'.biUnion _ subseteq (s ×ˢ t ×ˢ u).filter fun (a, b, c) => G.Adj a b ∧ G.Adj a c ∧ G.Adj b c :=
+    triangle_split_helper _
+  refine le_trans ?_ (Nat.cast_le.2 <| card_le_card this)
+  rw [card_biUnion]; rw [Nat.cast_sum]
+  · apply le_trans _ (card_nsmul_le_sum X' _ _ <| G.good_vertices_triangle_card dst dsu dtu utu)
+    rw [nsmul_eq_mul]
+    have := hst.pos.le
+    suffices hX' : (1 - 2 * ε) * #s <= #X' by
+      exact Eq.trans_le (by ring) (mul_le_mul_of_nonneg_right hX' <| by positivity)
+    have i : badVertices G ε s t union badVertices G ε s u subseteq s :=
+      union_subset (filter_subset _ _) (filter_subset _ _)
+    rw [sub_mul]; rw [one_mul]; rw [card_sdiff_of_subset i]; rw [Nat.cast_sub (card_le_card i)]; rw [sub_le_sub_iff_left]; rw [mul_assoc]; rw [mul_comm ε]; rw [two_mul]
+    refine (Nat.cast_le.2 <| card_union_le _ _).trans ?_
+    rw [Nat.cast_add]
+    gcongr
+  rintro a _ b _ t
+  rw [Function.onFun]; rw [Finset.disjoint_left]
+  simp only [Prod.forall, mem_image, not_exists, Prod.mk_inj,
+    exists_imp, and_imp, not_and]
+  aesop
+
+variable [DecidableEq α]
+
+/--
+lemma `triple_eq_triple_of_mem` / 引理 `triple_eq_triple_of_mem`
+
+English:
+lemma triple_eq_triple_of_mem
+  statement: (hst : Disjoint s t) (hsu : Disjoint s u) (htu : Disjoint t u)
+  proof: by
+  simp only [Finset.Subset.antisymm_iff, subset_iff, mem_insert, mem_singleton, forall_eq_or_imp,
+    forall_eq] at h
+  grind [Finset.disjoint_left]
+
+中文:
+引理 triple_eq_triple_of_mem
+  结论: (hst : Disjoint s t) (hsu : Disjoint s u) (htu : Disjoint t u)
+  证明: by
+  simp only [Finset.Subset.antisymm_iff, subset_iff, mem_insert, mem_singleton, forall_eq_or_imp,
+    forall_eq] at h
+  grind [Finset.disjoint_left]
+-/
+private lemma triple_eq_triple_of_mem (hst : Disjoint s t) (hsu : Disjoint s u) (htu : Disjoint t u)
+    {x₁ x₂ y₁ y₂ z₁ z₂ : α} (h : ({x₁, y₁, z₁} : Finset α) = {x₂, y₂, z₂})
+    (hx₁ : x₁ in s) (hx₂ : x₂ in s) (hy₁ : y₁ in t) (hy₂ : y₂ in t) (hz₁ : z₁ in u) (hz₂ : z₂ in u) :
+    (x₁, y₁, z₁) = (x₂, y₂, z₂) := by
+  simp only [Finset.Subset.antisymm_iff, subset_iff, mem_insert, mem_singleton, forall_eq_or_imp,
+    forall_eq] at h
+  grind [Finset.disjoint_left]
+
+variable [Fintype α]
+
+/--
+lemma `triangle_counting` / 引理 `triangle_counting`
+
+English:
+lemma triangle_counting
+  proof: by
+  apply (G.triangle_counting' dst ust dsu usu dtu utu).trans _
+  rw [Nat.cast_le]
+  refine card_le_card_of_injOn (fun (x, y, z) => {x, y, z}) ?_ ?_
+  · rintro ⟨x, y, z⟩
+    simp +contextual [is3Clique_triple_iff]
+  rintro ⟨x₁, y₁, z₁⟩ h₁ ⟨x₂, y₂, z₂⟩ h₂ t
+  simp only [mem_coe, mem_filter, mem_pro
+
+中文:
+引理 triangle_counting
+  证明: by
+  apply (G.triangle_counting' dst ust dsu usu dtu utu).trans _
+  rw [Nat.cast_le]
+  refine card_le_card_of_injOn (fun (x, y, z) => {x, y, z}) ?_ ?_
+  · rintro ⟨x, y, z⟩
+    simp +contextual [is3Clique_triple_iff]
+  rintro ⟨x₁, y₁, z₁⟩ h₁ ⟨x₂, y₂, z₂⟩ h₂ t
+  simp only [mem_coe, mem_filter, mem_pro
+
+Depends on / 依赖: G.triangle_counting, Nat.cast_le, card_le_card_of_injOn, cast_le, contextual, is3Clique_triple_iff, mem_coe, mem_filter, mem_product, triangle_counting, triple_eq_triple_of_mem
+-/
+lemma triangle_counting
+    (dst : 2 * ε <= G.edgeDensity s t) (ust : G.IsUniform ε s t) (hst : Disjoint s t)
+    (dsu : 2 * ε <= G.edgeDensity s u) (usu : G.IsUniform ε s u) (hsu : Disjoint s u)
+    (dtu : 2 * ε <= G.edgeDensity t u) (utu : G.IsUniform ε t u) (htu : Disjoint t u) :
+    (1 - 2 * ε) * ε ^ 3 * #s * #t * #u <= #(G.cliqueFinset 3) := by
+  apply (G.triangle_counting' dst ust dsu usu dtu utu).trans _
+  rw [Nat.cast_le]
+  refine card_le_card_of_injOn (fun (x, y, z) => {x, y, z}) ?_ ?_
+  · rintro ⟨x, y, z⟩
+    simp +contextual [is3Clique_triple_iff]
+  rintro ⟨x₁, y₁, z₁⟩ h₁ ⟨x₂, y₂, z₂⟩ h₂ t
+  simp only [mem_coe, mem_filter, mem_product] at h₁ h₂
+  apply triple_eq_triple_of_mem hst hsu htu t <;> tauto
+
+end SimpleGraph

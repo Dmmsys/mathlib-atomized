@@ -1,0 +1,866 @@
+/-
+Copyright (c) 2024 Christian Merten. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Christian Merten
+-/
+module
+
+public import Mathlib.CategoryTheory.Limits.Opposites
+public import Mathlib.CategoryTheory.Limits.Preserves.Limits
+public import Mathlib.CategoryTheory.Limits.Yoneda
+
+/-!
+
+# Ind- and pro- (co)yoneda lemmas
+
+We define limit versions of the yoneda and coyoneda lemmas.
+
+## Main results
+
+Notation: categories `C`, `I` and functors `D : Iᵒᵖ ⥤ C`, `F : C ⥤ Type`.
+
+- `colimitCoyonedaHomIsoLimit`: pro-coyoneda lemma: morphisms from colimit of coyoneda of
+  diagram `D` to `F` is limit of `F` evaluated at `D`.
+- `colimitCoyonedaHomIsoLimit'`: a variant of `colimitCoyonedaHomIsoLimit` for a covariant
+  diagram.
+
+-/
+
+@[expose] public section
+
+universe u₁ u₂ v₁ v₂
+
+namespace CategoryTheory
+
+namespace Limits
+
+open Opposite
+
+variable {C : Type u₁} [Category.{u₂} C] {I : Type v₁} [Category.{v₂} I]
+
+section HomCocontinuousCovariant
+
+variable (F : I ⥤ C) [HasColimit F]
+
+/--
+Definition of `coyonedaOpColimitIsoLimitCoyoneda` / `coyonedaOpColimitIsoLimitCoyoneda` 的定义
+
+English:
+definition coyonedaOpColimitIsoLimitCoyoneda
+  signature: :
+  body: coyoneda.mapIso (limitOpIsoOpColimit F).symm ≪≫ (preservesLimitIso coyoneda F.op)
+
+中文:
+定义 coyonedaOpColimitIsoLimitCoyoneda
+  签名: :
+  定义体: coyoneda.mapIso (limitOpIsoOpColimit F).symm ≪≫ (preservesLimitIso coyoneda F.op)
+
+Depends on / 依赖: F.op, coyoneda, coyoneda.mapIso, limitOpIsoOpColimit, mapIso, preservesLimitIso
+-/
+noncomputable def coyonedaOpColimitIsoLimitCoyoneda :
+    coyoneda.obj (op <| colimit F) ≅ limit (F.op ⋙ coyoneda) :=
+  coyoneda.mapIso (limitOpIsoOpColimit F).symm ≪≫ (preservesLimitIso coyoneda F.op)
+
+set_option backward.isDefEq.respectTransparency false in
+@[reassoc (attr := simp)]
+/--
+lemma `coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π` / 引理 `coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π`
+
+English:
+lemma coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π
+  given: (i : I)
+  proof: by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda, Functor.mapIso_symm,
+    Iso.trans_hom, Iso.symm_hom, Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π,
+    ← Functor.map_comp, limitOpIsoOpColimit_inv_comp_π]
+
+中文:
+引理 coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π
+  条件: (i : I)
+  证明: by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda, Functor.mapIso_symm,
+    Iso.trans_hom, Iso.symm_hom, Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π,
+    ← Functor.map_comp, limitOpIsoOpColimit_inv_comp_π]
+
+Depends on / 依赖: Category, Category.assoc, Functor, Functor.mapIso_inv, Functor.mapIso_symm, Functor.map_comp, Iso.symm_hom, Iso.trans_hom, coyonedaOpColimitIsoLimitCoyoneda, mapIso_inv, mapIso_symm, map_comp, symm_hom, trans_hom
+-/
+lemma coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π (i : I) :
+    (coyonedaOpColimitIsoLimitCoyoneda F).hom ≫ limit.π (F.op.comp coyoneda) ⟨i⟩
+      = coyoneda.map (colimit.ι F i).op := by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda, Functor.mapIso_symm,
+    Iso.trans_hom, Iso.symm_hom, Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π,
+    ← Functor.map_comp, limitOpIsoOpColimit_inv_comp_π]
+
+set_option backward.isDefEq.respectTransparency false in
+@[reassoc (attr := simp)]
+/--
+lemma `coyonedaOpColimitIsoLimitCoyoneda_inv_comp_π` / 引理 `coyonedaOpColimitIsoLimitCoyoneda_inv_comp_π`
+
+English:
+lemma coyonedaOpColimitIsoLimitCoyoneda_inv_comp_π
+  given: (i : I)
+  proof: by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+中文:
+引理 coyonedaOpColimitIsoLimitCoyoneda_inv_comp_π
+  条件: (i : I)
+  证明: by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+Depends on / 依赖: Category, Category.assoc, Category.id_comp, Iso.inv_hom_id, id_comp, inv_hom_id
+-/
+lemma coyonedaOpColimitIsoLimitCoyoneda_inv_comp_π (i : I) :
+    (coyonedaOpColimitIsoLimitCoyoneda F).inv ≫ coyoneda.map (colimit.ι F i).op =
+      limit.π (F.op.comp coyoneda) ⟨i⟩ := by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+/--
+Definition of `colimitHomIsoLimitYoneda` / `colimitHomIsoLimitYoneda` 的定义
+
+English:
+definition colimitHomIsoLimitYoneda
+  body: (coyonedaOpColimitIsoLimitCoyoneda F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+中文:
+定义 colimitHomIsoLimitYoneda
+  定义体: (coyonedaOpColimitIsoLimitCoyoneda F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+Depends on / 依赖: coyonedaOpColimitIsoLimitCoyoneda, limitObjIsoLimitCompEvaluation
+-/
+noncomputable def colimitHomIsoLimitYoneda
+    [HasLimitsOfShape Iᵒᵖ (Type u₂)] (A : C) :
+    (colimit F ⟶ A) ≅ limit (F.op ⋙ yoneda.obj A) :=
+  (coyonedaOpColimitIsoLimitCoyoneda F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[reassoc (attr := simp)]
+/--
+lemma `colimitHomIsoLimitYoneda_hom_comp_π` / 引理 `colimitHomIsoLimitYoneda_hom_comp_π`
+
+English:
+lemma colimitHomIsoLimitYoneda_hom_comp_π
+  given: [HasLimitsOfShape Iᵒᵖ (Type u₂)] (A : C) (i : I)
+  proof: by
+  simp only [colimitHomIsoLimitYoneda, Iso.trans_hom, Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [Functor.flip_map_app]
+
+中文:
+引理 colimitHomIsoLimitYoneda_hom_comp_π
+  条件: [HasLimitsOfShape Iᵒᵖ (类型u₂)] (A : C) (i : I)
+  证明: by
+  simp only [colimitHomIsoLimitYoneda, Iso.trans_hom, Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [Functor.flip_map_app]
+
+Depends on / 依赖: Category, Category.assoc, Functor, Functor.flip_map_app, Iso.app_hom, Iso.trans_hom, app_hom, colimitHomIsoLimitYoneda, coyonedaOpColimitIsoLimitCoyoneda, flip_map_app, trans_hom
+-/
+lemma colimitHomIsoLimitYoneda_hom_comp_π [HasLimitsOfShape Iᵒᵖ (Type u₂)] (A : C) (i : I) :
+    (colimitHomIsoLimitYoneda F A).hom ≫ limit.π (F.op ⋙ yoneda.obj A) ⟨i⟩ =
+      (yoneda.obj A).map (colimit.ι F i).op := by
+  simp only [colimitHomIsoLimitYoneda, Iso.trans_hom, Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda_hom_comp_π]; rw [Functor.flip_map_app]
+
+set_option backward.isDefEq.respectTransparency.types false in
+set_option backward.defeqAttrib.useBackward true in
+@[reassoc (attr := simp)]
+/--
+lemma `colimitHomIsoLimitYoneda_inv_comp_π` / 引理 `colimitHomIsoLimitYoneda_inv_comp_π`
+
+English:
+lemma colimitHomIsoLimitYoneda_inv_comp_π
+  given: [HasLimitsOfShape Iᵒᵖ (Type u₂)] (A : C) (i : I)
+  proof: by
+  rw [← dsimp% colimitHomIsoLimitYoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+中文:
+引理 colimitHomIsoLimitYoneda_inv_comp_π
+  条件: [HasLimitsOfShape Iᵒᵖ (类型u₂)] (A : C) (i : I)
+  证明: by
+  rw [← dsimp% colimitHomIsoLimitYoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+Depends on / 依赖: Category, Category.assoc, Category.id_comp, Iso.inv_hom_id, id_comp, inv_hom_id
+-/
+lemma colimitHomIsoLimitYoneda_inv_comp_π [HasLimitsOfShape Iᵒᵖ (Type u₂)] (A : C) (i : I) :
+    dsimp% (colimitHomIsoLimitYoneda F A).inv ≫ (yoneda.obj A).map (colimit.ι F i).op =
+      limit.π (F.op ⋙ yoneda.obj A) ⟨i⟩ := by
+  rw [← dsimp% colimitHomIsoLimitYoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+end HomCocontinuousCovariant
+
+section HomCocontinuousContravariant
+
+variable (F : Iᵒᵖ ⥤ C) [HasColimit F]
+
+/--
+Definition of `coyonedaOpColimitIsoLimitCoyoneda'` / `coyonedaOpColimitIsoLimitCoyoneda'` 的定义
+
+English:
+definition coyonedaOpColimitIsoLimitCoyoneda'
+  signature: :
+  body: coyoneda.mapIso (limitRightOpIsoOpColimit F).symm ≪≫ preservesLimitIso coyoneda F.rightOp
+
+中文:
+定义 coyonedaOpColimitIsoLimitCoyoneda'
+  签名: :
+  定义体: coyoneda.mapIso (limitRightOpIsoOpColimit F).symm ≪≫ preservesLimitIso coyoneda F.rightOp
+
+Depends on / 依赖: F.rightOp, coyoneda, coyoneda.mapIso, limitRightOpIsoOpColimit, mapIso, preservesLimitIso, rightOp
+-/
+noncomputable def coyonedaOpColimitIsoLimitCoyoneda' :
+    coyoneda.obj (op <| colimit F) ≅ limit (F.rightOp ⋙ coyoneda) :=
+  coyoneda.mapIso (limitRightOpIsoOpColimit F).symm ≪≫ preservesLimitIso coyoneda F.rightOp
+
+set_option backward.isDefEq.respectTransparency false in
+@[reassoc (attr := simp)]
+/--
+lemma `coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π` / 引理 `coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π`
+
+English:
+lemma coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π
+  given: (i : I)
+  proof: by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda', Functor.mapIso_symm, Iso.trans_hom, Iso.symm_hom,
+    Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π, ← Functor.map_comp,
+    limitRightOpIsoOpColimit_inv_comp_π]
+
+中文:
+引理 coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π
+  条件: (i : I)
+  证明: by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda', Functor.mapIso_symm, Iso.trans_hom, Iso.symm_hom,
+    Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π, ← Functor.map_comp,
+    limitRightOpIsoOpColimit_inv_comp_π]
+-/
+lemma coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π (i : I) :
+    (coyonedaOpColimitIsoLimitCoyoneda' F).hom ≫ limit.π (F.rightOp ⋙ coyoneda) i =
+      coyoneda.map (colimit.ι F ⟨i⟩).op := by
+  simp only [coyonedaOpColimitIsoLimitCoyoneda', Functor.mapIso_symm, Iso.trans_hom, Iso.symm_hom,
+    Functor.mapIso_inv, Category.assoc, preservesLimitIso_hom_π, ← Functor.map_comp,
+    limitRightOpIsoOpColimit_inv_comp_π]
+
+set_option backward.isDefEq.respectTransparency false in
+@[reassoc (attr := simp)]
+/--
+lemma `coyonedaOpColimitIsoLimitCoyoneda'_inv_comp_π` / 引理 `coyonedaOpColimitIsoLimitCoyoneda'_inv_comp_π`
+
+English:
+lemma coyonedaOpColimitIsoLimitCoyoneda'_inv_comp_π
+  given: (i : I)
+  proof: by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+中文:
+引理 coyonedaOpColimitIsoLimitCoyoneda'_inv_comp_π
+  条件: (i : I)
+  证明: by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+-/
+lemma coyonedaOpColimitIsoLimitCoyoneda'_inv_comp_π (i : I) :
+    (coyonedaOpColimitIsoLimitCoyoneda' F).inv ≫ coyoneda.map (colimit.ι F ⟨i⟩).op =
+      limit.π (F.rightOp ⋙ coyoneda) i := by
+  rw [← coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+/--
+Definition of `colimitHomIsoLimitYoneda'` / `colimitHomIsoLimitYoneda'` 的定义
+
+English:
+definition colimitHomIsoLimitYoneda'
+  signature: [HasLimitsOfShape I (Type u₂)] (A : C)
+  body: (coyonedaOpColimitIsoLimitCoyoneda' F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+中文:
+定义 colimitHomIsoLimitYoneda'
+  签名: [HasLimitsOfShape I (类型u₂)] (A : C)
+  定义体: (coyonedaOpColimitIsoLimitCoyoneda' F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+Depends on / 依赖: coyonedaOpColimitIsoLimitCoyoneda, limitObjIsoLimitCompEvaluation
+-/
+noncomputable def colimitHomIsoLimitYoneda' [HasLimitsOfShape I (Type u₂)] (A : C) :
+    (colimit F ⟶ A) ≅ limit (F.rightOp ⋙ yoneda.obj A) :=
+  (coyonedaOpColimitIsoLimitCoyoneda' F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[reassoc (attr := simp)]
+/--
+lemma `colimitHomIsoLimitYoneda'_hom_comp_π` / 引理 `colimitHomIsoLimitYoneda'_hom_comp_π`
+
+English:
+lemma colimitHomIsoLimitYoneda'_hom_comp_π
+  given: [HasLimitsOfShape I (Type u₂)] (A : C) (i : I)
+  proof: by
+  simp only [colimitHomIsoLimitYoneda', Iso.trans_hom,
+    Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda' F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [Functor.flip_map_app]
+
+中文:
+引理 colimitHomIsoLimitYoneda'_hom_comp_π
+  条件: [HasLimitsOfShape I (类型u₂)] (A : C) (i : I)
+  证明: by
+  simp only [colimitHomIsoLimitYoneda', Iso.trans_hom,
+    Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda' F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [Functor.flip_map_app]
+-/
+lemma colimitHomIsoLimitYoneda'_hom_comp_π [HasLimitsOfShape I (Type u₂)] (A : C) (i : I) :
+    (colimitHomIsoLimitYoneda' F A).hom ≫ limit.π (F.rightOp ⋙ yoneda.obj A) i =
+      (yoneda.obj A).map (colimit.ι F ⟨i⟩).op := by
+  simp only [colimitHomIsoLimitYoneda', Iso.trans_hom,
+    Iso.app_hom, Category.assoc]
+  erw [limitObjIsoLimitCompEvaluation_hom_π]
+  change ((coyonedaOpColimitIsoLimitCoyoneda' F).hom ≫ _).app A = _
+  rw [coyonedaOpColimitIsoLimitCoyoneda'_hom_comp_π]; rw [Functor.flip_map_app]
+
+set_option backward.isDefEq.respectTransparency.types false in
+set_option backward.defeqAttrib.useBackward true in
+@[reassoc (attr := simp)]
+/--
+lemma `colimitHomIsoLimitYoneda'_inv_comp_π` / 引理 `colimitHomIsoLimitYoneda'_inv_comp_π`
+
+English:
+lemma colimitHomIsoLimitYoneda'_inv_comp_π
+  given: [HasLimitsOfShape I (Type u₂)] (A : C) (i : I)
+  proof: by
+  rw [← dsimp% colimitHomIsoLimitYoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+中文:
+引理 colimitHomIsoLimitYoneda'_inv_comp_π
+  条件: [HasLimitsOfShape I (类型u₂)] (A : C) (i : I)
+  证明: by
+  rw [← dsimp% colimitHomIsoLimitYoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+-/
+lemma colimitHomIsoLimitYoneda'_inv_comp_π [HasLimitsOfShape I (Type u₂)] (A : C) (i : I) :
+    dsimp% (colimitHomIsoLimitYoneda' F A).inv ≫ (yoneda.obj A).map (colimit.ι F ⟨i⟩).op =
+      limit.π (F.rightOp ⋙ yoneda.obj A) i := by
+  rw [← dsimp% colimitHomIsoLimitYoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
+
+end HomCocontinuousContravariant
+
+section ProCoyonedaContravariant
+
+variable (D : Iᵒᵖ ⥤ C) (F : C ⥤ Type u₂)
+variable [HasColimit (D.rightOp ⋙ coyoneda)] [HasLimitsOfShape Iᵒᵖ (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitCoyonedaHomIsoLimit` / `colimitCoyonedaHomIsoLimit` 的定义
+
+English:
+definition colimitCoyonedaHomIsoLimit
+  signature: :
+  body: colimitHomIsoLimitYoneda _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+中文:
+定义 colimitCoyonedaHomIsoLimit
+  签名: :
+  定义体: colimitHomIsoLimitYoneda _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+Depends on / 依赖: Functor, Functor.isoWhiskerLeft, HasLimit, HasLimit.isoOfNatIso, Prod.sectL, colimitHomIsoLimitYoneda, coyonedaLemma, isoOfNatIso, isoWhiskerLeft
+-/
+noncomputable def colimitCoyonedaHomIsoLimit :
+    (colimit (D.rightOp ⋙ coyoneda) ⟶ F) ≅ limit (D ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  colimitHomIsoLimitYoneda _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[simp]
+/--
+lemma `colimitCoyonedaHomIsoLimit_π_apply` / 引理 `colimitCoyonedaHomIsoLimit_π_apply`
+
+English:
+lemma colimitCoyonedaHomIsoLimit_π_apply
+  given: (f : colimit (D.rightOp ⋙ coyoneda) ⟶ F) (i : I)
+  proof: by
+  change ((colimitCoyonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) (op i))) f = _
+  simp only [colimitCoyonedaHomIsoLimit, Iso.trans_hom, Category.assoc,
+    HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  simp only [coyonedaLemma
+
+中文:
+引理 colimitCoyonedaHomIsoLimit_π_apply
+  条件: (f : colimit (D.rightOp ⋙ coyoneda) ⟶ F) (i : I)
+  证明: by
+  change ((colimitCoyonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) (op i))) f = _
+  simp only [colimitCoyonedaHomIsoLimit, Iso.trans_hom, Category.assoc,
+    HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  simp only [coyonedaLemma
+
+Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.isoOfNatIso_hom_, Iso.trans_hom, colimitCoyonedaHomIsoLimit, comp_apply, coyonedaLemma, trans_hom, uliftFunctor
+-/
+lemma colimitCoyonedaHomIsoLimit_π_apply (f : colimit (D.rightOp ⋙ coyoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) (op i) ((colimitCoyonedaHomIsoLimit D F).hom f) =
+      ⟨f.app (D.obj (op i)) ((colimit.ι (D.rightOp ⋙ coyoneda) i).app (D.obj (op i))
+          (𝟙 (D.obj (op i))))⟩ := by
+  change ((colimitCoyonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) (op i))) f = _
+  simp only [colimitCoyonedaHomIsoLimit, Iso.trans_hom, Category.assoc,
+    HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  simp only [coyonedaLemma, comp_apply]
+  rfl
+
+end ProCoyonedaContravariant
+
+section ProCoyonedaContravariantLeftOp
+
+variable (D : I ⥤ Cᵒᵖ) (F : C ⥤ Type u₂)
+variable [HasColimit (D ⋙ coyoneda)] [HasLimitsOfShape Iᵒᵖ (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitCoyonedaHomIsoLimitLeftOp` / `colimitCoyonedaHomIsoLimitLeftOp` 的定义
+
+English:
+definition colimitCoyonedaHomIsoLimitLeftOp
+  signature: :
+  body: haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit D.leftOp F
+
+@[simp]
+
+中文:
+定义 colimitCoyonedaHomIsoLimitLeftOp
+  签名: :
+  定义体: haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit D.leftOp F
+
+@[simp]
+
+Depends on / 依赖: D.leftOp, D.leftOp.rightOp, HasColimit, colimitCoyonedaHomIsoLimit, coyoneda, leftOp, rightOp
+-/
+noncomputable def colimitCoyonedaHomIsoLimitLeftOp :
+    (colimit (D ⋙ coyoneda) ⟶ F) ≅ limit (D.leftOp ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit D.leftOp F
+
+@[simp]
+/--
+lemma `colimitCoyonedaHomIsoLimitLeftOp_π_apply` / 引理 `colimitCoyonedaHomIsoLimitLeftOp_π_apply`
+
+English:
+lemma colimitCoyonedaHomIsoLimitLeftOp_π_apply
+  given: (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I)
+  proof: haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit_π_apply _ _ _ _
+
+中文:
+引理 colimitCoyonedaHomIsoLimitLeftOp_π_apply
+  条件: (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I)
+  证明: haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit_π_apply _ _ _ _
+
+Depends on / 依赖: D.leftOp.rightOp, HasColimit, coyoneda, leftOp, rightOp
+-/
+lemma colimitCoyonedaHomIsoLimitLeftOp_π_apply (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D.leftOp ⋙ F ⋙ uliftFunctor.{u₁}) (op i)
+        ((colimitCoyonedaHomIsoLimitLeftOp D F).hom f) =
+      ⟨f.app (D.obj i).unop ((colimit.ι (D ⋙ coyoneda) i).app (D.obj i).unop
+          (𝟙 (D.obj i).unop))⟩ :=
+  haveI : HasColimit (D.leftOp.rightOp ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit_π_apply _ _ _ _
+
+end ProCoyonedaContravariantLeftOp
+
+section IndYonedaCovariant
+
+variable (D : Iᵒᵖ ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Type u₂)
+variable [HasColimit (D.unop ⋙ yoneda)] [HasLimitsOfShape Iᵒᵖ (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitYonedaHomIsoLimit` / `colimitYonedaHomIsoLimit` 的定义
+
+English:
+definition colimitYonedaHomIsoLimit
+  signature: :
+  body: colimitHomIsoLimitYoneda _ _ ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+中文:
+定义 colimitYonedaHomIsoLimit
+  签名: :
+  定义体: colimitHomIsoLimitYoneda _ _ ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+Depends on / 依赖: Functor, Functor.isoWhiskerLeft, HasLimit, HasLimit.isoOfNatIso, Prod.sectL, colimitHomIsoLimitYoneda, isoOfNatIso, isoWhiskerLeft, yonedaLemma
+-/
+noncomputable def colimitYonedaHomIsoLimit :
+      (colimit (D.unop ⋙ yoneda) ⟶ F) ≅ limit (D ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  colimitHomIsoLimitYoneda _ _ ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[simp]
+/--
+lemma `colimitYonedaHomIsoLimit_π_apply` / 引理 `colimitYonedaHomIsoLimit_π_apply`
+
+English:
+lemma colimitYonedaHomIsoLimit_π_apply
+  given: (f : colimit (D.unop ⋙ yoneda) ⟶ F) (i : Iᵒᵖ)
+  proof: by
+  change ((colimitYonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit, Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+
+中文:
+引理 colimitYonedaHomIsoLimit_π_apply
+  条件: (f : colimit (D.unop ⋙ yoneda) ⟶ F) (i : Iᵒᵖ)
+  证明: by
+  change ((colimitYonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit, Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+
+Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.isoOfNatIso_hom_, Iso.trans_hom, colimitYonedaHomIsoLimit, trans_hom, uliftFunctor, yonedaLemma
+-/
+lemma colimitYonedaHomIsoLimit_π_apply (f : colimit (D.unop ⋙ yoneda) ⟶ F) (i : Iᵒᵖ) :
+    dsimp% limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i ((colimitYonedaHomIsoLimit D F).hom f) =
+      ⟨f.app (D.obj i)
+        ((colimit.ι (D.unop ⋙ yoneda) i.unop).app (D.obj i) (𝟙 (D.obj i).unop))⟩ := by
+  change ((colimitYonedaHomIsoLimit D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit, Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+
+end IndYonedaCovariant
+
+section IndYonedaCovariantOp
+
+variable (D : I ⥤ C) (F : Cᵒᵖ ⥤ Type u₂)
+variable [HasColimit (D ⋙ yoneda)] [HasLimitsOfShape Iᵒᵖ (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitYonedaHomIsoLimitOp` / `colimitYonedaHomIsoLimitOp` 的定义
+
+English:
+definition colimitYonedaHomIsoLimitOp
+  signature: :
+  body: haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit D.op F
+
+@[simp]
+
+中文:
+定义 colimitYonedaHomIsoLimitOp
+  签名: :
+  定义体: haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit D.op F
+
+@[simp]
+
+Depends on / 依赖: D.op, D.op.unop, HasColimit, colimitYonedaHomIsoLimit, yoneda
+-/
+noncomputable def colimitYonedaHomIsoLimitOp :
+    (colimit (D ⋙ yoneda) ⟶ F) ≅ limit (D.op ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit D.op F
+
+@[simp]
+/--
+lemma `colimitYonedaHomIsoLimitOp_π_apply` / 引理 `colimitYonedaHomIsoLimitOp_π_apply`
+
+English:
+lemma colimitYonedaHomIsoLimitOp_π_apply
+  given: (f : colimit (D ⋙ yoneda) ⟶ F) (i : Iᵒᵖ)
+  proof: haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit_π_apply _ _ _ _
+
+中文:
+引理 colimitYonedaHomIsoLimitOp_π_apply
+  条件: (f : colimit (D ⋙ yoneda) ⟶ F) (i : Iᵒᵖ)
+  证明: haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit_π_apply _ _ _ _
+
+Depends on / 依赖: D.op.unop, HasColimit, yoneda
+-/
+lemma colimitYonedaHomIsoLimitOp_π_apply (f : colimit (D ⋙ yoneda) ⟶ F) (i : Iᵒᵖ) :
+    dsimp% limit.π (D.op ⋙ F ⋙ uliftFunctor.{u₁}) i ((colimitYonedaHomIsoLimitOp D F).hom f) =
+      ⟨f.app (op (D.obj i.unop))
+        ((colimit.ι (D ⋙ yoneda) i.unop).app (op (D.obj i.unop)) (𝟙 (D.obj i.unop)))⟩ :=
+  haveI : HasColimit (D.op.unop ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit_π_apply _ _ _ _
+
+end IndYonedaCovariantOp
+
+section ProCoyonedaCovariant
+
+variable (D : I ⥤ C) (F : C ⥤ Type u₂)
+variable [HasColimit (D.op ⋙ coyoneda)] [HasLimitsOfShape I (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitCoyonedaHomIsoLimit'` / `colimitCoyonedaHomIsoLimit'` 的定义
+
+English:
+definition colimitCoyonedaHomIsoLimit'
+  signature: :
+  body: colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+中文:
+定义 colimitCoyonedaHomIsoLimit'
+  签名: :
+  定义体: colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+Depends on / 依赖: Functor, Functor.isoWhiskerLeft, HasLimit, HasLimit.isoOfNatIso, Prod.sectL, colimitHomIsoLimitYoneda, coyonedaLemma, isoOfNatIso, isoWhiskerLeft
+-/
+noncomputable def colimitCoyonedaHomIsoLimit' :
+    (colimit (D.op ⋙ coyoneda) ⟶ F) ≅ limit (D ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL C F) (coyonedaLemma C))
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[simp]
+/--
+lemma `colimitCoyonedaHomIsoLimit'_π_apply` / 引理 `colimitCoyonedaHomIsoLimit'_π_apply`
+
+English:
+lemma colimitCoyonedaHomIsoLimit'_π_apply
+  given: (f : colimit (D.op ⋙ coyoneda) ⟶ F) (i : I)
+  proof: by
+  change ((colimitCoyonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitCoyonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [coyonedaLemma]
+  rfl
+
+中文:
+引理 colimitCoyonedaHomIsoLimit'_π_apply
+  条件: (f : colimit (D.op ⋙ coyoneda) ⟶ F) (i : I)
+  证明: by
+  change ((colimitCoyonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitCoyonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [coyonedaLemma]
+  rfl
+-/
+lemma colimitCoyonedaHomIsoLimit'_π_apply (f : colimit (D.op ⋙ coyoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i ((colimitCoyonedaHomIsoLimit' D F).hom f) =
+      ⟨f.app (D.obj i) ((colimit.ι (D.op ⋙ coyoneda) ⟨i⟩).app (D.obj i) (𝟙 (D.obj i)))⟩ := by
+  change ((colimitCoyonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitCoyonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [coyonedaLemma]
+  rfl
+
+end ProCoyonedaCovariant
+
+section ProCoyonedaCovariantUnop
+
+variable (D : Iᵒᵖ ⥤ Cᵒᵖ) (F : C ⥤ Type u₂)
+variable [HasColimit (D ⋙ coyoneda)] [HasLimitsOfShape I (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitCoyonedaHomIsoLimitUnop` / `colimitCoyonedaHomIsoLimitUnop` 的定义
+
+English:
+definition colimitCoyonedaHomIsoLimitUnop
+  signature: :
+  body: haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit' D.unop F
+
+@[simp]
+
+中文:
+定义 colimitCoyonedaHomIsoLimitUnop
+  签名: :
+  定义体: haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit' D.unop F
+
+@[simp]
+
+Depends on / 依赖: D.unop, D.unop.op, HasColimit, colimitCoyonedaHomIsoLimit, coyoneda
+-/
+noncomputable def colimitCoyonedaHomIsoLimitUnop :
+    (colimit (D ⋙ coyoneda) ⟶ F) ≅ limit (D.unop ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit' D.unop F
+
+@[simp]
+/--
+lemma `colimitCoyonedaHomIsoLimitUnop_π_apply` / 引理 `colimitCoyonedaHomIsoLimitUnop_π_apply`
+
+English:
+lemma colimitCoyonedaHomIsoLimitUnop_π_apply
+  given: (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I)
+  proof: haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit'_π_apply _ _ _ _
+
+中文:
+引理 colimitCoyonedaHomIsoLimitUnop_π_apply
+  条件: (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I)
+  证明: haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit'_π_apply _ _ _ _
+
+Depends on / 依赖: D.unop.op, HasColimit, colimitCoyonedaHomIsoLimit, coyoneda
+-/
+lemma colimitCoyonedaHomIsoLimitUnop_π_apply (f : colimit (D ⋙ coyoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D.unop ⋙ F ⋙ uliftFunctor.{u₁}) i ((colimitCoyonedaHomIsoLimitUnop D F).hom f) =
+      ⟨f.app (D.obj (op i)).unop
+          ((colimit.ι (D ⋙ coyoneda) ⟨i⟩).app (D.obj (op i)).unop (𝟙 (D.obj (op i)).unop))⟩ :=
+  haveI : HasColimit (D.unop.op ⋙ coyoneda) :=
+inferInstanceAs HasColimit (D ⋙ coyoneda)
+  colimitCoyonedaHomIsoLimit'_π_apply _ _ _ _
+
+end ProCoyonedaCovariantUnop
+
+section IndYonedaContravariant
+
+variable (D : I ⥤ Cᵒᵖ) (F : Cᵒᵖ ⥤ Type u₂)
+variable [HasColimit (D.leftOp ⋙ yoneda)] [HasLimitsOfShape I (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitYonedaHomIsoLimit'` / `colimitYonedaHomIsoLimit'` 的定义
+
+English:
+definition colimitYonedaHomIsoLimit'
+  signature: :
+  body: colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+中文:
+定义 colimitYonedaHomIsoLimit'
+  签名: :
+  定义体: colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+Depends on / 依赖: Functor, Functor.isoWhiskerLeft, HasLimit, HasLimit.isoOfNatIso, Prod.sectL, colimitHomIsoLimitYoneda, isoOfNatIso, isoWhiskerLeft, yonedaLemma
+-/
+noncomputable def colimitYonedaHomIsoLimit' :
+    (colimit (D.leftOp ⋙ yoneda) ⟶ F) ≅ limit (D ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  colimitHomIsoLimitYoneda' _ F ≪≫
+    HasLimit.isoOfNatIso (Functor.isoWhiskerLeft (D ⋙ Prod.sectL _ _) (yonedaLemma C))
+
+set_option backward.isDefEq.respectTransparency.types false in
+@[simp]
+/--
+lemma `colimitYonedaHomIsoLimit'_π_apply` / 引理 `colimitYonedaHomIsoLimit'_π_apply`
+
+English:
+lemma colimitYonedaHomIsoLimit'_π_apply
+  given: (f : colimit (D.leftOp ⋙ yoneda) ⟶ F) (i : I)
+  proof: by
+  change ((colimitYonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+
+中文:
+引理 colimitYonedaHomIsoLimit'_π_apply
+  条件: (f : colimit (D.leftOp ⋙ yoneda) ⟶ F) (i : I)
+  证明: by
+  change ((colimitYonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+-/
+lemma colimitYonedaHomIsoLimit'_π_apply (f : colimit (D.leftOp ⋙ yoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i ((colimitYonedaHomIsoLimit' D F).hom f) =
+      ⟨f.app (D.obj i)
+        ((colimit.ι (D.leftOp ⋙ yoneda) (op i)).app (D.obj i) (𝟙 (D.obj i).unop))⟩ := by
+  change ((colimitYonedaHomIsoLimit' D F).hom ≫ (limit.π (D ⋙ F ⋙ uliftFunctor.{u₁}) i)) f = _
+  simp only [colimitYonedaHomIsoLimit', Iso.trans_hom, Category.assoc, HasLimit.isoOfNatIso_hom_π]
+  rw [← Category.assoc]; rw [colimitHomIsoLimitYoneda'_hom_comp_π]
+  dsimp [yonedaLemma]
+  rfl
+
+end IndYonedaContravariant
+
+section IndYonedaContravariantRightOp
+
+variable (D : Iᵒᵖ ⥤ C) (F : Cᵒᵖ ⥤ Type u₂)
+variable [HasColimit (D ⋙ yoneda)] [HasLimitsOfShape I (Type (max u₁ u₂))]
+
+/--
+Definition of `colimitYonedaHomIsoLimitRightOp` / `colimitYonedaHomIsoLimitRightOp` 的定义
+
+English:
+definition colimitYonedaHomIsoLimitRightOp
+  signature: :
+  body: haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit' D.rightOp F
+
+@[simp]
+
+中文:
+定义 colimitYonedaHomIsoLimitRightOp
+  签名: :
+  定义体: haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit' D.rightOp F
+
+@[simp]
+
+Depends on / 依赖: D.rightOp, D.rightOp.leftOp, HasColimit, colimitYonedaHomIsoLimit, leftOp, rightOp, yoneda
+-/
+noncomputable def colimitYonedaHomIsoLimitRightOp :
+    (colimit (D ⋙ yoneda) ⟶ F) ≅ limit (D.rightOp ⋙ F ⋙ uliftFunctor.{u₁}) :=
+  haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit' D.rightOp F
+
+@[simp]
+/--
+lemma `colimitYonedaHomIsoLimitRightOp_π_apply` / 引理 `colimitYonedaHomIsoLimitRightOp_π_apply`
+
+English:
+lemma colimitYonedaHomIsoLimitRightOp_π_apply
+  given: (f : colimit (D ⋙ yoneda) ⟶ F) (i : I)
+  proof: haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit'_π_apply _ _ _ _
+
+中文:
+引理 colimitYonedaHomIsoLimitRightOp_π_apply
+  条件: (f : colimit (D ⋙ yoneda) ⟶ F) (i : I)
+  证明: haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit'_π_apply _ _ _ _
+
+Depends on / 依赖: D.rightOp.leftOp, HasColimit, colimitYonedaHomIsoLimit, leftOp, rightOp, yoneda
+-/
+lemma colimitYonedaHomIsoLimitRightOp_π_apply (f : colimit (D ⋙ yoneda) ⟶ F) (i : I) :
+    dsimp% limit.π (D.rightOp ⋙ F ⋙ uliftFunctor.{u₁}) i
+      ((colimitYonedaHomIsoLimitRightOp D F).hom f) = ⟨f.app (op (D.obj (op i)))
+        ((colimit.ι (D ⋙ yoneda) (op i)).app (op (D.obj (op i))) (𝟙 (D.obj (op i))))⟩ :=
+  haveI : HasColimit (D.rightOp.leftOp ⋙ yoneda) :=
+inferInstanceAs HasColimit (D ⋙ yoneda)
+  colimitYonedaHomIsoLimit'_π_apply _ _ _ _
+
+end IndYonedaContravariantRightOp
+
+end Limits
+
+end CategoryTheory

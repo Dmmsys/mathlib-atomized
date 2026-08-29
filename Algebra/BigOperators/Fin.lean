@@ -1,0 +1,2736 @@
+/-
+Copyright (c) 2020 Yury Kudryashov, Anne Baanen. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yury Kudryashov, Anne Baanen
+-/
+module
+
+public import Mathlib.Algebra.BigOperators.Ring.Finset
+public import Mathlib.Algebra.Group.Action.Pi
+public import Mathlib.Data.Fintype.BigOperators
+public import Mathlib.Data.Fintype.Fin
+public import Mathlib.Logic.Equiv.Fin.Basic
+
+/-!
+# Big operators and `Fin`
+
+Some results about products and sums over the type `Fin`.
+
+The most important results are the induction formulas `Fin.prod_univ_castSucc`
+and `Fin.prod_univ_succ`, and the formula `Fin.prod_const` for the product of a
+constant function. These results have variants for sums instead of products.
+
+## Main declarations
+
+* `finFunctionFinEquiv`: An explicit equivalence between `Fin n → Fin m` and `Fin (m ^ n)`.
+-/
+
+@[expose] public section
+
+assert_not_exists Field
+
+open Finset
+
+variable {ι M : Type*}
+
+namespace Finset
+
+@[to_additive]
+/--
+theorem `prod_range` / 定理 `prod_range`
+
+English:
+theorem prod_range
+  given: [CommMonoid M] {n : Nat} (f : Nat -> M)
+  proof: (Fin.prod_univ_eq_prod_range _ _).symm
+
+中文:
+定理 prod_range
+  条件: [CommMonoid M] {n : 自然数} (f : 自然数 -> M)
+  证明: (Fin.prod_univ_eq_prod_range _ _).symm
+
+Depends on / 依赖: Fin.prod_univ_eq_prod_range, prod_univ_eq_prod_range
+-/
+theorem prod_range [CommMonoid M] {n : Nat} (f : Nat -> M) :
+    ∏ i in Finset.range n, f i = ∏ i : Fin n, f i :=
+  (Fin.prod_univ_eq_prod_range _ _).symm
+
+end Finset
+
+namespace Fin
+
+section CommMonoid
+
+variable [CommMonoid M] {n : Nat}
+
+@[to_additive]
+/--
+theorem `prod_ofFn` / 定理 `prod_ofFn`
+
+English:
+theorem prod_ofFn
+  given: (f : Fin n -> M)
+  statement: (List.ofFn f).prod = ∏ i, f i
+  proof: by
+  simp [prod_eq_multiset_prod]
+
+@[to_additive]
+
+中文:
+定理 prod_ofFn
+  条件: (f : Fin n -> M)
+  结论: (List.ofFn f).prod = ∏ i, f i
+  证明: by
+  simp [prod_eq_multiset_prod]
+
+@[to_additive]
+
+Depends on / 依赖: prod_eq_multiset_prod
+-/
+theorem prod_ofFn (f : Fin n -> M) : (List.ofFn f).prod = ∏ i, f i := by
+  simp [prod_eq_multiset_prod]
+
+@[to_additive]
+/--
+theorem `prod_univ_def` / 定理 `prod_univ_def`
+
+English:
+theorem prod_univ_def
+  given: (f : Fin n -> M)
+  statement: ∏ i, f i = ((List.finRange n).map f).prod
+  proof: by
+  rw [← List.ofFn_eq_map]; rw [prod_ofFn]
+
+中文:
+定理 prod_univ_def
+  条件: (f : Fin n -> M)
+  结论: ∏ i, f i = ((List.finRange n).map f).prod
+  证明: by
+  rw [← List.ofFn_eq_map]; rw [prod_ofFn]
+
+Depends on / 依赖: List.ofFn_eq_map, ofFn_eq_map, prod_ofFn
+-/
+theorem prod_univ_def (f : Fin n -> M) : ∏ i, f i = ((List.finRange n).map f).prod := by
+  rw [← List.ofFn_eq_map]; rw [prod_ofFn]
+
+/-- A product of a function `f : Fin 0 → M` is `1` because `Fin 0` is empty -/
+@[to_additive /-- A sum of a function `f : Fin 0 → M` is `0` because `Fin 0` is empty -/]
+/--
+theorem `prod_univ_zero` / 定理 `prod_univ_zero`
+
+English:
+theorem prod_univ_zero
+  given: (f : Fin 0 -> M)
+  statement: ∏ i, f i = 1
+  proof: rfl
+
+中文:
+定理 prod_univ_zero
+  条件: (f : Fin 0 -> M)
+  结论: ∏ i, f i = 1
+  证明: rfl
+-/
+theorem prod_univ_zero (f : Fin 0 -> M) : ∏ i, f i = 1 :=
+  rfl
+
+/-- A product of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)`
+is the product of `f x`, for some `x : Fin (n + 1)` times the remaining product -/
+@[to_additive /-- A sum of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)` is the sum of
+`f x`, for some `x : Fin (n + 1)` plus the remaining sum -/]
+/--
+theorem `prod_univ_succAbove` / 定理 `prod_univ_succAbove`
+
+English:
+theorem prod_univ_succAbove
+  given: (f : Fin (n + 1) -> M) (x : Fin (n + 1))
+  proof: by
+  rw [univ_succAbove n x]; rw [prod_cons]; rw [Finset.prod_map]; rw [coe_succAboveEmb]
+
+中文:
+定理 prod_univ_succAbove
+  条件: (f : Fin (n + 1) -> M) (x : Fin (n + 1))
+  证明: by
+  rw [univ_succAbove n x]; rw [prod_cons]; rw [Finset.prod_map]; rw [coe_succAboveEmb]
+
+Depends on / 依赖: Finset, Finset.prod_map, coe_succAboveEmb, prod_cons, prod_map, univ_succAbove
+-/
+theorem prod_univ_succAbove (f : Fin (n + 1) -> M) (x : Fin (n + 1)) :
+    ∏ i, f i = f x * ∏ i : Fin n, f (x.succAbove i) := by
+  rw [univ_succAbove n x]; rw [prod_cons]; rw [Finset.prod_map]; rw [coe_succAboveEmb]
+
+/-- A product of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)`
+is the product of `f 0` times the remaining product -/
+@[to_additive /-- A sum of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)` is the sum of
+`f 0` plus the remaining sum -/]
+/--
+theorem `prod_univ_succ` / 定理 `prod_univ_succ`
+
+English:
+theorem prod_univ_succ
+  given: (f : Fin (n + 1) -> M)
+  proof: prod_univ_succAbove f 0
+
+中文:
+定理 prod_univ_succ
+  条件: (f : Fin (n + 1) -> M)
+  证明: prod_univ_succAbove f 0
+
+Depends on / 依赖: prod_univ_succAbove
+-/
+theorem prod_univ_succ (f : Fin (n + 1) -> M) :
+    ∏ i, f i = f 0 * ∏ i : Fin n, f i.succ :=
+  prod_univ_succAbove f 0
+
+/-- A product of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)`
+is the product of `f (Fin.last n)` times the remaining product -/
+@[to_additive /-- A sum of a function `f : Fin (n + 1) → M` over all `Fin (n + 1)` is the sum of
+`f (Fin.last n)` plus the remaining sum -/]
+/--
+theorem `prod_univ_castSucc` / 定理 `prod_univ_castSucc`
+
+English:
+theorem prod_univ_castSucc
+  given: (f : Fin (n + 1) -> M)
+  proof: by
+  simpa [mul_comm] using prod_univ_succAbove f (last n)
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_univ_castSucc
+  条件: (f : Fin (n + 1) -> M)
+  证明: by
+  simpa [mul_comm] using prod_univ_succAbove f (last n)
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: mul_comm, prod_univ_succAbove
+-/
+theorem prod_univ_castSucc (f : Fin (n + 1) -> M) :
+    ∏ i, f i = (∏ i : Fin n, f (Fin.castSucc i)) * f (last n) := by
+  simpa [mul_comm] using prod_univ_succAbove f (last n)
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_univ_getElem` / 定理 `prod_univ_getElem`
+
+English:
+theorem prod_univ_getElem
+  given: (l : List M)
+  statement: ∏ i : Fin l.length, l[i.1] = l.prod
+  proof: by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_univ_getElem
+  条件: (l : List M)
+  结论: ∏ i : Fin l.length, l[i.1] = l.prod
+  证明: by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: Finset, Finset.prod_eq_multiset_prod, prod_eq_multiset_prod
+-/
+theorem prod_univ_getElem (l : List M) : ∏ i : Fin l.length, l[i.1] = l.prod := by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_univ_fun_getElem` / 定理 `prod_univ_fun_getElem`
+
+English:
+theorem prod_univ_fun_getElem
+  given: (l : List ι) (f : ι -> M)
+  proof: by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_univ_fun_getElem
+  条件: (l : List ι) (f : ι -> M)
+  证明: by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: Finset, Finset.prod_eq_multiset_prod, prod_eq_multiset_prod
+-/
+theorem prod_univ_fun_getElem (l : List ι) (f : ι -> M) :
+    ∏ i : Fin l.length, f l[i.1] = (l.map f).prod := by
+  simp [Finset.prod_eq_multiset_prod]
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_cons` / 定理 `prod_cons`
+
+English:
+theorem prod_cons
+  given: (x : M) (f : Fin n -> M)
+  proof: by
+  simp_rw [prod_univ_succ, cons_zero, cons_succ]
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_cons
+  条件: (x : M) (f : Fin n -> M)
+  证明: by
+  simp_rw [prod_univ_succ, cons_zero, cons_succ]
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: cons_succ, cons_zero, prod_univ_succ, simp_rw
+-/
+theorem prod_cons (x : M) (f : Fin n -> M) :
+    (∏ i : Fin n.succ, (cons x f : Fin n.succ -> M) i) = x * ∏ i : Fin n, f i := by
+  simp_rw [prod_univ_succ, cons_zero, cons_succ]
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_snoc` / 定理 `prod_snoc`
+
+English:
+theorem prod_snoc
+  given: (x : M) (f : Fin n -> M)
+  proof: by
+  simp [prod_univ_castSucc]
+
+@[to_additive sum_univ_one]
+
+中文:
+定理 prod_snoc
+  条件: (x : M) (f : Fin n -> M)
+  证明: by
+  simp [prod_univ_castSucc]
+
+@[to_additive sum_univ_one]
+
+Depends on / 依赖: prod_univ_castSucc
+-/
+theorem prod_snoc (x : M) (f : Fin n -> M) :
+    (∏ i : Fin n.succ, (snoc f x : Fin n.succ -> M) i) = (∏ i : Fin n, f i) * x := by
+  simp [prod_univ_castSucc]
+
+@[to_additive sum_univ_one]
+/--
+theorem `prod_univ_one` / 定理 `prod_univ_one`
+
+English:
+theorem prod_univ_one
+  given: (f : Fin 1 -> M)
+  statement: ∏ i, f i = f 0
+  proof: by simp
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_univ_one
+  条件: (f : Fin 1 -> M)
+  结论: ∏ i, f i = f 0
+  证明: by simp
+
+@[to_additive (attr := simp)]
+-/
+theorem prod_univ_one (f : Fin 1 -> M) : ∏ i, f i = f 0 := by simp
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_univ_two` / 定理 `prod_univ_two`
+
+English:
+theorem prod_univ_two
+  given: (f : Fin 2 -> M)
+  statement: ∏ i, f i = f 0 * f 1
+  proof: by
+  simp [prod_univ_succ]
+
+@[to_additive]
+
+中文:
+定理 prod_univ_two
+  条件: (f : Fin 2 -> M)
+  结论: ∏ i, f i = f 0 * f 1
+  证明: by
+  simp [prod_univ_succ]
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_succ
+-/
+theorem prod_univ_two (f : Fin 2 -> M) : ∏ i, f i = f 0 * f 1 := by
+  simp [prod_univ_succ]
+
+@[to_additive]
+/--
+theorem `prod_univ_two'` / 定理 `prod_univ_two'`
+
+English:
+theorem prod_univ_two'
+  given: (f : ι -> M) (a b : ι)
+  statement: ∏ i, f (![a, b] i) = f a * f b
+  proof: prod_univ_two _
+
+@[to_additive]
+
+中文:
+定理 prod_univ_two'
+  条件: (f : ι -> M) (a b : ι)
+  结论: ∏ i, f (![a, b] i) = f a * f b
+  证明: prod_univ_two _
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_two
+-/
+theorem prod_univ_two' (f : ι -> M) (a b : ι) : ∏ i, f (![a, b] i) = f a * f b :=
+  prod_univ_two _
+
+@[to_additive]
+/--
+theorem `prod_univ_three` / 定理 `prod_univ_three`
+
+English:
+theorem prod_univ_three
+  given: (f : Fin 3 -> M)
+  statement: ∏ i, f i = f 0 * f 1 * f 2
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_two]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_three
+  条件: (f : Fin 3 -> M)
+  结论: ∏ i, f i = f 0 * f 1 * f 2
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_two]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_two
+-/
+theorem prod_univ_three (f : Fin 3 -> M) : ∏ i, f i = f 0 * f 1 * f 2 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_two]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_univ_four` / 定理 `prod_univ_four`
+
+English:
+theorem prod_univ_four
+  given: (f : Fin 4 -> M)
+  statement: ∏ i, f i = f 0 * f 1 * f 2 * f 3
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_three]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_four
+  条件: (f : Fin 4 -> M)
+  结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_three]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_three
+-/
+theorem prod_univ_four (f : Fin 4 -> M) : ∏ i, f i = f 0 * f 1 * f 2 * f 3 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_three]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_univ_five` / 定理 `prod_univ_five`
+
+English:
+theorem prod_univ_five
+  given: (f : Fin 5 -> M)
+  statement: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_four]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_five
+  条件: (f : Fin 5 -> M)
+  结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_four]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_four
+-/
+theorem prod_univ_five (f : Fin 5 -> M) : ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_four]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_univ_six` / 定理 `prod_univ_six`
+
+English:
+theorem prod_univ_six
+  given: (f : Fin 6 -> M)
+  statement: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_five]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_six
+  条件: (f : Fin 6 -> M)
+  结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_five]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_five
+-/
+theorem prod_univ_six (f : Fin 6 -> M) : ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_five]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_univ_seven` / 定理 `prod_univ_seven`
+
+English:
+theorem prod_univ_seven
+  given: (f : Fin 7 -> M)
+  statement: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 * f 6
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_six]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_seven
+  条件: (f : Fin 7 -> M)
+  结论: ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 * f 6
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_six]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_six
+-/
+theorem prod_univ_seven (f : Fin 7 -> M) : ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 * f 6 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_six]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_univ_eight` / 定理 `prod_univ_eight`
+
+English:
+theorem prod_univ_eight
+  given: (f : Fin 8 -> M)
+  proof: by
+  rw [prod_univ_castSucc]; rw [prod_univ_seven]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 prod_univ_eight
+  条件: (f : Fin 8 -> M)
+  证明: by
+  rw [prod_univ_castSucc]; rw [prod_univ_seven]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: prod_univ_castSucc, prod_univ_seven
+-/
+theorem prod_univ_eight (f : Fin 8 -> M) :
+    ∏ i, f i = f 0 * f 1 * f 2 * f 3 * f 4 * f 5 * f 6 * f 7 := by
+  rw [prod_univ_castSucc]; rw [prod_univ_seven]
+  rfl
+
+@[to_additive]
+/--
+theorem `prod_const` / 定理 `prod_const`
+
+English:
+theorem prod_const
+  given: (n : Nat) (x : M)
+  statement: ∏ _i : Fin n, x = x ^ n
+  proof: by simp
+
+@[to_additive]
+
+中文:
+定理 prod_const
+  条件: (n : 自然数) (x : M)
+  结论: ∏ _i : Fin n, x = x ^ n
+  证明: by simp
+
+@[to_additive]
+-/
+theorem prod_const (n : Nat) (x : M) : ∏ _i : Fin n, x = x ^ n := by simp
+
+@[to_additive]
+/--
+theorem `prod_congr'` / 定理 `prod_congr'`
+
+English:
+theorem prod_congr'
+  given: {a b : Nat} (f : Fin b -> M) (h : a = b)
+  proof: by
+  subst h
+  congr
+
+@[to_additive]
+
+中文:
+定理 prod_congr'
+  条件: {a b : 自然数} (f : Fin b -> M) (h : a = b)
+  证明: by
+  subst h
+  congr
+
+@[to_additive]
+-/
+theorem prod_congr' {a b : Nat} (f : Fin b -> M) (h : a = b) :
+    (∏ i : Fin a, f (i.cast h)) = ∏ i : Fin b, f i := by
+  subst h
+  congr
+
+@[to_additive]
+/--
+theorem `prod_univ_add` / 定理 `prod_univ_add`
+
+English:
+theorem prod_univ_add
+  given: {a b : Nat} (f : Fin (a + b) -> M)
+  proof: by
+  rw [Fintype.prod_equiv finSumFinEquiv.symm f fun i => f (finSumFinEquiv.toFun i)]
+  · apply Fintype.prod_sum_type
+  · intro x
+    simp only [Equiv.toFun_as_coe, Equiv.apply_symm_apply]
+
+@[to_additive]
+
+中文:
+定理 prod_univ_add
+  条件: {a b : 自然数} (f : Fin (a + b) -> M)
+  证明: by
+  rw [Fintype.prod_equiv finSumFinEquiv.symm f fun i => f (finSumFinEquiv.toFun i)]
+  · apply Fintype.prod_sum_type
+  · intro x
+    simp only [Equiv.toFun_as_coe, Equiv.apply_symm_apply]
+
+@[to_additive]
+
+Depends on / 依赖: Equiv.apply_symm_apply, Equiv.toFun_as_coe, Fintype, Fintype.prod_equiv, Fintype.prod_sum_type, apply_symm_apply, finSumFinEquiv, finSumFinEquiv.symm, finSumFinEquiv.toFun, prod_equiv, prod_sum_type, toFun_as_coe
+-/
+theorem prod_univ_add {a b : Nat} (f : Fin (a + b) -> M) :
+    (∏ i : Fin (a + b), f i) = (∏ i : Fin a, f (castAdd b i)) * ∏ i : Fin b, f (natAdd a i) := by
+  rw [Fintype.prod_equiv finSumFinEquiv.symm f fun i => f (finSumFinEquiv.toFun i)]
+  · apply Fintype.prod_sum_type
+  · intro x
+    simp only [Equiv.toFun_as_coe, Equiv.apply_symm_apply]
+
+@[to_additive]
+/--
+theorem `prod_trunc` / 定理 `prod_trunc`
+
+English:
+theorem prod_trunc
+  given: {a b : Nat} (f : Fin (a + b) -> M) (hf : forall j : Fin b, f (natAdd a j) = 1)
+  proof: by
+  rw [prod_univ_add]; rw [Fintype.prod_eq_one _ hf]; rw [mul_one]
+
+@[to_additive]
+
+中文:
+定理 prod_trunc
+  条件: {a b : 自然数} (f : Fin (a + b) -> M) (hf : 对任意 j : Fin b, f (natAdd a j) = 1)
+  证明: by
+  rw [prod_univ_add]; rw [Fintype.prod_eq_one _ hf]; rw [mul_one]
+
+@[to_additive]
+
+Depends on / 依赖: Fintype, Fintype.prod_eq_one, mul_one, prod_eq_one, prod_univ_add
+-/
+theorem prod_trunc {a b : Nat} (f : Fin (a + b) -> M) (hf : forall j : Fin b, f (natAdd a j) = 1) :
+    (∏ i : Fin (a + b), f i) = ∏ i : Fin a, f (castAdd b i) := by
+  rw [prod_univ_add]; rw [Fintype.prod_eq_one _ hf]; rw [mul_one]
+
+@[to_additive]
+/--
+lemma `prod_insertNth_go` / 引理 `prod_insertNth_go`
+
+English:
+lemma prod_insertNth_go
+  proof: exists_cons p
+    have i_lt := Nat.lt_of_succ_lt_succ h
+    let i_fin : Fin (n + 1) := ⟨i, i_lt⟩
+    rw [show ⟨i + 1]; rw [h⟩ = i_fin.succ from rfl]
+    simp only [insertNth_succ_cons, prod_cons]
+    rw [prod_insertNth_go n i i_lt x tl]; rw [mul_left_comm]
+
+@[to_additive (attr := simp)]
+
+中文:
+引理 prod_insertNth_go
+  证明: exists_cons p
+    have i_lt := Nat.lt_of_succ_lt_succ h
+    let i_fin : Fin (n + 1) := ⟨i, i_lt⟩
+    rw [show ⟨i + 1]; rw [h⟩ = i_fin.succ from rfl]
+    simp only [insertNth_succ_cons, prod_cons]
+    rw [prod_insertNth_go n i i_lt x tl]; rw [mul_left_comm]
+
+@[to_additive (attr := simp)]
+-/
+private lemma prod_insertNth_go :
+    forall n i (h : i < n + 1) x (p : Fin n -> M), ∏ j, insertNth ⟨i, h⟩ x p j = x * ∏ j, p j
+  | n, 0, h, x, p => by simp
+  | 0, i, h, x, p => by simp [fin_one_eq_zero ⟨i, h⟩]
+  | n + 1, i + 1, h, x, p => by
+    obtain ⟨hd, tl, rfl⟩ := exists_cons p
+    have i_lt := Nat.lt_of_succ_lt_succ h
+    let i_fin : Fin (n + 1) := ⟨i, i_lt⟩
+    rw [show ⟨i + 1]; rw [h⟩ = i_fin.succ from rfl]
+    simp only [insertNth_succ_cons, prod_cons]
+    rw [prod_insertNth_go n i i_lt x tl]; rw [mul_left_comm]
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_insertNth` / 定理 `prod_insertNth`
+
+English:
+theorem prod_insertNth
+  given: i x (p : Fin n -> M)
+  statement: ∏ j, insertNth i x p j = x * ∏ j, p j
+  proof: prod_insertNth_go n i.val i.isLt x p
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_insertNth
+  条件: i x (p : Fin n -> M)
+  结论: ∏ j, insertNth i x p j = x * ∏ j, p j
+  证明: prod_insertNth_go n i.val i.isLt x p
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: i.isLt, i.val, prod_insertNth_go
+-/
+theorem prod_insertNth i x (p : Fin n -> M) : ∏ j, insertNth i x p j = x * ∏ j, p j :=
+  prod_insertNth_go n i.val i.isLt x p
+
+@[to_additive (attr := simp)]
+/--
+theorem `mul_prod_removeNth` / 定理 `mul_prod_removeNth`
+
+English:
+theorem mul_prod_removeNth
+  given: i (f : Fin (n + 1) -> M)
+  statement: f i * ∏ j, removeNth i f j = ∏ j, f j
+  proof: by
+  rw [← prod_insertNth]; rw [insertNth_self_removeNth]
+
+中文:
+定理 mul_prod_removeNth
+  条件: i (f : Fin (n + 1) -> M)
+  结论: f i * ∏ j, removeNth i f j = ∏ j, f j
+  证明: by
+  rw [← prod_insertNth]; rw [insertNth_self_removeNth]
+
+Depends on / 依赖: insertNth_self_removeNth, prod_insertNth
+-/
+theorem mul_prod_removeNth i (f : Fin (n + 1) -> M) : f i * ∏ j, removeNth i f j = ∏ j, f j := by
+  rw [← prod_insertNth]; rw [insertNth_self_removeNth]
+
+/-!
+### Products over intervals: `Fin.cast`
+-/
+
+section cast
+
+variable {m : Nat}
+
+@[to_additive]
+/--
+theorem `prod_Icc_cast` / 定理 `prod_Icc_cast`
+
+English:
+theorem prod_Icc_cast
+  given: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_finCongr_Icc]
+
+@[to_additive]
+
+中文:
+定理 prod_Icc_cast
+  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_finCongr_Icc]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Icc
+-/
+theorem prod_Icc_cast (h : n = m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Icc (a.cast h) (b.cast h), f i = ∏ i in Icc a b, f (i.cast h) := by
+  simp [← map_finCongr_Icc]
+
+@[to_additive]
+/--
+theorem `prod_Ico_cast` / 定理 `prod_Ico_cast`
+
+English:
+theorem prod_Ico_cast
+  given: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_finCongr_Ico]
+
+@[to_additive]
+
+中文:
+定理 prod_Ico_cast
+  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_finCongr_Ico]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Ico
+-/
+theorem prod_Ico_cast (h : n = m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ico (a.cast h) (b.cast h), f i = ∏ i in Ico a b, f (i.cast h) := by
+  simp [← map_finCongr_Ico]
+
+@[to_additive]
+/--
+theorem `prod_Ioc_cast` / 定理 `prod_Ioc_cast`
+
+English:
+theorem prod_Ioc_cast
+  given: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_finCongr_Ioc]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioc_cast
+  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_finCongr_Ioc]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Ioc
+-/
+theorem prod_Ioc_cast (h : n = m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ioc (a.cast h) (b.cast h), f i = ∏ i in Ioc a b, f (i.cast h) := by
+  simp [← map_finCongr_Ioc]
+
+@[to_additive]
+/--
+theorem `prod_Ioo_cast` / 定理 `prod_Ioo_cast`
+
+English:
+theorem prod_Ioo_cast
+  given: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_finCongr_Ioo]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioo_cast
+  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_finCongr_Ioo]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Ioo
+-/
+theorem prod_Ioo_cast (h : n = m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ioo (a.cast h) (b.cast h), f i = ∏ i in Ioo a b, f (i.cast h) := by
+  simp [← map_finCongr_Ioo]
+
+@[to_additive]
+/--
+theorem `prod_uIcc_cast` / 定理 `prod_uIcc_cast`
+
+English:
+theorem prod_uIcc_cast
+  given: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_finCongr_uIcc]
+
+@[to_additive]
+
+中文:
+定理 prod_uIcc_cast
+  条件: (h : n = m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_finCongr_uIcc]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_uIcc
+-/
+theorem prod_uIcc_cast (h : n = m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in uIcc (a.cast h) (b.cast h), f i = ∏ i in uIcc a b, f (i.cast h) := by
+  simp [← map_finCongr_uIcc]
+
+@[to_additive]
+/--
+theorem `prod_Ici_cast` / 定理 `prod_Ici_cast`
+
+English:
+theorem prod_Ici_cast
+  given: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_finCongr_Ici]
+
+@[to_additive]
+
+中文:
+定理 prod_Ici_cast
+  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_finCongr_Ici]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Ici
+-/
+theorem prod_Ici_cast (h : n = m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i >= a.cast h, f i = ∏ i >= a, f (i.cast h) := by
+  simp [← map_finCongr_Ici]
+
+@[to_additive]
+/--
+theorem `prod_Ioi_cast` / 定理 `prod_Ioi_cast`
+
+English:
+theorem prod_Ioi_cast
+  given: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_finCongr_Ioi]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioi_cast
+  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_finCongr_Ioi]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Ioi
+-/
+theorem prod_Ioi_cast (h : n = m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i > a.cast h, f i = ∏ i > a, f (i.cast h) := by
+  simp [← map_finCongr_Ioi]
+
+@[to_additive]
+/--
+theorem `prod_Iic_cast` / 定理 `prod_Iic_cast`
+
+English:
+theorem prod_Iic_cast
+  given: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_finCongr_Iic]
+
+@[to_additive]
+
+中文:
+定理 prod_Iic_cast
+  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_finCongr_Iic]
+
+@[to_additive]
+
+Depends on / 依赖: map_finCongr_Iic
+-/
+theorem prod_Iic_cast (h : n = m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i <= a.cast h, f i = ∏ i <= a, f (i.cast h) := by
+  simp [← map_finCongr_Iic]
+
+@[to_additive]
+/--
+theorem `prod_Iio_cast` / 定理 `prod_Iio_cast`
+
+English:
+theorem prod_Iio_cast
+  given: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_finCongr_Iio]
+
+中文:
+定理 prod_Iio_cast
+  条件: (h : n = m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_finCongr_Iio]
+
+Depends on / 依赖: map_finCongr_Iio
+-/
+theorem prod_Iio_cast (h : n = m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i < a.cast h, f i = ∏ i < a, f (i.cast h) := by
+  simp [← map_finCongr_Iio]
+
+end cast
+
+/-!
+### Products over intervals: `Fin.castLE`
+-/
+
+section castLE
+
+variable {m : Nat}
+
+@[to_additive]
+/--
+theorem `prod_Icc_castLE` / 定理 `prod_Icc_castLE`
+
+English:
+theorem prod_Icc_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Icc]
+
+@[to_additive]
+
+中文:
+定理 prod_Icc_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Icc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_Icc
+-/
+theorem prod_Icc_castLE (h : n <= m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Icc (a.castLE h) (b.castLE h), f i = ∏ i in Icc a b, f (i.castLE h) := by
+  simp [← map_castLEEmb_Icc]
+
+@[to_additive]
+/--
+theorem `prod_Ico_castLE` / 定理 `prod_Ico_castLE`
+
+English:
+theorem prod_Ico_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Ico]
+
+@[to_additive]
+
+中文:
+定理 prod_Ico_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Ico]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_Ico
+-/
+theorem prod_Ico_castLE (h : n <= m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ico (a.castLE h) (b.castLE h), f i = ∏ i in Ico a b, f (i.castLE h) := by
+  simp [← map_castLEEmb_Ico]
+
+@[to_additive]
+/--
+theorem `prod_Ioc_castLE` / 定理 `prod_Ioc_castLE`
+
+English:
+theorem prod_Ioc_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Ioc]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioc_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Ioc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_Ioc
+-/
+theorem prod_Ioc_castLE (h : n <= m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ioc (a.castLE h) (b.castLE h), f i = ∏ i in Ioc a b, f (i.castLE h) := by
+  simp [← map_castLEEmb_Ioc]
+
+@[to_additive]
+/--
+theorem `prod_Ioo_castLE` / 定理 `prod_Ioo_castLE`
+
+English:
+theorem prod_Ioo_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Ioo]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioo_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Ioo]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_Ioo
+-/
+theorem prod_Ioo_castLE (h : n <= m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in Ioo (a.castLE h) (b.castLE h), f i = ∏ i in Ioo a b, f (i.castLE h) := by
+  simp [← map_castLEEmb_Ioo]
+
+@[to_additive]
+/--
+theorem `prod_uIcc_castLE` / 定理 `prod_uIcc_castLE`
+
+English:
+theorem prod_uIcc_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castLEEmb_uIcc]
+
+@[to_additive]
+
+中文:
+定理 prod_uIcc_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castLEEmb_uIcc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_uIcc
+-/
+theorem prod_uIcc_castLE (h : n <= m) (f : Fin m -> M) (a b : Fin n) :
+    ∏ i in uIcc (a.castLE h) (b.castLE h), f i = ∏ i in uIcc a b, f (i.castLE h) := by
+  simp [← map_castLEEmb_uIcc]
+
+@[to_additive]
+/--
+theorem `prod_Iic_castLE` / 定理 `prod_Iic_castLE`
+
+English:
+theorem prod_Iic_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Iic]
+
+@[to_additive]
+
+中文:
+定理 prod_Iic_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Iic]
+
+@[to_additive]
+
+Depends on / 依赖: map_castLEEmb_Iic
+-/
+theorem prod_Iic_castLE (h : n <= m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i <= a.castLE h, f i = ∏ i <= a, f (i.castLE h) := by
+  simp [← map_castLEEmb_Iic]
+
+@[to_additive]
+/--
+theorem `prod_Iio_castLE` / 定理 `prod_Iio_castLE`
+
+English:
+theorem prod_Iio_castLE
+  given: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  proof: by
+  simp [← map_castLEEmb_Iio]
+
+中文:
+定理 prod_Iio_castLE
+  条件: (h : n <= m) (f : Fin m -> M) (a : Fin n)
+  证明: by
+  simp [← map_castLEEmb_Iio]
+
+Depends on / 依赖: map_castLEEmb_Iio
+-/
+theorem prod_Iio_castLE (h : n <= m) (f : Fin m -> M) (a : Fin n) :
+    ∏ i < a.castLE h, f i = ∏ i < a, f (i.castLE h) := by
+  simp [← map_castLEEmb_Iio]
+
+end castLE
+
+/-!
+### Products over intervals: `Fin.castAdd`
+-/
+
+section castAdd
+
+@[to_additive]
+/--
+theorem `prod_Icc_castAdd` / 定理 `prod_Icc_castAdd`
+
+English:
+theorem prod_Icc_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Icc]
+
+@[to_additive]
+
+中文:
+定理 prod_Icc_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Icc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_Icc
+-/
+theorem prod_Icc_castAdd (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n) :
+    ∏ i in Icc (a.castAdd m) (b.castAdd m), f i = ∏ i in Icc a b, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Icc]
+
+@[to_additive]
+/--
+theorem `prod_Ico_castAdd` / 定理 `prod_Ico_castAdd`
+
+English:
+theorem prod_Ico_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Ico]
+
+@[to_additive]
+
+中文:
+定理 prod_Ico_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Ico]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_Ico
+-/
+theorem prod_Ico_castAdd (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n) :
+    ∏ i in Ico (a.castAdd m) (b.castAdd m), f i = ∏ i in Ico a b, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Ico]
+
+@[to_additive]
+/--
+theorem `prod_Ioc_castAdd` / 定理 `prod_Ioc_castAdd`
+
+English:
+theorem prod_Ioc_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Ioc]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioc_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Ioc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_Ioc
+-/
+theorem prod_Ioc_castAdd (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n) :
+    ∏ i in Ioc (a.castAdd m) (b.castAdd m), f i = ∏ i in Ioc a b, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Ioc]
+
+@[to_additive]
+/--
+theorem `prod_Ioo_castAdd` / 定理 `prod_Ioo_castAdd`
+
+English:
+theorem prod_Ioo_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Ioo]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioo_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Ioo]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_Ioo
+-/
+theorem prod_Ioo_castAdd (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n) :
+    ∏ i in Ioo (a.castAdd m) (b.castAdd m), f i = ∏ i in Ioo a b, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Ioo]
+
+@[to_additive]
+/--
+theorem `prod_uIcc_castAdd` / 定理 `prod_uIcc_castAdd`
+
+English:
+theorem prod_uIcc_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castAddEmb_uIcc]
+
+@[to_additive]
+
+中文:
+定理 prod_uIcc_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castAddEmb_uIcc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_uIcc
+-/
+theorem prod_uIcc_castAdd (m : Nat) (f : Fin (n + m) -> M) (a b : Fin n) :
+    ∏ i in uIcc (a.castAdd m) (b.castAdd m), f i = ∏ i in uIcc a b, f (i.castAdd m) := by
+  simp [← map_castAddEmb_uIcc]
+
+@[to_additive]
+/--
+theorem `prod_Iic_castAdd` / 定理 `prod_Iic_castAdd`
+
+English:
+theorem prod_Iic_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Iic]
+
+@[to_additive]
+
+中文:
+定理 prod_Iic_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Iic]
+
+@[to_additive]
+
+Depends on / 依赖: map_castAddEmb_Iic
+-/
+theorem prod_Iic_castAdd (m : Nat) (f : Fin (n + m) -> M) (a : Fin n) :
+    ∏ i <= a.castAdd m, f i = ∏ i <= a, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Iic]
+
+@[to_additive]
+/--
+theorem `prod_Iio_castAdd` / 定理 `prod_Iio_castAdd`
+
+English:
+theorem prod_Iio_castAdd
+  given: (m : Nat) (f : Fin (n + m) -> M) (a : Fin n)
+  proof: by
+  simp [← map_castAddEmb_Iio]
+
+中文:
+定理 prod_Iio_castAdd
+  条件: (m : 自然数) (f : Fin (n + m) -> M) (a : Fin n)
+  证明: by
+  simp [← map_castAddEmb_Iio]
+
+Depends on / 依赖: map_castAddEmb_Iio
+-/
+theorem prod_Iio_castAdd (m : Nat) (f : Fin (n + m) -> M) (a : Fin n) :
+    ∏ i < a.castAdd m, f i = ∏ i < a, f (i.castAdd m) := by
+  simp [← map_castAddEmb_Iio]
+
+end castAdd
+
+/-!
+### Products over intervals: `Fin.castSucc`
+-/
+
+section castSucc
+
+@[to_additive]
+/--
+theorem `prod_Icc_castSucc` / 定理 `prod_Icc_castSucc`
+
+English:
+theorem prod_Icc_castSucc
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Icc]
+
+@[to_additive]
+
+中文:
+定理 prod_Icc_castSucc
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Icc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_Icc
+-/
+theorem prod_Icc_castSucc (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Icc a.castSucc b.castSucc, f i = ∏ i in Icc a b, f i.castSucc := by
+  simp [← map_castSuccEmb_Icc]
+
+@[to_additive]
+/--
+theorem `prod_Ico_castSucc` / 定理 `prod_Ico_castSucc`
+
+English:
+theorem prod_Ico_castSucc
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Ico]
+
+@[to_additive]
+
+中文:
+定理 prod_Ico_castSucc
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Ico]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_Ico
+-/
+theorem prod_Ico_castSucc (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ico a.castSucc b.castSucc, f i = ∏ i in Ico a b, f i.castSucc := by
+  simp [← map_castSuccEmb_Ico]
+
+@[to_additive]
+/--
+theorem `prod_Ioc_castSucc` / 定理 `prod_Ioc_castSucc`
+
+English:
+theorem prod_Ioc_castSucc
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Ioc]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioc_castSucc
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Ioc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_Ioc
+-/
+theorem prod_Ioc_castSucc (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ioc a.castSucc b.castSucc, f i = ∏ i in Ioc a b, f i.castSucc := by
+  simp [← map_castSuccEmb_Ioc]
+
+@[to_additive]
+/--
+theorem `prod_Ioo_castSucc` / 定理 `prod_Ioo_castSucc`
+
+English:
+theorem prod_Ioo_castSucc
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Ioo]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioo_castSucc
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Ioo]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_Ioo
+-/
+theorem prod_Ioo_castSucc (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ioo a.castSucc b.castSucc, f i = ∏ i in Ioo a b, f i.castSucc := by
+  simp [← map_castSuccEmb_Ioo]
+
+@[to_additive]
+/--
+theorem `prod_uIcc_castSucc` / 定理 `prod_uIcc_castSucc`
+
+English:
+theorem prod_uIcc_castSucc
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_uIcc]
+
+@[to_additive]
+
+中文:
+定理 prod_uIcc_castSucc
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_uIcc]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_uIcc
+-/
+theorem prod_uIcc_castSucc (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in uIcc a.castSucc b.castSucc, f i = ∏ i in uIcc a b, f i.castSucc := by
+  simp [← map_castSuccEmb_uIcc]
+
+@[to_additive]
+/--
+theorem `prod_Iic_castSucc` / 定理 `prod_Iic_castSucc`
+
+English:
+theorem prod_Iic_castSucc
+  given: (f : Fin (n + 1) -> M) (a : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Iic]
+
+@[to_additive]
+
+中文:
+定理 prod_Iic_castSucc
+  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Iic]
+
+@[to_additive]
+
+Depends on / 依赖: map_castSuccEmb_Iic
+-/
+theorem prod_Iic_castSucc (f : Fin (n + 1) -> M) (a : Fin n) :
+    ∏ i <= a.castSucc, f i = ∏ i <= a, f i.castSucc := by
+  simp [← map_castSuccEmb_Iic]
+
+@[to_additive]
+/--
+theorem `prod_Iio_castSucc` / 定理 `prod_Iio_castSucc`
+
+English:
+theorem prod_Iio_castSucc
+  given: (f : Fin (n + 1) -> M) (a : Fin n)
+  proof: by
+  simp [← map_castSuccEmb_Iio]
+
+中文:
+定理 prod_Iio_castSucc
+  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  证明: by
+  simp [← map_castSuccEmb_Iio]
+
+Depends on / 依赖: map_castSuccEmb_Iio
+-/
+theorem prod_Iio_castSucc (f : Fin (n + 1) -> M) (a : Fin n) :
+    ∏ i < a.castSucc, f i = ∏ i < a, f i.castSucc := by
+  simp [← map_castSuccEmb_Iio]
+
+end castSucc
+
+/-!
+### Products over intervals: `Fin.succ`
+-/
+
+section succ
+
+@[to_additive]
+/--
+theorem `prod_Icc_succ` / 定理 `prod_Icc_succ`
+
+English:
+theorem prod_Icc_succ
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_succEmb_Icc]
+
+@[to_additive]
+
+中文:
+定理 prod_Icc_succ
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_succEmb_Icc]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_Icc
+-/
+theorem prod_Icc_succ (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Icc a.succ b.succ, f i = ∏ i in Icc a b, f i.succ := by
+  simp [← map_succEmb_Icc]
+
+@[to_additive]
+/--
+theorem `prod_Ico_succ` / 定理 `prod_Ico_succ`
+
+English:
+theorem prod_Ico_succ
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_succEmb_Ico]
+
+@[to_additive]
+
+中文:
+定理 prod_Ico_succ
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_succEmb_Ico]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_Ico
+-/
+theorem prod_Ico_succ (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ico a.succ b.succ, f i = ∏ i in Ico a b, f i.succ := by
+  simp [← map_succEmb_Ico]
+
+@[to_additive]
+/--
+theorem `prod_Ioc_succ` / 定理 `prod_Ioc_succ`
+
+English:
+theorem prod_Ioc_succ
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_succEmb_Ioc]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioc_succ
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_succEmb_Ioc]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_Ioc
+-/
+theorem prod_Ioc_succ (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ioc a.succ b.succ, f i = ∏ i in Ioc a b, f i.succ := by
+  simp [← map_succEmb_Ioc]
+
+@[to_additive]
+/--
+theorem `prod_Ioo_succ` / 定理 `prod_Ioo_succ`
+
+English:
+theorem prod_Ioo_succ
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_succEmb_Ioo]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioo_succ
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_succEmb_Ioo]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_Ioo
+-/
+theorem prod_Ioo_succ (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in Ioo a.succ b.succ, f i = ∏ i in Ioo a b, f i.succ := by
+  simp [← map_succEmb_Ioo]
+
+@[to_additive]
+/--
+theorem `prod_uIcc_succ` / 定理 `prod_uIcc_succ`
+
+English:
+theorem prod_uIcc_succ
+  given: (f : Fin (n + 1) -> M) (a b : Fin n)
+  proof: by
+  simp [← map_succEmb_uIcc]
+
+@[to_additive]
+
+中文:
+定理 prod_uIcc_succ
+  条件: (f : Fin (n + 1) -> M) (a b : Fin n)
+  证明: by
+  simp [← map_succEmb_uIcc]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_uIcc
+-/
+theorem prod_uIcc_succ (f : Fin (n + 1) -> M) (a b : Fin n) :
+    ∏ i in uIcc a.succ b.succ, f i = ∏ i in uIcc a b, f i.succ := by
+  simp [← map_succEmb_uIcc]
+
+@[to_additive]
+/--
+theorem `prod_Ici_succ` / 定理 `prod_Ici_succ`
+
+English:
+theorem prod_Ici_succ
+  given: (f : Fin (n + 1) -> M) (a : Fin n)
+  proof: by
+  simp [← map_succEmb_Ici]
+
+@[to_additive (attr := simp)]
+
+中文:
+定理 prod_Ici_succ
+  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  证明: by
+  simp [← map_succEmb_Ici]
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: map_succEmb_Ici
+-/
+theorem prod_Ici_succ (f : Fin (n + 1) -> M) (a : Fin n) :
+    ∏ i >= a.succ, f i = ∏ i >= a, f i.succ := by
+  simp [← map_succEmb_Ici]
+
+@[to_additive (attr := simp)]
+/--
+theorem `prod_Ioi_succ` / 定理 `prod_Ioi_succ`
+
+English:
+theorem prod_Ioi_succ
+  given: (f : Fin (n + 1) -> M) (a : Fin n)
+  proof: by
+  simp [← map_succEmb_Ioi]
+
+@[to_additive]
+
+中文:
+定理 prod_Ioi_succ
+  条件: (f : Fin (n + 1) -> M) (a : Fin n)
+  证明: by
+  simp [← map_succEmb_Ioi]
+
+@[to_additive]
+
+Depends on / 依赖: map_succEmb_Ioi
+-/
+theorem prod_Ioi_succ (f : Fin (n + 1) -> M) (a : Fin n) :
+    ∏ i > a.succ, f i = ∏ i > a, f i.succ := by
+  simp [← map_succEmb_Ioi]
+
+@[to_additive]
+/--
+theorem `prod_Ioi_zero` / 定理 `prod_Ioi_zero`
+
+English:
+theorem prod_Ioi_zero
+  given: (f : Fin (n + 1) -> M)
+  proof: by
+  simp [Ioi_zero_eq_map]
+
+中文:
+定理 prod_Ioi_zero
+  条件: (f : Fin (n + 1) -> M)
+  证明: by
+  simp [Ioi_zero_eq_map]
+
+Depends on / 依赖: Ioi_zero_eq_map
+-/
+theorem prod_Ioi_zero (f : Fin (n + 1) -> M) :
+    ∏ i > 0, f i = ∏ j : Fin n, f j.succ := by
+  simp [Ioi_zero_eq_map]
+
+end succ
+
+/-- The product of `g i j` over `i j : Fin (n + 1)`, `i ≠ j`,
+is equal to the product of `g i j * g j i` over `i < j`.
+
+The additive version of this lemma is useful for some proofs about differential forms.
+In this application, the function has the signature `f : Fin (n + 1) → Fin n → M`,
+where `f i j` means `g i (Fin.succAbove i j)` in the informal statements.
+
+Similarly, the product of `g i j * g j i` over `i < j`
+is written as `f (Fin.castSucc i) j * f (Fin.succ j) i` over `i j : Fin n`, `j ≥ i`.
+-/
+@[to_additive /-- The sum of `g i j` over `i j : Fin (n + 1)`, `i ≠ j`,
+is equal to the sum of `g i j + g j i` over `i < j`.
+
+This lemma is useful for some proofs about differential forms.
+In this application, the function has the signature `f : Fin (n + 1) → Fin n → M`,
+where `f i j` means `g i (Fin.succAbove i j)` in the informal statements.
+
+Similarly, the sum of `g i j + g j i` over `i < j`
+is written as `f (Fin.castSucc i) j + f (Fin.succ j) i` over `i j : Fin n`, `j ≥ i`.
+-/]
+/--
+theorem `prod_prod_eq_prod_triangle_mul` / 定理 `prod_prod_eq_prod_triangle_mul`
+
+English:
+theorem prod_prod_eq_prod_triangle_mul
+  given: (f : Fin (n + 1) -> Fin n -> M)
+  proof: calc
+  _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
+    simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j <= i, f i.succ j := by
+    rw [Fin.prod_univ_castSucc]; rw [Fin.p
+
+中文:
+定理 prod_prod_eq_prod_triangle_mul
+  条件: (f : Fin (n + 1) -> Fin n -> M)
+  证明: calc
+  _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
+    simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j <= i, f i.succ j := by
+    rw [Fin.prod_univ_castSucc]; rw [Fin.p
+-/
+theorem prod_prod_eq_prod_triangle_mul (f : Fin (n + 1) -> Fin n -> M) :
+    ∏ i, ∏ j, f i j = ∏ i : Fin n, ∏ j >= i, (f i.castSucc j * f j.succ i) := calc
+  _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
+    simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j <= i, f i.succ j := by
+    rw [Fin.prod_univ_castSucc]; rw [Fin.prod_univ_succ]
+    simp [Finset.filter_le_eq_Ici, Finset.filter_ge_eq_Iic]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j >= i, f j.succ i := by
+    congr 1
+    apply Finset.prod_comm'
+    simp
+  _ = ∏ i : Fin n, ∏ j >= i, (f i.castSucc j * f j.succ i) := by
+    simp only [Finset.prod_mul_distrib]
+
+end CommMonoid
+
+/--
+theorem `sum_pow_mul_eq_add_pow` / 定理 `sum_pow_mul_eq_add_pow`
+
+English:
+theorem sum_pow_mul_eq_add_pow
+  given: {n : Nat} {R : Type*} [CommSemiring R] (a b : R)
+  proof: by
+  simpa using Fintype.sum_pow_mul_eq_add_pow (Fin n) a b
+
+中文:
+定理 sum_pow_mul_eq_add_pow
+  条件: {n : 自然数} {R : 类型} [CommSemiring R] (a b : R)
+  证明: by
+  simpa using Fintype.sum_pow_mul_eq_add_pow (Fin n) a b
+
+Depends on / 依赖: Fintype, Fintype.sum_pow_mul_eq_add_pow, sum_pow_mul_eq_add_pow
+-/
+theorem sum_pow_mul_eq_add_pow {n : Nat} {R : Type*} [CommSemiring R] (a b : R) :
+    (∑ s : Finset (Fin n), a ^ s.card * b ^ (n - s.card)) = (a + b) ^ n := by
+  simpa using Fintype.sum_pow_mul_eq_add_pow (Fin n) a b
+
+/--
+lemma `sum_neg_one_pow` / 引理 `sum_neg_one_pow`
+
+English:
+lemma sum_neg_one_pow
+  given: (R : Type*) [Ring R] (m : Nat)
+  proof: by
+  induction m with
+  | zero => simp
+  | succ n IH =>
+    simp only [Fin.sum_univ_castSucc, Fin.val_castSucc, IH, Fin.val_last, Nat.even_add_one, ite_not]
+    split_ifs with h
+    · simp [*]
+    · simp [(Nat.not_even_iff_odd.mp h).neg_pow]
+
+中文:
+引理 sum_neg_one_pow
+  条件: (R : 类型) [Ring R] (m : 自然数)
+  证明: by
+  induction m with
+  | zero => simp
+  | succ n IH =>
+    simp only [Fin.sum_univ_castSucc, Fin.val_castSucc, IH, Fin.val_last, Nat.even_add_one, ite_not]
+    split_ifs with h
+    · simp [*]
+    · simp [(Nat.not_even_iff_odd.mp h).neg_pow]
+
+Depends on / 依赖: Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last, Nat.even_add_one, Nat.not_even_iff_odd.mp, even_add_one, ite_not, neg_pow, not_even_iff_odd, split_ifs, sum_univ_castSucc, val_castSucc, val_last
+-/
+lemma sum_neg_one_pow (R : Type*) [Ring R] (m : Nat) :
+    (∑ n : Fin m, (-1) ^ n.1 : R) = if Even m then 0 else 1 := by
+  induction m with
+  | zero => simp
+  | succ n IH =>
+    simp only [Fin.sum_univ_castSucc, Fin.val_castSucc, IH, Fin.val_last, Nat.even_add_one, ite_not]
+    split_ifs with h
+    · simp [*]
+    · simp [(Nat.not_even_iff_odd.mp h).neg_pow]
+
+section PartialProd
+
+variable [Monoid M] {n : Nat}
+
+/-- For `f = (a₁, ..., aₙ)` in `αⁿ`, `partialProd f` is `(1, a₁, a₁a₂, ..., a₁...aₙ)` in `αⁿ⁺¹`. -/
+@[to_additive /-- For `f = (a₁, ..., aₙ)` in `αⁿ`, `partialSum f` is
+`(0, a₁, a₁ + a₂, ..., a₁ + ... + aₙ)` in `αⁿ⁺¹`. -/]
+/--
+Definition of `partialProd` / `partialProd` 的定义
+
+English:
+definition partialProd
+  signature: (f : Fin n -> M) (i : Fin (n + 1))
+  body: ((List.ofFn f).take i).prod
+
+@[to_additive (attr := simp)]
+
+中文:
+定义 partialProd
+  签名: (f : Fin n -> M) (i : Fin (n + 1))
+  定义体: ((List.ofFn f).take i).prod
+
+@[to_additive (attr := simp)]
+
+Depends on / 依赖: List.ofFn
+-/
+def partialProd (f : Fin n -> M) (i : Fin (n + 1)) : M :=
+  ((List.ofFn f).take i).prod
+
+@[to_additive (attr := simp)]
+/--
+theorem `partialProd_zero` / 定理 `partialProd_zero`
+
+English:
+theorem partialProd_zero
+  given: (f : Fin n -> M)
+  statement: partialProd f 0 = 1
+  proof: by simp [partialProd]
+
+@[to_additive]
+
+中文:
+定理 partialProd_zero
+  条件: (f : Fin n -> M)
+  结论: partialProd f 0 = 1
+  证明: by simp [partialProd]
+
+@[to_additive]
+
+Depends on / 依赖: partialProd
+-/
+theorem partialProd_zero (f : Fin n -> M) : partialProd f 0 = 1 := by simp [partialProd]
+
+@[to_additive]
+/--
+theorem `partialProd_succ` / 定理 `partialProd_succ`
+
+English:
+theorem partialProd_succ
+  given: (f : Fin n -> M) (j : Fin n)
+  proof: by
+  simp [partialProd, List.take_add_one]
+
+@[to_additive]
+
+中文:
+定理 partialProd_succ
+  条件: (f : Fin n -> M) (j : Fin n)
+  证明: by
+  simp [partialProd, List.take_add_one]
+
+@[to_additive]
+
+Depends on / 依赖: List.take_add_one, partialProd, take_add_one
+-/
+theorem partialProd_succ (f : Fin n -> M) (j : Fin n) :
+    partialProd f j.succ = partialProd f (Fin.castSucc j) * f j := by
+  simp [partialProd, List.take_add_one]
+
+@[to_additive]
+/--
+theorem `partialProd_succ'` / 定理 `partialProd_succ'`
+
+English:
+theorem partialProd_succ'
+  given: (f : Fin (n + 1) -> M) (j : Fin (n + 1))
+  proof: by
+  simp [partialProd]
+  rfl
+
+@[to_additive]
+
+中文:
+定理 partialProd_succ'
+  条件: (f : Fin (n + 1) -> M) (j : Fin (n + 1))
+  证明: by
+  simp [partialProd]
+  rfl
+
+@[to_additive]
+
+Depends on / 依赖: partialProd
+-/
+theorem partialProd_succ' (f : Fin (n + 1) -> M) (j : Fin (n + 1)) :
+    partialProd f j.succ = f 0 * partialProd (Fin.tail f) j := by
+  simp [partialProd]
+  rfl
+
+@[to_additive]
+/--
+lemma `partialProd_init` / 引理 `partialProd_init`
+
+English:
+lemma partialProd_init
+  given: {f : Fin (n + 1) -> M} (i : Fin (n + 1))
+  proof: i.inductionOn (by simp) fun i hi => by simp_all [init, partialProd_succ]
+
+@[to_additive]
+
+中文:
+引理 partialProd_init
+  条件: {f : Fin (n + 1) -> M} (i : Fin (n + 1))
+  证明: i.inductionOn (by simp) fun i hi => by simp_all [init, partialProd_succ]
+
+@[to_additive]
+
+Depends on / 依赖: i.inductionOn, inductionOn, partialProd_succ
+-/
+lemma partialProd_init {f : Fin (n + 1) -> M} (i : Fin (n + 1)) :
+    partialProd (init f) i = partialProd f i.castSucc :=
+  i.inductionOn (by simp) fun i hi => by simp_all [init, partialProd_succ]
+
+@[to_additive]
+/--
+theorem `partialProd_left_inv` / 定理 `partialProd_left_inv`
+
+English:
+theorem partialProd_left_inv
+  given: {G : Type*} [Group G] (f : Fin (n + 1) -> G)
+  proof: funext fun x => Fin.inductionOn x (by simp) fun x hx => by
+    simp only [Pi.smul_apply, smul_eq_mul] at hx ⊢
+    rw [partialProd_succ]; rw [← mul_assoc]; rw [hx]; rw [mul_inv_cancel_left]
+
+@[to_additive]
+
+中文:
+定理 partialProd_left_inv
+  条件: {G : 类型} [Group G] (f : Fin (n + 1) -> G)
+  证明: funext fun x => Fin.inductionOn x (by simp) fun x hx => by
+    simp only [Pi.smul_apply, smul_eq_mul] at hx ⊢
+    rw [partialProd_succ]; rw [← mul_assoc]; rw [hx]; rw [mul_inv_cancel_left]
+
+@[to_additive]
+
+Depends on / 依赖: Fin.inductionOn, Pi.smul_apply, inductionOn, mul_assoc, mul_inv_cancel_left, partialProd_succ, smul_apply, smul_eq_mul
+-/
+theorem partialProd_left_inv {G : Type*} [Group G] (f : Fin (n + 1) -> G) :
+    (f 0 • partialProd fun i : Fin n => (f i.castSucc)⁻¹ * f i.succ) = f :=
+  funext fun x => Fin.inductionOn x (by simp) fun x hx => by
+    simp only [Pi.smul_apply, smul_eq_mul] at hx ⊢
+    rw [partialProd_succ]; rw [← mul_assoc]; rw [hx]; rw [mul_inv_cancel_left]
+
+@[to_additive]
+/--
+theorem `partialProd_right_inv` / 定理 `partialProd_right_inv`
+
+English:
+theorem partialProd_right_inv
+  given: {G : Type*} [Group G] (f : Fin n -> G) (i : Fin n)
+  proof: by
+  rw [partialProd_succ]; rw [inv_mul_cancel_left]
+
+@[to_additive]
+
+中文:
+定理 partialProd_right_inv
+  条件: {G : 类型} [Group G] (f : Fin n -> G) (i : Fin n)
+  证明: by
+  rw [partialProd_succ]; rw [inv_mul_cancel_left]
+
+@[to_additive]
+
+Depends on / 依赖: inv_mul_cancel_left, partialProd_succ
+-/
+theorem partialProd_right_inv {G : Type*} [Group G] (f : Fin n -> G) (i : Fin n) :
+    (partialProd f (Fin.castSucc i))⁻¹ * partialProd f i.succ = f i := by
+  rw [partialProd_succ]; rw [inv_mul_cancel_left]
+
+@[to_additive]
+/--
+lemma `partialProd_contractNth` / 引理 `partialProd_contractNth`
+
+English:
+lemma partialProd_contractNth
+  statement: {G : Type*} [Monoid G] {n : Nat}
+  proof: by
+  ext i
+  refine inductionOn i ?_ ?_
+  · simp
+  · intro i hi
+    simp only [Function.comp_apply, succ_succAbove_succ] at *
+    rw [partialProd_succ]; rw [partialProd_succ]; rw [hi]
+    rcases lt_trichotomy (i : Nat) a with (h | h | h)
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ 
+
+中文:
+引理 partialProd_contractNth
+  结论: {G : 类型} [Monoid G] {n : 自然数}
+  证明: by
+  ext i
+  refine inductionOn i ?_ ?_
+  · simp
+  · intro i hi
+    simp only [Function.comp_apply, succ_succAbove_succ] at *
+    rw [partialProd_succ]; rw [partialProd_succ]; rw [hi]
+    rcases lt_trichotomy (i : Nat) a with (h | h | h)
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ 
+
+Depends on / 依赖: Function, Function.comp_apply, castSucc_succ, comp_apply, contractNth_apply_of_eq, contractNth_apply_of_lt, inductionOn, lt_def, lt_trichotomy, mul_asso, partialProd_succ, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, succ_succAbove_succ, val_castSucc, val_succ
+-/
+lemma partialProd_contractNth {G : Type*} [Monoid G] {n : Nat}
+    (g : Fin (n + 1) -> G) (a : Fin (n + 1)) :
+    partialProd (contractNth a (· * ·) g) = partialProd g ∘ a.succ.succAbove := by
+  ext i
+  refine inductionOn i ?_ ?_
+  · simp
+  · intro i hi
+    simp only [Function.comp_apply, succ_succAbove_succ] at *
+    rw [partialProd_succ]; rw [partialProd_succ]; rw [hi]
+    rcases lt_trichotomy (i : Nat) a with (h | h | h)
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ _ _ _ h,
+        succAbove_of_castSucc_lt] <;>
+      simp only [lt_def, val_castSucc, val_succ] <;>
+      lia
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_eq _ _ _ _ h,
+        succAbove_of_le_castSucc, castSucc_succ, partialProd_succ, mul_assoc] <;>
+      simp only [castSucc_lt_succ_iff, le_def, val_castSucc] <;>
+      lia
+    · rw [succAbove_of_le_castSucc, succAbove_of_le_castSucc, contractNth_apply_of_gt _ _ _ _ h,
+        castSucc_succ] <;>
+      simp only [le_def, val_succ, val_castSucc] <;>
+      lia
+
+/-- Let `(g₀, g₁, ..., gₙ)` be a tuple of elements in `Gⁿ⁺¹`.
+Then if `k < j`, this says `(g₀g₁...gₖ₋₁)⁻¹ * g₀g₁...gₖ = gₖ`.
+If `k = j`, it says `(g₀g₁...gₖ₋₁)⁻¹ * g₀g₁...gₖ₊₁ = gₖgₖ₊₁`.
+If `k > j`, it says `(g₀g₁...gₖ)⁻¹ * g₀g₁...gₖ₊₁ = gₖ₊₁.`
+Useful for defining group cohomology. -/
+@[to_additive
+      /-- Let `(g₀, g₁, ..., gₙ)` be a tuple of elements in `Gⁿ⁺¹`.
+      Then if `k < j`, this says `-(g₀ + g₁ + ... + gₖ₋₁) + (g₀ + g₁ + ... + gₖ) = gₖ`.
+      If `k = j`, it says `-(g₀ + g₁ + ... + gₖ₋₁) + (g₀ + g₁ + ... + gₖ₊₁) = gₖ + gₖ₊₁`.
+      If `k > j`, it says `-(g₀ + g₁ + ... + gₖ) + (g₀ + g₁ + ... + gₖ₊₁) = gₖ₊₁.`
+      Useful for defining group cohomology. -/]
+/--
+theorem `inv_partialProd_mul_eq_contractNth` / 定理 `inv_partialProd_mul_eq_contractNth`
+
+English:
+theorem inv_partialProd_mul_eq_contractNth
+  statement: {G : Type*} [Group G] (g : Fin (n + 1) -> G)
+  proof: by
+  rcases lt_trichotomy (k : Nat) j with (h | h | h)
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_castSucc_lt, partialProd_right_inv,
+    contractNth_apply_of_lt]
+    · assumption
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_lt h
+  · rwa [succAbove_o
+
+中文:
+定理 inv_partialProd_mul_eq_contractNth
+  结论: {G : 类型} [Group G] (g : Fin (n + 1) -> G)
+  证明: by
+  rcases lt_trichotomy (k : Nat) j with (h | h | h)
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_castSucc_lt, partialProd_right_inv,
+    contractNth_apply_of_lt]
+    · assumption
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_lt h
+  · rwa [succAbove_o
+
+Depends on / 依赖: castSucc_lt_iff_succ_le, castSucc_succ, contractNth_apply_of_eq, contractNth_apply_of_lt, le_iff_v, le_iff_val_le_val, le_of_lt, lt_trichotomy, mul_assoc, partialProd_right_inv, partialProd_succ, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, succ_le_succ_iff
+-/
+theorem inv_partialProd_mul_eq_contractNth {G : Type*} [Group G] (g : Fin (n + 1) -> G)
+    (j : Fin (n + 1)) (k : Fin n) :
+    (partialProd g (j.succ.succAbove (Fin.castSucc k)))⁻¹ * partialProd g (j.succAbove k).succ =
+      j.contractNth (· * ·) g k := by
+  rcases lt_trichotomy (k : Nat) j with (h | h | h)
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_castSucc_lt, partialProd_right_inv,
+    contractNth_apply_of_lt]
+    · assumption
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_lt h
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_le_castSucc, partialProd_succ,
+    castSucc_succ, ← mul_assoc,
+      partialProd_right_inv, contractNth_apply_of_eq]
+    · simp [le_iff_val_le_val, ← h]
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_eq h
+  · rwa [succAbove_of_le_castSucc, succAbove_of_le_castSucc, partialProd_succ, partialProd_succ,
+      castSucc_succ, partialProd_succ, inv_mul_cancel_left, contractNth_apply_of_gt]
+    · exact le_iff_val_le_val.2 (le_of_lt h)
+    · rw [le_iff_val_le_val, val_succ]
+      exact Nat.succ_le_of_lt h
+
+end PartialProd
+
+end Fin
+
+/-- Equivalence between `Fin n → Fin m` and `Fin (m ^ n)`. -/
+@[simps!]
+/--
+Definition of `finFunctionFinEquiv` / `finFunctionFinEquiv` 的定义
+
+English:
+definition finFunctionFinEquiv
+  signature: {m n : Nat}
+  body: Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_fun, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * m ^ (i : Nat), by
+      induction n with
+      | zero => simp
+      | succ n ih =>
+        cases m
+        · exact isEmptyElim (f <| Fin.last _)
+        simp_rw [Fin.sum_univ_castSucc
+
+中文:
+定义 finFunctionFinEquiv
+  签名: {m n : 自然数}
+  定义体: Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_fun, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * m ^ (i : Nat), by
+      induction n with
+      | zero => simp
+      | succ n ih =>
+        cases m
+        · exact isEmptyElim (f <| Fin.last _)
+        simp_rw [Fin.sum_univ_castSucc
+
+Depends on / 依赖: Equiv.ofRightInverseOfCardLE, Fin.is_le, Fin.last, Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last, Fintype, Fintype.card_fin, Fintype.card_fun, Nat.add_lt_add_of_lt_of_le, Nat.mul_le_mul_right, add_comm, add_lt_add_of_lt_of_le, card_fin, card_fun, isEmptyElim, is_le, le_of_eq, mul_le_mul_right, ofRightInverseOfCardLE
+-/
+def finFunctionFinEquiv {m n : Nat} : (Fin n -> Fin m) ≃ Fin (m ^ n) :=
+  Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_fun, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * m ^ (i : Nat), by
+      induction n with
+      | zero => simp
+      | succ n ih =>
+        cases m
+        · exact isEmptyElim (f <| Fin.last _)
+        simp_rw [Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last]
+        refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _
+          (Fin.is_le _)).trans_eq ?_
+        rw [← one_add_mul (_ : Nat)]; rw [add_comm]; rw [pow_succ']⟩)
+    (fun a b => ⟨a / m ^ (b : Nat) % m, by
+      rcases n with - | n
+      · exact b.elim0
+      rcases m with - | m
+      · rw [zero_pow n.succ_ne_zero] at a
+        exact a.elim0
+      · exact Nat.mod_lt _ m.succ_pos⟩)
+    fun a => by
+      dsimp
+      induction n with
+      | zero => subsingleton [(finCongr <| pow_zero _).subsingleton]
+      | succ n ih =>
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.val_zero, Fin.val_succ, pow_zero, Nat.div_one,
+          mul_one, pow_succ', ← Nat.div_div_eq_div_mul, mul_left_comm _ m, ← mul_sum]
+        rw [ih _ (Nat.div_lt_of_lt_mul (a.is_lt.trans_eq (pow_succ' _ _)))]; rw [Nat.mod_add_div]
+
+/--
+theorem `finFunctionFinEquiv_apply` / 定理 `finFunctionFinEquiv_apply`
+
+English:
+theorem finFunctionFinEquiv_apply
+  given: {m n : Nat} (f : Fin n -> Fin m)
+  proof: rfl
+
+中文:
+定理 finFunctionFinEquiv_apply
+  条件: {m n : 自然数} (f : Fin n -> Fin m)
+  证明: rfl
+-/
+theorem finFunctionFinEquiv_apply {m n : Nat} (f : Fin n -> Fin m) :
+    (finFunctionFinEquiv f : Nat) = ∑ i : Fin n, ↑(f i) * m ^ (i : Nat) :=
+  rfl
+
+/--
+theorem `finFunctionFinEquiv_single` / 定理 `finFunctionFinEquiv_single`
+
+English:
+theorem finFunctionFinEquiv_single
+  given: {m n : Nat} [NeZero m] (i : Fin n) (j : Fin m)
+  proof: by
+  rw [finFunctionFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+中文:
+定理 finFunctionFinEquiv_single
+  条件: {m n : 自然数} [NeZero m] (i : Fin n) (j : Fin m)
+  证明: by
+  rw [finFunctionFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+Depends on / 依赖: Fin.val_zero, Fintype, Fintype.sum_eq_single, Pi.single_eq_of_ne, Pi.single_eq_same, finFunctionFinEquiv_apply, single_eq_of_ne, single_eq_same, sum_eq_single, val_zero, zero_mul
+-/
+theorem finFunctionFinEquiv_single {m n : Nat} [NeZero m] (i : Fin n) (j : Fin m) :
+    (finFunctionFinEquiv (Pi.single i j) : Nat) = j * m ^ (i : Nat) := by
+  rw [finFunctionFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+set_option backward.isDefEq.respectTransparency false in
+/--
+Definition of `finPiFinEquiv` / `finPiFinEquiv` 的定义
+
+English:
+definition finPiFinEquiv
+  signature: {m : Nat} {n : Fin m -> Nat}
+  body: Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_pi, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * ∏ j, n (Fin.castLE i.is_lt.le j), by
+      induction m with
+      | zero => simp
+      | succ m ih =>
+      rw [Fin.prod_univ_castSucc]; rw [Fin.sum_univ_castSucc]
+      suffices
+     
+
+中文:
+定义 finPiFinEquiv
+  签名: {m : 自然数} {n : Fin m -> 自然数}
+  定义体: Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_pi, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * ∏ j, n (Fin.castLE i.is_lt.le j), by
+      induction m with
+      | zero => simp
+      | succ m ih =>
+      rw [Fin.prod_univ_castSucc]; rw [Fin.sum_univ_castSucc]
+      suffices
+     
+
+Depends on / 依赖: Equiv.ofRightInverseOfCardLE, Fin.castLE, Fin.prod_univ_castSucc, Fin.sum_univ_castSucc, Fintype, Fintype.card_fin, Fintype.card_pi, card_fin, card_pi, castLE, i.is_lt.le, i.prop.le, is_lt, le_of_eq, ofRightInverseOfCardLE, prod_univ_castSucc, simp_rw, solve_by_elim, sum_univ_castSucc
+-/
+def finPiFinEquiv {m : Nat} {n : Fin m -> Nat} : (forall i : Fin m, Fin (n i)) ≃ Fin (∏ i : Fin m, n i) :=
+  Equiv.ofRightInverseOfCardLE (le_of_eq <| by simp_rw [Fintype.card_pi, Fintype.card_fin])
+    (fun f => ⟨∑ i, f i * ∏ j, n (Fin.castLE i.is_lt.le j), by
+      induction m with
+      | zero => simp
+      | succ m ih =>
+      rw [Fin.prod_univ_castSucc]; rw [Fin.sum_univ_castSucc]
+      suffices
+        forall (n : Fin m -> Nat) (nn : Nat) (f : forall i : Fin m, Fin (n i)) (fn : Fin nn),
+          ((∑ i : Fin m, ↑(f i) * ∏ j : Fin i, n (Fin.castLE i.prop.le j)) + ↑fn * ∏ j, n j) <
+            (∏ i : Fin m, n i) * nn by
+        solve_by_elim
+      intro n nn f fn
+      cases nn
+      · exact isEmptyElim fn
+      refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _ (Fin.is_le _)).trans_eq ?_
+      rw [← one_add_mul (_ : Nat)]; rw [mul_comm]; rw [add_comm]⟩)
+    (fun a b => ⟨(a / ∏ j : Fin b, n (Fin.castLE b.is_lt.le j)) % n b, by
+      cases m
+      · exact b.elim0
+      rcases h : n b with nb | nb
+      · rw [prod_eq_zero (Finset.mem_univ _) h] at a
+        exact isEmptyElim a
+      exact Nat.mod_lt _ nb.succ_pos⟩)
+    (by
+      intro a; revert a; dsimp only [Fin.val_mk]
+      refine Fin.consInduction ?_ ?_ n
+      · intro a
+        have : Subsingleton (Fin (∏ i : Fin 0, i.elim0)) :=
+          (finCongr <| prod_empty).subsingleton
+        subsingleton
+      · intro n x xs ih a
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.cons_succ]
+        have := fun i : Fin n =>
+          Fintype.prod_equiv (finCongr <| Fin.val_succ i)
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Fin.is_lt _).le j))
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Nat.succ_le_succ (Fin.is_lt _).le) j))
+            fun j => rfl
+        simp_rw [this]
+        clear this
+        simp_rw [Fin.val_zero, Fintype.prod_empty, Nat.div_one, mul_one, Fin.cons_zero,
+          Fin.prod_univ_succ, Fin.castLE_zero, Fin.cons_zero, ← Nat.div_div_eq_div_mul,
+          mul_left_comm (_ % _ : Nat), ← mul_sum]
+        convert! Nat.mod_add_div _ _
+        exact ih (a / x) (Nat.div_lt_of_lt_mul <| a.is_lt.trans_eq (Fin.prod_univ_succ _)))
+
+/--
+theorem `finPiFinEquiv_apply` / 定理 `finPiFinEquiv_apply`
+
+English:
+theorem finPiFinEquiv_apply
+  given: {m : Nat} {n : Fin m -> Nat} (f : forall i : Fin m, Fin (n i))
+  proof: rfl
+
+中文:
+定理 finPiFinEquiv_apply
+  条件: {m : 自然数} {n : Fin m -> 自然数} (f : 对任意 i : Fin m, Fin (n i))
+  证明: rfl
+-/
+theorem finPiFinEquiv_apply {m : Nat} {n : Fin m -> Nat} (f : forall i : Fin m, Fin (n i)) :
+    (finPiFinEquiv f : Nat) = ∑ i, f i * ∏ j, n (Fin.castLE i.is_lt.le j) := rfl
+
+/--
+theorem `finPiFinEquiv_single` / 定理 `finPiFinEquiv_single`
+
+English:
+theorem finPiFinEquiv_single
+  statement: {m : Nat} {n : Fin m -> Nat} [forall i, NeZero (n i)] (i : Fin m)
+  proof: by
+  rw [finPiFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+中文:
+定理 finPiFinEquiv_single
+  结论: {m : 自然数} {n : Fin m -> 自然数} [对任意 i, NeZero (n i)] (i : Fin m)
+  证明: by
+  rw [finPiFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+Depends on / 依赖: Fin.val_zero, Fintype, Fintype.sum_eq_single, Pi.single_eq_of_ne, Pi.single_eq_same, finPiFinEquiv_apply, single_eq_of_ne, single_eq_same, sum_eq_single, val_zero, zero_mul
+-/
+theorem finPiFinEquiv_single {m : Nat} {n : Fin m -> Nat} [forall i, NeZero (n i)] (i : Fin m)
+    (j : Fin (n i)) :
+    (finPiFinEquiv (Pi.single i j : forall i : Fin m, Fin (n i)) : Nat) =
+      j * ∏ j, n (Fin.castLE i.is_lt.le j) := by
+  rw [finPiFinEquiv_apply]; rw [Fintype.sum_eq_single i]; rw [Pi.single_eq_same]
+  rintro x hx
+  rw [Pi.single_eq_of_ne hx]; rw [Fin.val_zero]; rw [zero_mul]
+
+/--
+Definition of `finSigmaFinEquiv` / `finSigmaFinEquiv` 的定义
+
+English:
+definition finSigmaFinEquiv
+  signature: {m : Nat} {n : Fin m -> Nat}
+  body: match m with
+  | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simpa using Fin.isEmpty')
+  | Nat.succ m =>
+    calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
+      _ ≃ _ := Equiv.sumSigmaDistrib _
+      _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.uniqueSigma _)
+      _ ≃ _ := finSumFinEquiv
+      _ ≃ 
+
+中文:
+定义 finSigmaFinEquiv
+  签名: {m : 自然数} {n : Fin m -> 自然数}
+  定义体: match m with
+  | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simpa using Fin.isEmpty')
+  | Nat.succ m =>
+    calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
+      _ ≃ _ := Equiv.sumSigmaDistrib _
+      _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.uniqueSigma _)
+      _ ≃ _ := finSumFinEquiv
+      _ ≃ 
+
+Depends on / 依赖: Equiv.equivOfIsEmpty, Equiv.sumSigmaDistrib, Equiv.uniqueSigma, Fin.isEmpty, Fin.sum_univ_castSucc, Nat.succ, equivOfIsEmpty, finCongr, finSigmaFinEquiv, finSigmaFinEquiv.sumCongr, finSumFinEquiv, isEmpty, sigmaCongrLeft, sigmaCongrLeft.symm, sumCongr, sumSigmaDistrib, sum_univ_castSucc, uniqueSigma
+-/
+def finSigmaFinEquiv {m : Nat} {n : Fin m -> Nat} : (i : Fin m) × Fin (n i) ≃ Fin (∑ i : Fin m, n i) :=
+  match m with
+  | 0 => @Equiv.equivOfIsEmpty _ _ _ (by simpa using Fin.isEmpty')
+  | Nat.succ m =>
+    calc _ ≃ _ := (@finSumFinEquiv m 1).sigmaCongrLeft.symm
+      _ ≃ _ := Equiv.sumSigmaDistrib _
+      _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.uniqueSigma _)
+      _ ≃ _ := finSumFinEquiv
+      _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
+
+set_option backward.isDefEq.respectTransparency false in
+@[simp]
+/--
+theorem `finSigmaFinEquiv_apply` / 定理 `finSigmaFinEquiv_apply`
+
+English:
+theorem finSigmaFinEquiv_apply
+  given: {m : Nat} {n : Fin m -> Nat} (k : (i : Fin m) × Fin (n i))
+  proof: by
+  induction m with
+  | zero => exact k.fst.elim0
+  | succ m ih =>
+  rcases k with ⟨⟨iv, hi⟩, j⟩
+  rw [finSigmaFinEquiv]
+  unfold finSumFinEquiv
+  simp only [Equiv.coe_fn_mk, Equiv.sigmaCongrLeft, Equiv.coe_fn_symm_mk, Equiv.trans_def,
+    Equiv.trans_apply, finCongr_apply, Fin.val_cast]
+  by_case
+
+中文:
+定理 finSigmaFinEquiv_apply
+  条件: {m : 自然数} {n : Fin m -> 自然数} (k : (i : Fin m) × Fin (n i))
+  证明: by
+  induction m with
+  | zero => exact k.fst.elim0
+  | succ m ih =>
+  rcases k with ⟨⟨iv, hi⟩, j⟩
+  rw [finSigmaFinEquiv]
+  unfold finSumFinEquiv
+  simp only [Equiv.coe_fn_mk, Equiv.sigmaCongrLeft, Equiv.coe_fn_symm_mk, Equiv.trans_def,
+    Equiv.trans_apply, finCongr_apply, Fin.val_cast]
+  by_case
+
+Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Equiv.sigmaCongrLeft, Equiv.trans_apply, Equiv.trans_def, Fin.addCases, Fin.val_cast, Nat.eq_of_lt_succ_of_not_lt, Sigma.mk, Sum.inl, Sum.inr, addCases, coe_fn_mk, coe_fn_symm_mk, eq_of_lt_succ_of_not_lt, equals, finCongr_apply, finSigmaFinEquiv, finSumFinEquiv, k.fst.elim0
+-/
+theorem finSigmaFinEquiv_apply {m : Nat} {n : Fin m -> Nat} (k : (i : Fin m) × Fin (n i)) :
+    (finSigmaFinEquiv k : Nat) = ∑ i : Fin k.1, n (Fin.castLE k.1.2.le i) + k.2 := by
+  induction m with
+  | zero => exact k.fst.elim0
+  | succ m ih =>
+  rcases k with ⟨⟨iv, hi⟩, j⟩
+  rw [finSigmaFinEquiv]
+  unfold finSumFinEquiv
+  simp only [Equiv.coe_fn_mk, Equiv.sigmaCongrLeft, Equiv.coe_fn_symm_mk, Equiv.trans_def,
+    Equiv.trans_apply, finCongr_apply, Fin.val_cast]
+  by_cases him : iv < m
+  · conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inl ⟨iv, him⟩, j⟩ => simp [Fin.addCases, him]
+    simpa using! ih _
+  · replace him := Nat.eq_of_lt_succ_of_not_lt hi him
+    subst him
+    conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inr 0, j⟩ => simp [Fin.addCases, Fin.natAdd]
+    simp
+    rfl
+
+/--
+theorem `finSigmaFinEquiv_one` / 定理 `finSigmaFinEquiv_one`
+
+English:
+theorem finSigmaFinEquiv_one
+  given: {n : Fin 1 -> Nat} (ij : (i : Fin 1) × Fin (n i))
+  proof: by
+  rw [finSigmaFinEquiv_apply]; rw [add_eq_right]
+  apply @Finset.sum_of_isEmpty _ _ _ _ (by simpa using Fin.isEmpty')
+
+中文:
+定理 finSigmaFinEquiv_one
+  条件: {n : Fin 1 -> 自然数} (ij : (i : Fin 1) × Fin (n i))
+  证明: by
+  rw [finSigmaFinEquiv_apply]; rw [add_eq_right]
+  apply @Finset.sum_of_isEmpty _ _ _ _ (by simpa using Fin.isEmpty')
+
+Depends on / 依赖: Fin.isEmpty, Finset, Finset.sum_of_isEmpty, add_eq_right, finSigmaFinEquiv_apply, isEmpty, sum_of_isEmpty
+-/
+theorem finSigmaFinEquiv_one {n : Fin 1 -> Nat} (ij : (i : Fin 1) × Fin (n i)) :
+    (finSigmaFinEquiv ij : Nat) = ij.2 := by
+  rw [finSigmaFinEquiv_apply]; rw [add_eq_right]
+  apply @Finset.sum_of_isEmpty _ _ _ _ (by simpa using Fin.isEmpty')
+
+namespace List
+
+section CommMonoid
+
+variable [CommMonoid M]
+
+@[to_additive]
+/--
+theorem `prod_take_ofFn` / 定理 `prod_take_ofFn`
+
+English:
+theorem prod_take_ofFn
+  given: {n : Nat} (f : Fin n -> M) (i : Nat)
+  proof: by
+  induction i with
+  | zero =>
+    simp
+  | succ i IH =>
+    by_cases h : i < n
+    · have : i < length (ofFn f) := by rwa [length_ofFn]
+      rw [prod_take_succ _ _ this]
+      have A : ({j | j.val < i + 1} : Finset (Fin n)) =
+          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by 
+
+中文:
+定理 prod_take_ofFn
+  条件: {n : 自然数} (f : Fin n -> M) (i : 自然数)
+  证明: by
+  induction i with
+  | zero =>
+    simp
+  | succ i IH =>
+    by_cases h : i < n
+    · have : i < length (ofFn f) := by rwa [length_ofFn]
+      rw [prod_take_succ _ _ this]
+      have A : ({j | j.val < i + 1} : Finset (Fin n)) =
+          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by 
+
+Depends on / 依赖: Fin.val, Finset, Nat.le_succ, i.succ, insert, j.val, le_succ, le_trans, length, length_ofFn, not_lt, not_lt.mp, prod_take_succ, take_of_length_le
+-/
+theorem prod_take_ofFn {n : Nat} (f : Fin n -> M) (i : Nat) :
+    ((ofFn f).take i).prod = ∏ j with j.val < i, f j := by
+  induction i with
+  | zero =>
+    simp
+  | succ i IH =>
+    by_cases h : i < n
+    · have : i < length (ofFn f) := by rwa [length_ofFn]
+      rw [prod_take_succ _ _ this]
+      have A : ({j | j.val < i + 1} : Finset (Fin n)) =
+          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by grind
+      grind
+    · have A : (ofFn f).take i = (ofFn f).take i.succ := by
+        rw [← length_ofFn (f := f)] at h
+        have : length (ofFn f) <= i := not_lt.mp h
+        rw [take_of_length_le this]; rw [take_of_length_le (le_trans this (Nat.le_succ _))]
+      have B : forall j : Fin n, ((j : Nat) < i.succ) = ((j : Nat) < i) := by
+        intro j
+        have : (j : Nat) < i := lt_of_lt_of_le j.2 (not_lt.mp h)
+        simp [this, lt_trans this (Nat.lt_succ_self _)]
+      simp [← A, B, IH]
+
+@[to_additive]
+/--
+theorem `prod_ofFn` / 定理 `prod_ofFn`
+
+English:
+theorem prod_ofFn
+  given: {n : Nat} {f : Fin n -> M}
+  statement: (ofFn f).prod = ∏ i, f i
+  proof: Fin.prod_ofFn f
+
+中文:
+定理 prod_ofFn
+  条件: {n : 自然数} {f : Fin n -> M}
+  结论: (ofFn f).prod = ∏ i, f i
+  证明: Fin.prod_ofFn f
+
+Depends on / 依赖: Fin.prod_ofFn, prod_ofFn
+-/
+theorem prod_ofFn {n : Nat} {f : Fin n -> M} : (ofFn f).prod = ∏ i, f i :=
+  Fin.prod_ofFn f
+
+end CommMonoid
+
+@[to_additive]
+/--
+theorem `alternatingProd_eq_finsetProd` / 定理 `alternatingProd_eq_finsetProd`
+
+English:
+theorem alternatingProd_eq_finsetProd
+  given: {G : Type*} [DivisionCommMonoid G]
+  proof: congr_arg _ (alternatingProd_eq_finsetProd _)
+    _ = ∏ i : Fin (L.length + 2), (g::h::L)[i] ^ (-1 : Int) ^ (i : Nat) := by
+        { rw [Fin.prod_univ_succ, Fin.prod_univ_succ, mul_assoc]
+          simp [pow_add]}
+
+@[deprecated (since := "2026-04-08")]
+alias alternatingSum_eq_finset_sum := alternat
+
+中文:
+定理 alternatingProd_eq_finsetProd
+  条件: {G : 类型} [DivisionCommMonoid G]
+  证明: congr_arg _ (alternatingProd_eq_finsetProd _)
+    _ = ∏ i : Fin (L.length + 2), (g::h::L)[i] ^ (-1 : Int) ^ (i : Nat) := by
+        { rw [Fin.prod_univ_succ, Fin.prod_univ_succ, mul_assoc]
+          simp [pow_add]}
+
+@[deprecated (since := "2026-04-08")]
+alias alternatingSum_eq_finset_sum := alternat
+
+Depends on / 依赖: Fin.prod_univ_succ, L.length, alternatingProd_eq_finsetProd, congr_arg, length, mul_assoc, pow_add, prod_univ_succ
+-/
+theorem alternatingProd_eq_finsetProd {G : Type*} [DivisionCommMonoid G] :
+    forall (L : List G), alternatingProd L = ∏ i : Fin L.length, L[i] ^ (-1 : Int) ^ (i : Nat)
+  | [] => by
+    rw [alternatingProd]; rw [Finset.prod_eq_one]
+    rintro ⟨i, ⟨⟩⟩
+  | g::[] => by
+    change g = ∏ i : Fin 1, [g][i] ^ (-1 : Int) ^ (i : Nat)
+    rw [Fin.prod_univ_succ]; simp
+  | g::h::L =>
+    calc g * h⁻¹ * L.alternatingProd
+      = g * h⁻¹ * ∏ i : Fin L.length, L[i] ^ (-1 : Int) ^ (i : Nat) :=
+        congr_arg _ (alternatingProd_eq_finsetProd _)
+    _ = ∏ i : Fin (L.length + 2), (g::h::L)[i] ^ (-1 : Int) ^ (i : Nat) := by
+        { rw [Fin.prod_univ_succ, Fin.prod_univ_succ, mul_assoc]
+          simp [pow_add]}
+
+@[deprecated (since := "2026-04-08")]
+alias alternatingSum_eq_finset_sum := alternatingSum_eq_finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias alternatingProd_eq_finset_prod := alternatingProd_eq_finsetProd
+
+end List
+
+/--
+lemma `Fin.sum_neg_one_pow_eq_zero` / 引理 `Fin.sum_neg_one_pow_eq_zero`
+
+English:
+lemma Fin.sum_neg_one_pow_eq_zero
+  statement: {α : Type*} [AddCommGroup α]
+  proof: by
+  have h₁ : ∑ i : Fin (n + 2), (-1 : Int) ^ i.val • d i =
+      d 0 +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (d (Fin.castSucc i).succ) +
+      (-1 : Int) ^ (n + 1) • d (Fin.last (n + 1)) := by
+    rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_castSucc]
+    simp [add_assoc]
+  have h₂ : ∑ i : Fin
+
+中文:
+引理 Fin.sum_neg_one_pow_eq_zero
+  结论: {α : 类型} [AddCommGroup α]
+  证明: by
+  have h₁ : ∑ i : Fin (n + 2), (-1 : Int) ^ i.val • d i =
+      d 0 +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (d (Fin.castSucc i).succ) +
+      (-1 : Int) ^ (n + 1) • d (Fin.last (n + 1)) := by
+    rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_castSucc]
+    simp [add_assoc]
+  have h₂ : ∑ i : Fin
+
+Depends on / 依赖: Fin.castSucc, Fin.last, Fin.succ, Fin.sum_univ_castSucc, Fin.sum_univ_succ, Finset, Finset.sum_add_di, add_assoc, castSucc, i.val, simp_rw, sum_add_di, sum_univ_castSucc, sum_univ_succ, zsmul_add
+-/
+lemma Fin.sum_neg_one_pow_eq_zero {α : Type*} [AddCommGroup α]
+    {n : Nat} (d : Fin (n + 2) -> α) (r : Fin (n + 1) -> α)
+    (h_first : d 0 = r 0)
+    (h_mid : forall i : Fin n, d i.succ.castSucc = r i.castSucc + r i.succ)
+    (h_last : d (Fin.last _) = r (Fin.last _)) :
+    ∑ i, (-1) ^ i.val • d i = 0 := by
+  have h₁ : ∑ i : Fin (n + 2), (-1 : Int) ^ i.val • d i =
+      d 0 +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (d (Fin.castSucc i).succ) +
+      (-1 : Int) ^ (n + 1) • d (Fin.last (n + 1)) := by
+    rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_castSucc]
+    simp [add_assoc]
+  have h₂ : ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (r (Fin.castSucc i) + r (Fin.succ i)) =
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.castSucc i) +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.succ i) := by
+    simp_rw [zsmul_add, Finset.sum_add_distrib]
+  have h₃ := Fin.sum_univ_castSucc fun i => (-1 : Int) ^ i.val • r i
+  simp_all [Fin.sum_univ_succ, pow_succ']
+  grind

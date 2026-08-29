@@ -1,0 +1,726 @@
+/-
+Copyright (c) 2019 Yury Kudryashov. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Yury Kudryashov
+-/
+module
+
+public import Mathlib.CategoryTheory.Endomorphism
+public import Mathlib.CategoryTheory.FinCategory.Basic
+public import Mathlib.CategoryTheory.Category.Cat
+public import Mathlib.Algebra.Category.MonCat.Basic
+public import Mathlib.Combinatorics.Quiver.SingleObj
+public import Mathlib.Algebra.Group.Units.Equiv
+
+/-!
+# Single-object category
+
+Single object category with a given monoid of endomorphisms.
+It is defined to facilitate transferring some definitions and lemmas (e.g., conjugacy etc.)
+from category theory to monoids and groups.
+
+## Main definitions
+
+Given a type `M` with a monoid structure, `SingleObj M` is `Unit` type with `Category` structure
+such that `End (SingleObj M).star` is the monoid `M`. This can be extended to a functor
+`MonCat ⥤ Cat`.
+
+If `M` is a group, then `SingleObj M` is a groupoid.
+
+An element `x : M` can be reinterpreted as an element of `End (SingleObj.star M)` using
+`SingleObj.toEnd`.
+
+## Implementation notes
+
+- `categoryStruct.comp` on `End (SingleObj.star M)` is `flip (*)`, not `(*)`. This way
+  multiplication on `End` agrees with the multiplication on `M`.
+
+- By default, Lean puts instances into `CategoryTheory` namespace instead of
+  `CategoryTheory.SingleObj`, so we give all names explicitly.
+-/
+
+@[expose] public section
+
+assert_not_exists MonoidWithZero
+
+universe u v w
+
+namespace CategoryTheory
+
+/--
+Definition of `SingleObj` / `SingleObj` 的定义
+
+English:
+abbreviation SingleObj
+  body: Quiver.SingleObj
+
+中文:
+缩写 SingleObj
+  定义体: Quiver.SingleObj
+
+Depends on / 依赖: Quiver, Quiver.SingleObj, SingleObj
+-/
+abbrev SingleObj :=
+  Quiver.SingleObj
+
+namespace SingleObj
+
+variable (M G : Type u)
+
+/--
+Instance `categoryStruct` / 实例 `categoryStruct`
+
+English:
+instance categoryStruct
+  signature: [One M] [Mul M]
+  body: M
+  comp x y := y * x
+  id _ := 1
+
+中文:
+实例 categoryStruct
+  签名: [One M] [Mul M]
+  定义体: M
+  comp x y := y * x
+  id _ := 1
+-/
+instance categoryStruct [One M] [Mul M] : CategoryStruct (SingleObj M) where
+  Hom _ _ := M
+  comp x y := y * x
+  id _ := 1
+
+variable [Monoid M] [Group G]
+
+/--
+Instance `category` / 实例 `category`
+
+English:
+instance category
+  signature: : Category (SingleObj M) where
+  body: one_mul
+  id_comp := mul_one
+  assoc x y z := (mul_assoc z y x).symm
+
+中文:
+实例 category
+  签名: : Category (SingleObj M) where
+  定义体: one_mul
+  id_comp := mul_one
+  assoc x y z := (mul_assoc z y x).symm
+
+Depends on / 依赖: one_mul
+-/
+instance category : Category (SingleObj M) where
+  comp_id := one_mul
+  id_comp := mul_one
+  assoc x y z := (mul_assoc z y x).symm
+
+/--
+theorem `id_as_one` / 定理 `id_as_one`
+
+English:
+theorem id_as_one
+  given: (x : SingleObj M)
+  statement: 𝟙 x = 1
+  proof: rfl
+
+中文:
+定理 id_as_one
+  条件: (x : SingleObj M)
+  结论: 𝟙 x = 1
+  证明: rfl
+-/
+theorem id_as_one (x : SingleObj M) : 𝟙 x = 1 :=
+  rfl
+
+/--
+theorem `comp_as_mul` / 定理 `comp_as_mul`
+
+English:
+theorem comp_as_mul
+  given: {x y z : SingleObj M} (f : x ⟶ y) (g : y ⟶ z)
+  statement: f ≫ g = g * f
+  proof: rfl
+
+中文:
+定理 comp_as_mul
+  条件: {x y z : SingleObj M} (f : x ⟶ y) (g : y ⟶ z)
+  结论: f ≫ g = g * f
+  证明: rfl
+
+Depends on / 依赖: Disjoint, IsBasis, M.Indep, contextual, contract_indep_iff, disjoint_sdiff_left, eq_of_subset_indep, hIX.eq_of_subset_indep, hIX.indep, hIX.indep.subset, hIX.subset, hJI.trans, maximal_subset_iff, sdiff_subset, sdiff_subset.trans, sdiff_subset_iff, subset, subset_antisymm_iff, subset_sdiff, subseteq
+-/
+theorem comp_as_mul {x y z : SingleObj M} (f : x ⟶ y) (g : y ⟶ z) : f ≫ g = g * f :=
+  rfl
+
+/--
+Instance `finCategoryOfFintype` / 实例 `finCategoryOfFintype`
+
+English:
+instance finCategoryOfFintype
+  signature: (M : Type) [Fintype M] [Monoid M]
+
+中文:
+实例 finCategoryOfFintype
+  签名: (M : Type) [Fintype M] [Monoid M]
+
+Depends on / 依赖: _iff_isBasis_inter_ground, _sdiff_sdiff_of_subset, contract_isBasis, hIX.contract_isBasis, inter_sdiff_assoc, isBasis, isBasis_inter_ground, sdiff_inter_distrib_right
+-/
+instance finCategoryOfFintype (M : Type) [Fintype M] [Monoid M] : FinCategory (SingleObj M) where
+
+/-- Groupoid structure on `SingleObj M`. -/
+@[stacks 0019]
+/--
+Instance `groupoid` / 实例 `groupoid`
+
+English:
+instance groupoid
+  signature: : Groupoid (SingleObj G) where
+  body: x⁻¹
+  inv_comp := mul_inv_cancel
+  comp_inv := inv_mul_cancel
+
+中文:
+实例 groupoid
+  签名: : Groupoid (SingleObj G) where
+  定义体: x⁻¹
+  inv_comp := mul_inv_cancel
+  comp_inv := inv_mul_cancel
+-/
+instance groupoid : Groupoid (SingleObj G) where
+  inv x := x⁻¹
+  inv_comp := mul_inv_cancel
+  comp_inv := inv_mul_cancel
+
+/--
+theorem `inv_as_inv` / 定理 `inv_as_inv`
+
+English:
+theorem inv_as_inv
+  given: {x y : SingleObj G} (f : x ⟶ y)
+  statement: inv f = f⁻¹
+  proof: by
+  apply IsIso.inv_eq_of_hom_inv_id
+  rw [comp_as_mul]; rw [inv_mul_cancel]; rw [id_as_one]
+
+中文:
+定理 inv_as_inv
+  条件: {x y : SingleObj G} (f : x ⟶ y)
+  结论: inv f = f⁻¹
+  证明: by
+  apply IsIso.inv_eq_of_hom_inv_id
+  rw [comp_as_mul]; rw [inv_mul_cancel]; rw [id_as_one]
+
+Depends on / 依赖: IsIso.inv_eq_of_hom_inv_id, comp_as_mul, id_as_one, inv_eq_of_hom_inv_id, inv_mul_cancel
+-/
+theorem inv_as_inv {x y : SingleObj G} (f : x ⟶ y) : inv f = f⁻¹ := by
+  apply IsIso.inv_eq_of_hom_inv_id
+  rw [comp_as_mul]; rw [inv_mul_cancel]; rw [id_as_one]
+
+/--
+Definition of `star` / `star` 的定义
+
+English:
+abbreviation star
+  signature: : SingleObj M
+  body: Quiver.SingleObj.star M
+
+中文:
+缩写 star
+  签名: : SingleObj M
+  定义体: Quiver.SingleObj.star M
+
+Depends on / 依赖: Quiver, Quiver.SingleObj.star, SingleObj, _sdiff_sdiff_of_subset, contract_isBasis, h.contract_isBasis, hJI.sdiff_eq_left, hXI.sdiff_eq_left, sdiff_eq_left, subset_union_right
+-/
+abbrev star : SingleObj M :=
+  Quiver.SingleObj.star M
+
+/--
+Definition of `toEnd` / `toEnd` 的定义
+
+English:
+definition toEnd
+  signature: : M ≃* End (SingleObj.star M)
+  body: { Equiv.refl M with map_mul' := fun _ _ => rfl }
+
+中文:
+定义 toEnd
+  签名: : M ≃* End (SingleObj.star M)
+  定义体: { Equiv.refl M with map_mul' := fun _ _ => rfl }
+
+Depends on / 依赖: Equiv.refl, map_mul
+-/
+def toEnd : M ≃* End (SingleObj.star M) :=
+  { Equiv.refl M with map_mul' := fun _ _ => rfl }
+
+/--
+theorem `toEnd_def` / 定理 `toEnd_def`
+
+English:
+theorem toEnd_def
+  given: (x : M)
+  statement: toEnd M x = x
+  proof: rfl
+
+中文:
+定理 toEnd_def
+  条件: (x : M)
+  结论: toEnd M x = x
+  证明: rfl
+
+Depends on / 依赖: contract_eq_contract_delete, contract_ground, contract_inter_ground_eq, delete_inter_ground_eq, eq_comm, hI.isBasis_inter_ground.contract_eq_contract_delete, inter_inter_distrib_right, isBasis_inter_ground, sdiff_eq
+-/
+theorem toEnd_def (x : M) : toEnd M x = x :=
+  rfl
+
+variable (N : Type v) [Monoid N]
+
+/-- There is a 1-1 correspondence between monoid homomorphisms `M → N` and functors between the
+corresponding single-object categories. It means that `SingleObj` is a fully faithful functor. -/
+@[stacks 001F "We do not characterize when the functor is full or faithful."]
+/--
+Definition of `mapHom` / `mapHom` 的定义
+
+English:
+definition mapHom
+  signature: : (M ->* N) ≃ SingleObj M ⥤ SingleObj N where
+  body: { obj := id
+      map := ⇑f
+      map_id := fun _ => f.map_one
+      map_comp := fun x y => f.map_mul y x }
+  invFun f :=
+    { toFun := fun x => f.map ((toEnd M) x)
+      map_one' := f.map_id _
+      map_mul' := fun x y => f.map_comp y x }
+  left_inv := by cat_disch
+  right_inv := by cat_disch
+
+中文:
+定义 mapHom
+  签名: : (M ->* N) ≃ SingleObj M ⥤ SingleObj N where
+  定义体: { obj := id
+      map := ⇑f
+      map_id := fun _ => f.map_one
+      map_comp := fun x y => f.map_mul y x }
+  invFun f :=
+    { toFun := fun x => f.map ((toEnd M) x)
+      map_one' := f.map_id _
+      map_mul' := fun x y => f.map_comp y x }
+  left_inv := by cat_disch
+  right_inv := by cat_disch
+
+Depends on / 依赖: and_assoc, and_comm, cat_disch, contract_eq_contract_delete, contract_indep_iff, delete_indep_iff, disjoint_comm, disjoint_union_right, f.map, f.map_comp, f.map_id, f.map_mul, f.map_one, hI.contract_eq_contract_delete, hI.indep.contract_indep_iff, hI.subset, invFun, left_inv, map_comp, map_id
+-/
+def mapHom : (M ->* N) ≃ SingleObj M ⥤ SingleObj N where
+  toFun f :=
+    { obj := id
+      map := ⇑f
+      map_id := fun _ => f.map_one
+      map_comp := fun x y => f.map_mul y x }
+  invFun f :=
+    { toFun := fun x => f.map ((toEnd M) x)
+      map_one' := f.map_id _
+      map_mul' := fun x y => f.map_comp y x }
+  left_inv := by cat_disch
+  right_inv := by cat_disch
+
+/--
+theorem `mapHom_id` / 定理 `mapHom_id`
+
+English:
+theorem mapHom_id
+  statement: mapHom M M (MonoidHom.id M) = 𝟭 _
+  proof: rfl
+
+中文:
+定理 mapHom_id
+  结论: mapHom M M (MonoidHom.id M) = 𝟭 _
+  证明: rfl
+-/
+theorem mapHom_id : mapHom M M (MonoidHom.id M) = 𝟭 _ :=
+  rfl
+
+variable {M N G}
+
+/--
+theorem `mapHom_comp` / 定理 `mapHom_comp`
+
+English:
+theorem mapHom_comp
+  given: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  proof: rfl
+
+中文:
+定理 mapHom_comp
+  条件: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  证明: rfl
+
+Depends on / 依赖: and_assoc, and_comm, contract_dep_iff, contract_eq_contract_delete, delete_dep_iff, disjoint_comm, disjoint_union_right, hI.contract_eq_contract_delete, hI.indep.contract_dep_iff, hI.subset, sdiff_union_of_subset, subset
+-/
+theorem mapHom_comp (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P) :
+    mapHom M P (g.comp f) = mapHom M N f ⋙ mapHom N P g :=
+  rfl
+
+variable {C : Type v} [Category.{w} C]
+
+set_option backward.isDefEq.respectTransparency.types false in
+/-- Given a function `f : C → G` from a category to a group, we get a functor
+`C ⥤ G` sending any morphism `x ⟶ y` to `f y * (f x)⁻¹`. -/
+@[simps]
+/--
+Definition of `differenceFunctor` / `differenceFunctor` 的定义
+
+English:
+definition differenceFunctor
+  signature: (f : C -> G)
+  body: ()
+  map {x y} _ := f y * (f x)⁻¹
+  map_id := by
+    intro
+    simp only [SingleObj.id_as_one, mul_inv_cancel]
+  map_comp := by
+    intros
+    rw [SingleObj.comp_as_mul]; rw [← mul_assoc]; rw [mul_left_inj]; rw [mul_assoc]; rw [inv_mul_cancel]; rw [mul_one]
+
+中文:
+定义 differenceFunctor
+  签名: (f : C -> G)
+  定义体: ()
+  map {x y} _ := f y * (f x)⁻¹
+  map_id := by
+    intro
+    simp only [SingleObj.id_as_one, mul_inv_cancel]
+  map_comp := by
+    intros
+    rw [SingleObj.comp_as_mul]; rw [← mul_assoc]; rw [mul_left_inj]; rw [mul_assoc]; rw [inv_mul_cancel]; rw [mul_one]
+-/
+def differenceFunctor (f : C -> G) : C ⥤ SingleObj G where
+  obj _ := ()
+  map {x y} _ := f y * (f x)⁻¹
+  map_id := by
+    intro
+    simp only [SingleObj.id_as_one, mul_inv_cancel]
+  map_comp := by
+    intros
+    rw [SingleObj.comp_as_mul]; rw [← mul_assoc]; rw [mul_left_inj]; rw [mul_assoc]; rw [inv_mul_cancel]; rw [mul_one]
+
+/-- A monoid homomorphism `f: M → End X` into the endomorphisms of an object `X` of a category `C`
+induces a functor `SingleObj M ⥤ C`. -/
+@[simps]
+/--
+Definition of `functor` / `functor` 的定义
+
+English:
+definition functor
+  signature: {X : C} (f : M ->* End X)
+  body: X
+  map a := f a
+  map_id _ := map_one f
+  map_comp a b := map_mul f b a
+
+中文:
+定义 functor
+  签名: {X : C} (f : M ->* End X)
+  定义体: X
+  map a := f a
+  map_id _ := map_one f
+  map_comp a b := map_mul f b a
+-/
+def functor {X : C} (f : M ->* End X) : SingleObj M ⥤ C where
+  obj _ := X
+  map a := f a
+  map_id _ := map_one f
+  map_comp a b := map_mul f b a
+
+/-- Construct a natural transformation between functors `SingleObj M ⥤ C` by
+giving a compatible morphism `SingleObj.star M`. -/
+@[simps]
+/--
+Definition of `natTrans` / `natTrans` 的定义
+
+English:
+definition natTrans
+  signature: {F G : SingleObj M ⥤ C} (u : F.obj (SingleObj.star M) ⟶ G.obj (SingleObj.star M))
+  body: u
+  naturality _ _ a := h a
+
+中文:
+定义 natTrans
+  签名: {F G : SingleObj M ⥤ C} (u : F.obj (SingleObj.star M) ⟶ G.obj (SingleObj.star M))
+  定义体: u
+  naturality _ _ a := h a
+-/
+def natTrans {F G : SingleObj M ⥤ C} (u : F.obj (SingleObj.star M) ⟶ G.obj (SingleObj.star M))
+    (h : forall a : M, F.map a ≫ u = u ≫ G.map a) : F ⟶ G where
+  app _ := u
+  naturality _ _ a := h a
+
+end SingleObj
+
+end CategoryTheory
+
+open CategoryTheory
+
+namespace MonoidHom
+
+variable {M : Type u} {N : Type v} [Monoid M] [Monoid N]
+
+/--
+Definition of `toFunctor` / `toFunctor` 的定义
+
+English:
+abbreviation toFunctor
+  signature: (f : M ->* N)
+  body: SingleObj.mapHom M N f
+
+@[simp]
+
+中文:
+缩写 toFunctor
+  签名: (f : M ->* N)
+  定义体: SingleObj.mapHom M N f
+
+@[simp]
+
+Depends on / 依赖: SingleObj, SingleObj.mapHom, and_iff_left, contract_indep_iff, disjoint_sdiff_right, hI.contract_indep_iff, mapHom
+-/
+abbrev toFunctor (f : M ->* N) : SingleObj M ⥤ SingleObj N :=
+  SingleObj.mapHom M N f
+
+@[simp]
+/--
+theorem `comp_toFunctor` / 定理 `comp_toFunctor`
+
+English:
+theorem comp_toFunctor
+  given: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  proof: rfl
+
+中文:
+定理 comp_toFunctor
+  条件: (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P)
+  证明: rfl
+-/
+theorem comp_toFunctor (f : M ->* N) {P : Type w} [Monoid P] (g : N ->* P) :
+    (g.comp f).toFunctor = f.toFunctor ⋙ g.toFunctor :=
+  rfl
+
+variable (M)
+
+@[simp]
+/--
+theorem `id_toFunctor` / 定理 `id_toFunctor`
+
+English:
+theorem id_toFunctor
+  statement: (id M).toFunctor = 𝟭 _
+  proof: rfl
+
+中文:
+定理 id_toFunctor
+  结论: (id M).toFunctor = 𝟭 _
+  证明: rfl
+
+Depends on / 依赖: _iff_isBasis_inter_ground, contract_ground, contract_isBasis_of_isBasis, h.isBasis_inter_ground.contract_isBasis_of_isBasis, h_ind, isBasis, isBasis_inter_ground, sdiff_inter_distrib_right
+-/
+theorem id_toFunctor : (id M).toFunctor = 𝟭 _ :=
+  rfl
+
+end MonoidHom
+
+namespace MulEquiv
+
+variable {M : Type u} {N : Type v} [Monoid M] [Monoid N]
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Reinterpret a monoid isomorphism `f : M ≃* N` as an equivalence `SingleObj M ≌ SingleObj N`. -/
+@[simps!]
+/--
+Definition of `toSingleObjEquiv` / `toSingleObjEquiv` 的定义
+
+English:
+definition toSingleObjEquiv
+  signature: (e : M ≃* N)
+  body: e.toMonoidHom.toFunctor
+  inverse := e.symm.toMonoidHom.toFunctor
+  unitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+  counitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+
+中文:
+定义 toSingleObjEquiv
+  签名: (e : M ≃* N)
+  定义体: e.toMonoidHom.toFunctor
+  inverse := e.symm.toMonoidHom.toFunctor
+  unitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+  counitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+
+Depends on / 依赖: e.toMonoidHom.toFunctor, toFunctor, toMonoidHom
+-/
+def toSingleObjEquiv (e : M ≃* N) : SingleObj M ≌ SingleObj N where
+  functor := e.toMonoidHom.toFunctor
+  inverse := e.symm.toMonoidHom.toFunctor
+  unitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+  counitIso := eqToIso (by
+    rw [← MonoidHom.comp_toFunctor]; rw [← MonoidHom.id_toFunctor]
+    congr 1
+    simp)
+
+end MulEquiv
+
+namespace Units
+
+variable (M : Type u) [Monoid M]
+
+/--
+Definition of `toAut` / `toAut` 的定义
+
+English:
+definition toAut
+  signature: : Mˣ ≃* Aut (SingleObj.star M)
+  body: MulEquiv.trans (Units.mapEquiv (SingleObj.toEnd M))
+    (Aut.unitsEndEquivAut (SingleObj.star M))
+
+@[simp]
+
+中文:
+定义 toAut
+  签名: : Mˣ ≃* Aut (SingleObj.star M)
+  定义体: MulEquiv.trans (Units.mapEquiv (SingleObj.toEnd M))
+    (Aut.unitsEndEquivAut (SingleObj.star M))
+
+@[simp]
+
+Depends on / 依赖: Aut.unitsEndEquivAut, MulEquiv, MulEquiv.trans, SingleObj, SingleObj.star, SingleObj.toEnd, Units.mapEquiv, mapEquiv, unitsEndEquivAut
+-/
+def toAut : Mˣ ≃* Aut (SingleObj.star M) :=
+  MulEquiv.trans (Units.mapEquiv (SingleObj.toEnd M))
+    (Aut.unitsEndEquivAut (SingleObj.star M))
+
+@[simp]
+/--
+theorem `toAut_hom` / 定理 `toAut_hom`
+
+English:
+theorem toAut_hom
+  given: (x : Mˣ)
+  statement: (toAut M x).hom = SingleObj.toEnd M x
+  proof: rfl
+
+@[simp]
+
+中文:
+定理 toAut_hom
+  条件: (x : Mˣ)
+  结论: (toAut M x).hom = SingleObj.toEnd M x
+  证明: rfl
+
+@[simp]
+
+Depends on / 依赖: contract_isBasis, h.contract_isBasis, h_ind, h_ind.subset, isBasis, isBasis_self, isBasis_self.isBasis, subset, subset_union_right
+-/
+theorem toAut_hom (x : Mˣ) : (toAut M x).hom = SingleObj.toEnd M x :=
+  rfl
+
+@[simp]
+/--
+theorem `toAut_inv` / 定理 `toAut_inv`
+
+English:
+theorem toAut_inv
+  given: (x : Mˣ)
+  statement: (toAut M x).inv = SingleObj.toEnd M (x⁻¹ : Mˣ)
+  proof: rfl
+
+中文:
+定理 toAut_inv
+  条件: (x : Mˣ)
+  结论: (toAut M x).inv = SingleObj.toEnd M (x⁻¹ : Mˣ)
+  证明: rfl
+-/
+theorem toAut_inv (x : Mˣ) : (toAut M x).inv = SingleObj.toEnd M (x⁻¹ : Mˣ) :=
+  rfl
+
+end Units
+
+namespace MonCat
+
+open CategoryTheory
+
+/--
+Definition of `toCat` / `toCat` 的定义
+
+English:
+definition toCat
+  signature: : MonCat ⥤ Cat where
+  body: Cat.of (SingleObj x)
+  map {x y} f := (SingleObj.mapHom x y f.hom).toCatHom
+
+中文:
+定义 toCat
+  签名: : MonCat ⥤ Cat where
+  定义体: Cat.of (SingleObj x)
+  map {x y} f := (SingleObj.mapHom x y f.hom).toCatHom
+
+Depends on / 依赖: Cat.of, SingleObj
+-/
+def toCat : MonCat ⥤ Cat where
+  obj x := Cat.of (SingleObj x)
+  map {x y} f := (SingleObj.mapHom x y f.hom).toCatHom
+
+/--
+Instance `toCat_full` / 实例 `toCat_full`
+
+English:
+instance toCat_full
+  signature: : toCat.Full where
+  body: let ⟨x, h⟩ := (SingleObj.mapHom _ _).surjective y.toFunctor
+    ⟨ofHom x, Cat.Hom.ext h⟩
+
+中文:
+实例 toCat_full
+  签名: : toCat.Full where
+  定义体: let ⟨x, h⟩ := (SingleObj.mapHom _ _).surjective y.toFunctor
+    ⟨ofHom x, Cat.Hom.ext h⟩
+
+Depends on / 依赖: Cat.Hom.ext, SingleObj, SingleObj.mapHom, mapHom, surjective, toFunctor, y.toFunctor
+-/
+instance toCat_full : toCat.Full where
+  map_surjective y :=
+    let ⟨x, h⟩ := (SingleObj.mapHom _ _).surjective y.toFunctor
+    ⟨ofHom x, Cat.Hom.ext h⟩
+
+set_option backward.isDefEq.respectTransparency false in
+/--
+Instance `toCat_faithful` / 实例 `toCat_faithful`
+
+English:
+instance toCat_faithful
+  signature: : toCat.Faithful where
+  body: MonCat.hom_ext by simpa [toCat] using congr(($h).toFunctor)
+
+中文:
+实例 toCat_faithful
+  签名: : toCat.Faithful where
+  定义体: MonCat.hom_ext by simpa [toCat] using congr(($h).toFunctor)
+
+Depends on / 依赖: MonCat, MonCat.hom_ext, hom_ext, toFunctor
+-/
+instance toCat_faithful : toCat.Faithful where
+map_injective h := MonCat.hom_ext by simpa [toCat] using congr(($h).toFunctor)
+
+end MonCat

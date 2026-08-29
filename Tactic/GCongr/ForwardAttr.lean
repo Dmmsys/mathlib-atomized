@@ -1,0 +1,92 @@
+/-
+Copyright (c) 2023 Mario Carneiro, Heather Macbeth. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Mario Carneiro, Heather Macbeth
+-/
+module
+
+public import Mathlib.Init
+
+/-!
+# Environment extension for the forward-reasoning part of the `gcongr` tactic
+-/
+
+public meta section
+
+open Lean Meta Elab Tactic
+
+namespace Mathlib.Tactic.GCongr
+
+/--
+Definition of `ForwardExt` / `ForwardExt` 的定义
+
+English:
+structure ForwardExt
+  parameters: where
+  axioms and operations (1):
+    - eval((h : Expr) (goal : MVarId)) : MetaM Unit
+
+中文:
+结构 ForwardExt
+  参数: where
+  公理与运算 (1 个):
+    - eval((h : Expr) (goal : MVarId)) : MetaM Unit
+-/
+structure ForwardExt where
+  eval (h : Expr) (goal : MVarId) : MetaM Unit
+
+/--
+Definition of `mkForwardExt` / `mkForwardExt` 的定义
+
+English:
+definition mkForwardExt
+  signature: (n : Name)
+  body: do
+  let { env, opts, .. } ← read
+IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
+
+中文:
+定义 mkForwardExt
+  签名: (n : Name)
+  定义体: do
+  let { env, opts, .. } ← read
+IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
+-/
+def mkForwardExt (n : Name) : ImportM ForwardExt := do
+  let { env, opts, .. } ← read
+IO.ofExcept unsafe env.evalConstCheck ForwardExt opts ``ForwardExt n
+
+/-- Environment extensions for `gcongrForward` declarations -/
+initialize forwardExt : PersistentEnvExtension Name (Name × ForwardExt)
+    (List Name × List (Name × ForwardExt)) ←
+  registerPersistentEnvExtension {
+    mkInitial := pure ([], {})
+    addImportedFn := fun s => do
+      let dt ← s.foldlM (init := {}) fun dt s => s.foldlM (init := dt) fun dt n => do
+        return (n, ← mkForwardExt n) :: dt
+      pure ([], dt)
+    addEntryFn := fun (entries, s) (n, ext) => (n :: entries, (n, ext) :: s)
+    exportEntriesFn := fun s => s.1.reverse.toArray
+  }
+
+initialize registerBuiltinAttribute {
+  name := `gcongr_forward
+  descr := "adds a gcongr_forward extension"
+  applicationTime := .afterCompilation
+  add := fun declName stx kind => match stx with
+    | `(attr| gcongr_forward) => do
+      unless kind == AttributeKind.global do
+        throwAttrMustBeGlobal `gcongr_forward kind
+      ensureAttrDeclIsMeta `gcongr_forward declName kind
+      let env ← getEnv
+      unless (env.getModuleIdxFor? declName).isNone do
+        throwError "invalid attribute 'gcongr_forward', declaration is in an imported module"
+      if (IR.getSorryDep env declName).isSome then return -- ignore in progress definitions
+      let ext ← mkForwardExt declName
+setEnv forwardExt.addEntry env (declName, ext)
+    | _ => throwUnsupportedSyntax
+}
+
+end GCongr
+
+end Mathlib.Tactic

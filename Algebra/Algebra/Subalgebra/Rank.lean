@@ -1,0 +1,169 @@
+/-
+Copyright (c) 2024 Jz Pan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jz Pan
+-/
+module
+
+public import Mathlib.LinearAlgebra.Dimension.Free
+public import Mathlib.LinearAlgebra.Dimension.Subsingleton
+public import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
+
+/-!
+
+# Some results on the ranks of subalgebras
+
+This file contains some results on the ranks of subalgebras,
+which are corollaries of `rank_mul_rank`.
+Since their proof essentially depends on the fact that a non-trivial commutative ring
+satisfies the strong rank condition, we put them into a separate file.
+
+-/
+
+public section
+
+open Module
+
+namespace Subalgebra
+
+variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
+  (A B : Subalgebra R S)
+
+section
+variable [Module.Free R A] [Module.Free A (Algebra.adjoin A (B : Set S))]
+
+/--
+theorem `rank_sup_eq_rank_left_mul_rank_of_free` / 定理 `rank_sup_eq_rank_left_mul_rank_of_free`
+
+English:
+theorem rank_sup_eq_rank_left_mul_rank_of_free
+  proof: by
+  rcases subsingleton_or_nontrivial R with _ | _
+  · have := Module.subsingleton R S; simp
+  nontriviality S using rank_subsingleton'
+  let : Algebra A (Algebra.adjoin A (B : Set S)) := Subalgebra.algebra _
+  let : SMul A (Algebra.adjoin A (B : Set S)) := Algebra.toSMul
+  have : IsScalarTower R A
+
+中文:
+定理 rank_sup_eq_rank_left_mul_rank_of_free
+  证明: by
+  rcases subsingleton_or_nontrivial R with _ | _
+  · have := Module.subsingleton R S; simp
+  nontriviality S using rank_subsingleton'
+  let : Algebra A (Algebra.adjoin A (B : Set S)) := Subalgebra.algebra _
+  let : SMul A (Algebra.adjoin A (B : Set S)) := Algebra.toSMul
+  have : IsScalarTower R A
+
+Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.toSMul, IsScalarTower, IsScalarTower.of_algebraMap_eq, Module, Module.rank, Module.subsingleton, Subalgebra, Subalgebra.algebra, adjoin, algebra, nontriviality, of_algebraMap_eq, rank_mul_rank, rank_subsingleton, restrictScalars, subsingleton, subsingleton_or_nontrivial, toSMul
+-/
+theorem rank_sup_eq_rank_left_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R A * Module.rank A (Algebra.adjoin A (B : Set S)) := by
+  rcases subsingleton_or_nontrivial R with _ | _
+  · have := Module.subsingleton R S; simp
+  nontriviality S using rank_subsingleton'
+  let : Algebra A (Algebra.adjoin A (B : Set S)) := Subalgebra.algebra _
+  let : SMul A (Algebra.adjoin A (B : Set S)) := Algebra.toSMul
+  have : IsScalarTower R A (Algebra.adjoin A (B : Set S)) :=
+    IsScalarTower.of_algebraMap_eq (congrFun rfl)
+  rw [rank_mul_rank R A (Algebra.adjoin A (B : Set S))]
+  change _ = Module.rank R ((Algebra.adjoin A (B : Set S)).restrictScalars R)
+  rw [Algebra.restrictScalars_adjoin]; rfl
+
+/--
+theorem `finrank_sup_eq_finrank_left_mul_finrank_of_free` / 定理 `finrank_sup_eq_finrank_left_mul_finrank_of_free`
+
+English:
+theorem finrank_sup_eq_finrank_left_mul_finrank_of_free
+  proof: by
+  simpa only [map_mul] using! congr(Cardinal.toNat $(rank_sup_eq_rank_left_mul_rank_of_free A B))
+
+中文:
+定理 finrank_sup_eq_finrank_left_mul_finrank_of_free
+  证明: by
+  simpa only [map_mul] using! congr(Cardinal.toNat $(rank_sup_eq_rank_left_mul_rank_of_free A B))
+
+Depends on / 依赖: Cardinal, Cardinal.toNat, map_mul, rank_sup_eq_rank_left_mul_rank_of_free
+-/
+theorem finrank_sup_eq_finrank_left_mul_finrank_of_free :
+    finrank R ↥(A ⊔ B) = finrank R A * finrank A (Algebra.adjoin A (B : Set S)) := by
+  simpa only [map_mul] using! congr(Cardinal.toNat $(rank_sup_eq_rank_left_mul_rank_of_free A B))
+
+/--
+theorem `finrank_left_dvd_finrank_sup_of_free` / 定理 `finrank_left_dvd_finrank_sup_of_free`
+
+English:
+theorem finrank_left_dvd_finrank_sup_of_free
+  proof: ⟨_, finrank_sup_eq_finrank_left_mul_finrank_of_free A B⟩
+
+中文:
+定理 finrank_left_dvd_finrank_sup_of_free
+  证明: ⟨_, finrank_sup_eq_finrank_left_mul_finrank_of_free A B⟩
+
+Depends on / 依赖: finrank_sup_eq_finrank_left_mul_finrank_of_free
+-/
+theorem finrank_left_dvd_finrank_sup_of_free :
+    finrank R A ∣ finrank R ↥(A ⊔ B) := ⟨_, finrank_sup_eq_finrank_left_mul_finrank_of_free A B⟩
+
+end
+
+section
+variable [Module.Free R B] [Module.Free B (Algebra.adjoin B (A : Set S))]
+
+/--
+theorem `rank_sup_eq_rank_right_mul_rank_of_free` / 定理 `rank_sup_eq_rank_right_mul_rank_of_free`
+
+English:
+theorem rank_sup_eq_rank_right_mul_rank_of_free
+  proof: by
+  rw [sup_comm]; rw [rank_sup_eq_rank_left_mul_rank_of_free]
+
+中文:
+定理 rank_sup_eq_rank_right_mul_rank_of_free
+  证明: by
+  rw [sup_comm]; rw [rank_sup_eq_rank_left_mul_rank_of_free]
+
+Depends on / 依赖: rank_sup_eq_rank_left_mul_rank_of_free, sup_comm
+-/
+theorem rank_sup_eq_rank_right_mul_rank_of_free :
+    Module.rank R ↥(A ⊔ B) = Module.rank R B * Module.rank B (Algebra.adjoin B (A : Set S)) := by
+  rw [sup_comm]; rw [rank_sup_eq_rank_left_mul_rank_of_free]
+
+/--
+theorem `finrank_sup_eq_finrank_right_mul_finrank_of_free` / 定理 `finrank_sup_eq_finrank_right_mul_finrank_of_free`
+
+English:
+theorem finrank_sup_eq_finrank_right_mul_finrank_of_free
+  proof: by
+  rw [sup_comm]; rw [finrank_sup_eq_finrank_left_mul_finrank_of_free]
+
+中文:
+定理 finrank_sup_eq_finrank_right_mul_finrank_of_free
+  证明: by
+  rw [sup_comm]; rw [finrank_sup_eq_finrank_left_mul_finrank_of_free]
+
+Depends on / 依赖: finrank_sup_eq_finrank_left_mul_finrank_of_free, sup_comm
+-/
+theorem finrank_sup_eq_finrank_right_mul_finrank_of_free :
+    finrank R ↥(A ⊔ B) = finrank R B * finrank B (Algebra.adjoin B (A : Set S)) := by
+  rw [sup_comm]; rw [finrank_sup_eq_finrank_left_mul_finrank_of_free]
+
+/--
+theorem `finrank_right_dvd_finrank_sup_of_free` / 定理 `finrank_right_dvd_finrank_sup_of_free`
+
+English:
+theorem finrank_right_dvd_finrank_sup_of_free
+  proof: ⟨_, finrank_sup_eq_finrank_right_mul_finrank_of_free A B⟩
+
+中文:
+定理 finrank_right_dvd_finrank_sup_of_free
+  证明: ⟨_, finrank_sup_eq_finrank_right_mul_finrank_of_free A B⟩
+
+Depends on / 依赖: finrank_sup_eq_finrank_right_mul_finrank_of_free
+-/
+theorem finrank_right_dvd_finrank_sup_of_free :
+    finrank R B ∣ finrank R ↥(A ⊔ B) := ⟨_, finrank_sup_eq_finrank_right_mul_finrank_of_free A B⟩
+
+end
+
+end Subalgebra
